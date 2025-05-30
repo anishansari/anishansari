@@ -60,14 +60,39 @@ I'm a passionate software engineer from Nepal specializing in **Laravel (PHP)**,
 
 ---
 
-## 📈 GitHub Stats
+## 📈 GitHub Stats & Contributions
+
+<table>
+<tr>
+<td>
+  
+<h3 align="center">GitHub Stats</h3>
+
 <p align="center">
   <img src="https://github-readme-stats.vercel.app/api?username=anishansari&show_icons=true&theme=radical" alt="GitHub Stats" />
-  <br/>
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=anishansari&theme=radical" alt="Streak Stats" />
-  <br/>
+</p>
+
+</td>
+<td>
+  
+<h3 align="center">GitHub Streak</h3>
+
+<p align="center">
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=anishansari&theme=radical" alt="GitHub Streak" />
+</p>
+
+</td>
+<td>
+  
+<h3 align="center">Top Languages</h3>
+
+<p align="center">
   <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=anishansari&layout=compact&theme=radical" alt="Top Languages" />
 </p>
+
+</td>
+</tr>
+</table>
 
 ---
 
