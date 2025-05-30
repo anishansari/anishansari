@@ -2,39 +2,30 @@
   <img src="https://github.com/anishansari/anishansari/blob/main/banner.png" alt="Anish Miya Ansari Banner" />
 </p>
 
-<h1 align="center">Hi there, I'm Anish Miya Ansari! 👋</h1>
+<h1 align="center">Hi there! 👋 I'm Anish Miya Ansari</h1>
+
 <p align="center">
-  🌍 Kathmandu, Nepal <br/>
-  📬 ansarianish4@gmail.com <br/>
+  🌍 Kathmandu, Nepal | 📬 <a href="mailto:ansarianish4@gmail.com">ansarianish4@gmail.com</a> <br/>
   🌐 <a href="https://anishansari.com.np">anishansari.com.np</a> | 🐙 <a href="https://github.com/anishansari">GitHub</a>
 </p>
 
 ---
 
-## 👨‍💻 About Me
-I'm a software engineer specializing in **Laravel (PHP)**, **Cloud Computing**, **Web Application Security**, and **Cross-Functional Collaboration**.  
-I love solving real-world problems with scalable, secure applications.  
-I’ve given talks and presented research on **Cloud Computing** and **Web Application Security** at **CSharpCorner** and other tech communities. 🌐💡
+## 🌟 About Me
+I'm a passionate software engineer from Nepal specializing in **Laravel (PHP)**, **Cloud Computing**, **Web Application Security**, and **Cross-Functional Collaboration**. I love sharing knowledge through talks and community contributions.
 
----
-
-## 🔥 GitHub Stats
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=anishansari&show_icons=true&theme=radical" alt="Anish's GitHub stats" />
-  <br/>
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=anishansari&theme=radical" alt="Anish's GitHub Streak" />
-  <br/>
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=anishansari&layout=compact&theme=radical" alt="Top Languages" />
-</p>
+- 💡 Presented talks and research on Cloud Computing and Web Application Security at CSharpCorner and other tech communities.
+- 🔒 Focus on secure, scalable web applications.
+- 🌐 Exploring new ways to solve real-world problems with technology.
 
 ---
 
 ## 🚀 Technical Projects
-- 🔗 **[Energy Efficient Mobile Cloud Offloading](https://bit.ly/3btNIec)**: Saving energy by offloading computations to the cloud.
-- 🔗 **[Safety Whistle](https://bit.ly/37IUMIP)**: Emergency SMS with location in one click.
-- 🔗 **[HRMS](https://bit.ly/3bvJWAS)**: Human resource management system with employee modules and payroll.
-- 🔗 **[Hotel Snowland](https://www.hotelsnowlandpokhara.com/)**: Hotel booking system with staff and service management.
-- 🔗 **[IoT Projects](https://bit.ly/37JeVZa)**: Fun IoT experiments using MicroPython, Arduino, and Raspberry Pi.
+- 🔗 **[Energy Efficient Mobile Cloud Offloading](https://bit.ly/3btNIec)** – Reduce phone energy by offloading computations to the cloud.
+- 🔗 **[Safety Whistle](https://bit.ly/37IUMIP)** – Emergency SMS with location sharing in one click.
+- 🔗 **[HRMS](https://bit.ly/3bvJWAS)** – Human resource management system with payroll and leave tracking.
+- 🔗 **[Hotel Snowland](https://www.hotelsnowlandpokhara.com/)** – Full-fledged hotel booking and management system.
+- 🔗 **[IoT Projects](https://bit.ly/37JeVZa)** – Experiments with MicroPython, Arduino, and Raspberry Pi.
 
 ---
 
@@ -54,7 +45,6 @@ I’ve given talks and presented research on **Cloud Computing** and **Web Appli
 ![Azure](https://img.shields.io/badge/-Azure-0078D4?style=flat&logo=microsoft-azure)
 ![AWS](https://img.shields.io/badge/-AWS-FF9900?style=flat&logo=amazon-aws)
 ![Google Cloud](https://img.shields.io/badge/-Google%20Cloud-4285F4?style=flat&logo=google-cloud)
-![CI/CD](https://img.shields.io/badge/-CI/CD-0A0A0A?style=flat)
 ![GitHub Actions](https://img.shields.io/badge/-GitHub%20Actions-2088FF?style=flat&logo=github-actions)
 ![Jira](https://img.shields.io/badge/-Jira-0052CC?style=flat&logo=jira)
 ![Trello](https://img.shields.io/badge/-Trello-0052CC?style=flat&logo=trello)
@@ -63,12 +53,28 @@ I’ve given talks and presented research on **Cloud Computing** and **Web Appli
 
 ---
 
+## 📈 GitHub Stats
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=anishansari&show_icons=true&theme=radical" alt="GitHub Stats" />
+  <br/>
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=anishansari&theme=radical" alt="Streak Stats" />
+  <br/>
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=anishansari&layout=compact&theme=radical" alt="Top Languages" />
+</p>
+
+---
+
 ## 🌐 Connect with Me
-- 📬 [ansarianish4@gmail.com](mailto:ansarianish4@gmail.com)
+- 📧 [Email](mailto:ansarianish4@gmail.com)
+- 🌐 [Website](https://anishansari.com.np)
 - 🐙 [GitHub](https://github.com/anishansari)
-- 🌍 [anishansari.com.np](https://anishansari.com.np)
 - 💼 [LinkedIn](https://linkedin.com/in/anishansari)
-- 🌐 [Twitter](https://twitter.com/anishansari)
+- 🐦 [Twitter](https://twitter.com/anishansari)
+
+---
+
+## ☕ Support Me
+If you like my work and want to support me, you can [**Buy Me a Coffee**](https://www.buymeacoffee.com/anishansari) ☕.
 
 ---
 
