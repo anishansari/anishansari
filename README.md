@@ -1,0 +1,76 @@
+<p align="center">
+  <img src="https://github.com/anishansari/anishansari/blob/main/banner.png" alt="Anish Miya Ansari Banner" />
+</p>
+
+<h1 align="center">Hi there, I'm Anish Miya Ansari! 👋</h1>
+<p align="center">
+  🌍 Kathmandu, Nepal <br/>
+  📬 ansarianish4@gmail.com <br/>
+  🌐 <a href="https://anishansari.com.np">anishansari.com.np</a> | 🐙 <a href="https://github.com/anishansari">GitHub</a>
+</p>
+
+---
+
+## 👨‍💻 About Me
+I'm a software engineer specializing in **Laravel (PHP)**, **Cloud Computing**, **Web Application Security**, and **Cross-Functional Collaboration**.  
+I love solving real-world problems with scalable, secure applications.  
+I’ve given talks and presented research on **Cloud Computing** and **Web Application Security** at **CSharpCorner** and other tech communities. 🌐💡
+
+---
+
+## 🔥 GitHub Stats
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=anishansari&show_icons=true&theme=radical" alt="Anish's GitHub stats" />
+  <br/>
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=anishansari&theme=radical" alt="Anish's GitHub Streak" />
+  <br/>
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=anishansari&layout=compact&theme=radical" alt="Top Languages" />
+</p>
+
+---
+
+## 🚀 Technical Projects
+- 🔗 **[Energy Efficient Mobile Cloud Offloading](https://bit.ly/3btNIec)**: Saving energy by offloading computations to the cloud.
+- 🔗 **[Safety Whistle](https://bit.ly/37IUMIP)**: Emergency SMS with location in one click.
+- 🔗 **[HRMS](https://bit.ly/3bvJWAS)**: Human resource management system with employee modules and payroll.
+- 🔗 **[Hotel Snowland](https://www.hotelsnowlandpokhara.com/)**: Hotel booking system with staff and service management.
+- 🔗 **[IoT Projects](https://bit.ly/37JeVZa)**: Fun IoT experiments using MicroPython, Arduino, and Raspberry Pi.
+
+---
+
+## 🛠 Technical Skills & Tools
+![PHP](https://img.shields.io/badge/-PHP-777BB4?style=flat&logo=php)
+![Python](https://img.shields.io/badge/-Python-3776AB?style=flat&logo=python)
+![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat&logo=javascript)
+![Laravel](https://img.shields.io/badge/-Laravel-FF2D20?style=flat&logo=laravel)
+![Vue.js](https://img.shields.io/badge/-Vue.js-4FC08D?style=flat&logo=vue.js)
+![HTML](https://img.shields.io/badge/-HTML5-E34F26?style=flat&logo=html5)
+![CSS](https://img.shields.io/badge/-CSS3-1572B6?style=flat&logo=css3)
+![Bootstrap](https://img.shields.io/badge/-Bootstrap-563D7C?style=flat&logo=bootstrap)
+![WordPress](https://img.shields.io/badge/-WordPress-21759B?style=flat&logo=wordpress)
+![MySQL](https://img.shields.io/badge/-MySQL-4479A1?style=flat&logo=mysql)
+![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker)
+![Linux](https://img.shields.io/badge/-Linux-FCC624?style=flat&logo=linux)
+![Azure](https://img.shields.io/badge/-Azure-0078D4?style=flat&logo=microsoft-azure)
+![AWS](https://img.shields.io/badge/-AWS-FF9900?style=flat&logo=amazon-aws)
+![Google Cloud](https://img.shields.io/badge/-Google%20Cloud-4285F4?style=flat&logo=google-cloud)
+![CI/CD](https://img.shields.io/badge/-CI/CD-0A0A0A?style=flat)
+![GitHub Actions](https://img.shields.io/badge/-GitHub%20Actions-2088FF?style=flat&logo=github-actions)
+![Jira](https://img.shields.io/badge/-Jira-0052CC?style=flat&logo=jira)
+![Trello](https://img.shields.io/badge/-Trello-0052CC?style=flat&logo=trello)
+![Arduino](https://img.shields.io/badge/-Arduino-00979D?style=flat&logo=arduino)
+![Micro:bit](https://img.shields.io/badge/-Micro:bit-00ED00?style=flat&logo=micro:bit)
+
+---
+
+## 🌐 Connect with Me
+- 📬 [ansarianish4@gmail.com](mailto:ansarianish4@gmail.com)
+- 🐙 [GitHub](https://github.com/anishansari)
+- 🌍 [anishansari.com.np](https://anishansari.com.np)
+- 💼 [LinkedIn](https://linkedin.com/in/anishansari)
+- 🌐 [Twitter](https://twitter.com/anishansari)
+
+---
+
+## 🎯 Fun Fact
+I think I'm an optimist! 😄
