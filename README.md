@@ -20,6 +20,13 @@ I'm a passionate software engineer from Nepal specializing in **Laravel (PHP)**,
 
 ---
 
+## 🏆 GitHub Trophies
+<p align="center">
+  <img src="https://github-profile-trophy.vercel.app/?username=anishansari&theme=onestar&column=7" alt="GitHub Trophies" />
+</p>
+
+---
+
 ## 🚀 Technical Projects
 - 🔗 **[Energy Efficient Mobile Cloud Offloading](https://bit.ly/3btNIec)** – Reduce phone energy by offloading computations to the cloud.
 - 🔗 **[Safety Whistle](https://bit.ly/37IUMIP)** – Emergency SMS with location sharing in one click.
@@ -61,6 +68,18 @@ I'm a passionate software engineer from Nepal specializing in **Laravel (PHP)**,
   <br/>
   <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=anishansari&layout=compact&theme=radical" alt="Top Languages" />
 </p>
+
+---
+
+## 🚀 Contribution & Activity Badges
+![Repositories](https://img.shields.io/badge/Repositories-53-blue)
+![Pull Requests](https://img.shields.io/badge/Pull%20Requests-77-green)
+![Stars](https://img.shields.io/badge/Stars-1-yellow)
+![Commits](https://img.shields.io/badge/Commits-2025-orange)
+![Followers](https://img.shields.io/badge/Followers-4-lightgrey)
+![Issues](https://img.shields.io/badge/Issues-2-red)
+![Reviews](https://img.shields.io/badge/Reviews-0-grey)
+![Profile Views](https://komarev.com/ghpvc/?username=anishansari&color=blue)
 
 ---
 
