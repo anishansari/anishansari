@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy Policy - World Clock Pro</title>
+    <style>
+      body { font-family: Arial, sans-serif; max-width: 840px; margin: 40px auto; padding: 0 16px; line-height: 1.6; color: #1f2937; }
+      h1, h2 { color: #0f172a; }
+      code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>Privacy Policy for World Clock Pro</h1>
+    <p><strong>Last updated:</strong> 2026-04-04</p>
+
+    <p>World Clock Pro is designed to work locally in your browser with minimal data use.</p>
+
+    <h2>What data the extension stores</h2>
+    <ul>
+      <li>Clock list and settings (labels, timezones, ordering, display preferences)</li>
+      <li>Reminder settings (title, time, timezone, selected days, lead minutes, enabled state)</li>
+      <li>Optional profiles created by the user</li>
+      <li>Temporary selected time text for conversion flow</li>
+      <li>Temporary snooze metadata for reminder notifications</li>
+    </ul>
+
+    <h2>Where data is stored</h2>
+    <ul>
+      <li><code>chrome.storage.sync</code>: user preferences that can sync with the same signed-in Chrome profile</li>
+      <li><code>chrome.storage.local</code>: local-only data needed for reminder snooze behavior</li>
+      <li><code>chrome.storage.session</code>: short-lived runtime/session helper values</li>
+    </ul>
+
+    <h2>Data collection and sharing</h2>
+    <ul>
+      <li>No analytics SDK is included.</li>
+      <li>No personal data is sold.</li>
+      <li>No data is sent to external servers for core functionality.</li>
+      <li>No account signup is required to use the extension.</li>
+    </ul>
+
+    <h2>Website access</h2>
+    <p>When you explicitly use "Use page selection" or context-menu conversion, the extension reads selected text from the active tab to parse time text. This action is user-initiated and used only for conversion.</p>
+    <p>The extension does not continuously monitor browsing content.</p>
+
+    <h2>Notifications</h2>
+    <p>The extension uses Chrome notifications to show reminder alerts and optional snooze actions selected by the user.</p>
+
+    <h2>Permissions usage summary</h2>
+    <ul>
+      <li><code>storage</code>: save clocks/settings/reminders/profiles</li>
+      <li><code>alarms</code>: update badge and check reminders</li>
+      <li><code>sidePanel</code>: show extension UI in Chrome side panel</li>
+      <li><code>contextMenus</code>: add convert-selected-time menu action</li>
+      <li><code>scripting</code> + <code>activeTab</code> + <code>tabs</code>: fetch selected text from the active page on request</li>
+      <li><code>notifications</code>: display reminder alerts</li>
+    </ul>
+
+    <h2>Changes to this policy</h2>
+    <p>If privacy behavior changes, this policy will be updated with a new "Last updated" date.</p>
+
+    <h2>Contact</h2>
+    <p>For privacy questions, contact: <strong>YOUR_EMAIL@YOUR_DOMAIN.COM</strong></p>
+  </body>
+</html>
