@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tilawah Privacy Policy</title>
+  <meta name="description" content="Tilawah privacy policy for Chrome, Firefox, and Edge extension users." />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --text: #111827;
+      --muted: #4b5563;
+      --card: #f9fafb;
+      --border: #e5e7eb;
+      --accent: #0f766e;
+      --maxw: 860px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1220;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --card: #111827;
+        --border: #1f2937;
+        --accent: #14b8a6;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 40px 20px 64px;
+    }
+
+    h1, h2 {
+      line-height: 1.25;
+      margin: 0 0 12px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin-top: 28px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    p, li { color: var(--text); }
+
+    .muted {
+      color: var(--muted);
+      margin: 0 0 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus-visible {
+      text-decoration: underline;
+    }
+
+    code {
+      background: rgba(127, 127, 127, 0.15);
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-size: 0.95em;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Tilawah Privacy Policy</h1>
+    <p class="muted">Last updated: April 4, 2026</p>
+
+    <section class="card" aria-label="Overview">
+      <p>
+        Tilawah is a Quran background audio extension. The extension is designed to run locally in the browser and only sends
+        network requests needed to fetch Quran audio and text, and optional prayer time data.
+      </p>
+    </section>
+
+    <h2>What Data We Access</h2>
+    <ul>
+      <li>Extension settings (reciter, volume, playback preferences, reminder settings)</li>
+      <li>Playback state (current surah and ayah, progress position)</li>
+      <li>Optional bookmarks created by the user</li>
+      <li>Optional account email and sync token, if user signs in to a custom backend</li>
+      <li>Active tab URLs only when focus mode blocking is enabled (to block configured distracting domains)</li>
+    </ul>
+
+    <h2>What Data We Do Not Collect by Default</h2>
+    <ul>
+      <li>No personal profile is created by default.</li>
+      <li>No analytics or tracking SDK is included.</li>
+      <li>No browsing history is transmitted to third-party analytics providers.</li>
+    </ul>
+
+    <h2>External Services Used</h2>
+    <ul>
+      <li>Quran API and metadata: <code>https://api.alquran.cloud</code></li>
+      <li>Quran audio CDN: <code>https://cdn.islamic.network</code></li>
+      <li>Prayer times (optional reminders): <code>https://api.aladhan.com</code></li>
+    </ul>
+    <p>
+      If backend sync is enabled by the user, data is sent only to the user-configured backend URL.
+    </p>
+
+    <h2>Storage</h2>
+    <ul>
+      <li>Local storage: settings, bookmarks, progress, and caches</li>
+      <li>Session storage: transient runtime state and URL cache</li>
+      <li>Optional browser sync storage: settings, progress, and bookmarks sync when selected</li>
+    </ul>
+
+    <h2>Data Sharing</h2>
+    <p>Tilawah does not sell user data. Data is shared only with:</p>
+    <ul>
+      <li>The APIs listed above to provide core functionality</li>
+      <li>An optional user-configured backend for account and sync</li>
+    </ul>
+
+    <h2>Security</h2>
+    <ul>
+      <li>Sensitive tokens are stored in extension storage for authenticated sync sessions.</li>
+      <li>Users can sign out and clear account data.</li>
+    </ul>
+
+    <h2>User Controls</h2>
+    <p>Users can:</p>
+    <ul>
+      <li>Disable reminders</li>
+      <li>Disable focus mode</li>
+      <li>Remove bookmarks</li>
+      <li>Sign out from backend sync</li>
+      <li>Uninstall the extension to remove extension data</li>
+    </ul>
+
+    <h2>Contact</h2>
+    <p>
+      For privacy questions, contact: <a href="mailto:support@tilawah.app">support@tilawah.app</a>
+    </p>
+  </main>
+</body>
+</html>
