@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hamro Radio Privacy Policy</title>
+  <style>
+    :root {
+      --bg: #0c1020;
+      --card: #131a2f;
+      --text: #e9ecf4;
+      --muted: #b8c0d4;
+      --accent: #ff4f4f;
+      --line: #29314a;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.6 -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 22px;
+    }
+    h1, h2, h3 {
+      line-height: 1.3;
+      margin: 0 0 12px;
+    }
+    h1 { font-size: 30px; }
+    h2 { font-size: 22px; margin-top: 28px; }
+    h3 { font-size: 18px; margin-top: 20px; }
+    p, li { color: var(--text); }
+    .muted { color: var(--muted); }
+    a { color: var(--accent); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #1a223b;
+      text-align: left;
+    }
+    code {
+      background: #1a223b;
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #ffdede;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Privacy Policy for Hamro Radio</h1>
+      <p class="muted"><strong>Effective date:</strong> 26 April 2026</p>
+      <p>
+        Hamro Radio ("we", "our", "us") provides live FM radio streaming, alarm playback,
+        optional account sign-in, and sharing features. This Privacy Policy explains what data
+        we process, why we process it, and your choices.
+      </p>
+
+      <h2>1. Information We Collect</h2>
+      <h3>a) Information you provide</h3>
+      <ul>
+        <li>Account details if you sign in (for example, Google account identity tokens handled by Firebase Authentication).</li>
+        <li>Favorites and related profile-linked preferences if account sync is enabled.</li>
+      </ul>
+
+      <h3>b) Information collected automatically</h3>
+      <ul>
+        <li>App diagnostics and technical logs needed to keep streaming reliable.</li>
+        <li>Usage events such as station clicks and playback activity.</li>
+        <li>Device and app details (app version, OS version, locale, connectivity status) for compatibility and troubleshooting.</li>
+      </ul>
+
+      <h3>c) Advertising and analytics data</h3>
+      <ul>
+        <li>Ad serving components may process device identifiers and ad interaction data to deliver and measure ads.</li>
+        <li>If personalized ads are enabled in your region, ad networks may use data according to their own policies.</li>
+      </ul>
+
+      <h2>2. Permissions We Request and Why</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Permission</th>
+            <th>Purpose</th>
+            <th>Required for core app?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>android.permission.INTERNET</code></td>
+            <td>Stream live radio and sync cloud-backed data.</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td><code>android.permission.FOREGROUND_SERVICE</code><br/><code>android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK</code></td>
+            <td>Keep radio playback running while app is in background.</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td><code>android.permission.WAKE_LOCK</code></td>
+            <td>Prevent interruptions during active playback or alarms.</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td><code>android.permission.POST_NOTIFICATIONS</code></td>
+            <td>Show playback and alarm notifications.</td>
+            <td>Optional but recommended</td>
+          </tr>
+          <tr>
+            <td><code>android.permission.SCHEDULE_EXACT_ALARM</code></td>
+            <td>Trigger user-configured alarms at exact time.</td>
+            <td>Only for alarm feature</td>
+          </tr>
+          <tr>
+            <td><code>android.permission.RECEIVE_BOOT_COMPLETED</code></td>
+            <td>Restore scheduled alarms after device restart or app update.</td>
+            <td>Only for alarm feature</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>3. How We Use Information</h2>
+      <ul>
+        <li>Provide radio streaming and playback controls.</li>
+        <li>Save preferences (for example favorites, equalizer choice, alarm settings).</li>
+        <li>Support account features and sync favorites across devices when signed in.</li>
+        <li>Serve ads and measure ad performance.</li>
+        <li>Detect abuse, errors, and improve stability.</li>
+      </ul>
+
+      <h2>4. Data Sharing</h2>
+      <p>We may share data with service providers only as needed to operate the app, including:</p>
+      <ul>
+        <li>Google Firebase (authentication and cloud database features).</li>
+        <li>Ad providers used by the app (for ad serving and measurement).</li>
+        <li>Infrastructure partners required for delivery, monitoring, and reliability.</li>
+      </ul>
+      <p>We do not sell your personal information.</p>
+
+      <h2>5. Data Retention</h2>
+      <ul>
+        <li>On-device settings remain until you clear app data or uninstall.</li>
+        <li>Cloud-linked account data is retained while needed for service or legal obligations.</li>
+        <li>You may request deletion of account-linked data by contacting us.</li>
+      </ul>
+
+      <h2>6. Security</h2>
+      <p>
+        We use reasonable technical and organizational safeguards to protect data.
+        No transmission or storage system is guaranteed to be 100% secure.
+      </p>
+
+      <h2>7. Children</h2>
+      <p>
+        This app is not directed to children under 13 (or the minimum age in your country).
+        If you believe a child has provided personal data, contact us for removal.
+      </p>
+
+      <h2>8. Your Choices</h2>
+      <ul>
+        <li>You can stop using account features by signing out.</li>
+        <li>You can disable notifications in device settings.</li>
+        <li>You can uninstall the app to stop further on-device processing.</li>
+      </ul>
+
+      <h2>9. International Users</h2>
+      <p>
+        Your data may be processed on servers located outside your country.
+        We take appropriate measures where required by law.
+      </p>
+
+      <h2>10. Changes to This Policy</h2>
+      <p>
+        We may update this Privacy Policy from time to time. We will update the effective date above when changes are published.
+      </p>
+
+      <h2>11. Contact</h2>
+      <p>
+        For privacy questions or data requests, contact:
+        <br/>
+        <strong>Email:</strong> <a href="mailto:support@hamroradio.app">support@hamroradio.app</a>
+      </p>
+      <p class="muted">Replace the contact email with your real support email before publishing.</p>
+    </section>
+  </main>
+</body>
+</html>
