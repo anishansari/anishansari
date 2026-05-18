@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Professional SCADA Simulator</title>
+
+<style>
+body{
+margin:0;
+font-family:Segoe UI,Arial,sans-serif;
+background:#07111f;
+color:#e2e8f0;
+}
+header{
+padding:16px;
+background:#0f172a;
+border-bottom:2px solid #1e293b;
+}
+header h1{margin:0}
+.wrapper{
+display:grid;
+grid-template-columns:2.2fr 1fr;
+gap:12px;
+padding:12px;
+}
+.panel{
+background:#111c2d;
+border-radius:12px;
+padding:12px;
+border:1px solid #243247;
+}
+svg{
+width:100%;
+height:760px;
+background:#081220;
+border-radius:10px;
+}
+.cardgrid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+.card{
+background:#091423;
+padding:10px;
+border-radius:10px;
+border:1px solid #243247;
+}
+.value{
+font-size:24px;
+font-weight:bold;
+margin-top:5px;
+}
+.ok{color:#34d399}
+.warn{color:#facc15}
+.bad{color:#f87171}
+button{
+width:100%;
+padding:10px;
+margin-top:8px;
+border:none;
+border-radius:8px;
+background:#2563eb;
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+button:hover{
+background:#1d4ed8;
+}
+#logs{
+height:260px;
+overflow:auto;
+background:black;
+padding:10px;
+border-radius:10px;
+font-family:Consolas;
+font-size:13px;
+}
+.log-normal{color:#00ff99}
+.log-alarm{color:#ff6666}
+.log-warn{color:#ffd966}
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+font-size:13px;
+}
+th,td{
+border:1px solid #243247;
+padding:7px;
+}
+th{
+background:#0b1525;
+}
+
+@keyframes blink{
+0%{opacity:1}
+50%{opacity:0.25}
+100%{opacity:1}
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Industrial SCADA & ICS Training Environment</h1>
+<p>Realistic Digital Twin Simulation for Industrial Automation Training</p>
+</header>
+
+<div class="wrapper">
+
+<div class="panel">
+
+<h2>Industrial Process Overview</h2>
+
+<svg viewBox="0 0 1500 760">
+
+<!-- tank -->
+<rect x="70" y="170" width="220" height="340" fill="#1e40af" stroke="white" stroke-width="4"/>
+<rect id="water" x="70" y="300" width="220" height="210" fill="#38bdf8"/>
+<text x="80" y="140" fill="white" font-size="26">Water Storage Tank</text>
+
+<!-- sensors -->
+<circle cx="380" cy="180" r="30" fill="#f59e0b"/>
+<text x="440" y="188" fill="white" font-size="22">Level Sensor LT-101</text>
+
+<circle cx="380" cy="310" r="30" fill="#ef4444"/>
+<text x="440" y="318" fill="white" font-size="22">Pressure Sensor PT-201</text>
+
+<circle cx="380" cy="440" r="30" fill="#22c55e"/>
+<text x="440" y="448" fill="white" font-size="22">Temperature Sensor TT-301</text>
+
+<!-- plc -->
+<rect id="plcBox" x="720" y="180" width="220" height="150" rx="12" fill="#475569" stroke="white" stroke-width="4"/>
+<text x="795" y="255" fill="white" font-size="38">PLC</text>
+<text x="750" y="295" fill="#cbd5e1" font-size="18">Automation Logic</text>
+
+<!-- rtu -->
+<rect id="rtuBox" x="720" y="400" width="220" height="120" rx="12" fill="#334155" stroke="white" stroke-width="4"/>
+<text x="790" y="470" fill="white" font-size="34">RTU</text>
+
+<!-- scada -->
+<rect id="scadaBox" x="1150" y="80" width="270" height="140" rx="12" fill="#1d4ed8" stroke="white" stroke-width="4"/>
+<text x="1205" y="160" fill="white" font-size="32">SCADA SERVER</text>
+
+<!-- historian -->
+<rect x="1150" y="300" width="270" height="120" rx="12" fill="#7c3aed" stroke="white" stroke-width="4"/>
+<text x="1230" y="375" fill="white" font-size="30">HISTORIAN</text>
+
+<!-- hmi -->
+<rect x="1150" y="500" width="270" height="120" rx="12" fill="#059669" stroke="white" stroke-width="4"/>
+<text x="1260" y="575" fill="white" font-size="34">HMI</text>
+
+<!-- pipes -->
+<line x1="290" y1="600" x2="520" y2="600" stroke="#94a3b8" stroke-width="24"/>
+<line x1="700" y1="600" x2="900" y2="600" stroke="#94a3b8" stroke-width="24"/>
+<line x1="1030" y1="600" x2="1180" y2="600" stroke="#94a3b8" stroke-width="24"/>
+
+<!-- pump -->
+<circle id="pump" cx="610" cy="600" r="75" fill="#22c55e" stroke="white" stroke-width="5"/>
+<text x="560" y="610" fill="white" font-size="28">PUMP</text>
+
+<!-- valve -->
+<rect id="valve" x="860" y="540" width="90" height="120" fill="#10b981" stroke="white" stroke-width="4"/>
+<text x="835" y="520" fill="white" font-size="22">Control Valve</text>
+
+<!-- plant -->
+<rect x="1320" y="420" width="120" height="90" fill="#374151" stroke="white" stroke-width="4"/>
+<text x="1335" y="475" fill="white" font-size="22">FACTORY</text>
+
+<!-- network -->
+<line id="net1" x1="410" y1="180" x2="720" y2="230" stroke="#00ffff" stroke-width="4" stroke-dasharray="12"/>
+<line id="net2" x1="410" y1="310" x2="720" y2="260" stroke="#00ffff" stroke-width="4" stroke-dasharray="12"/>
+<line id="net3" x1="410" y1="440" x2="720" y2="290" stroke="#00ffff" stroke-width="4" stroke-dasharray="12"/>
+
+<line id="net4" x1="940" y1="250" x2="1150" y2="150" stroke="#facc15" stroke-width="4" stroke-dasharray="12"/>
+<line id="net5" x1="940" y1="250" x2="1150" y2="360" stroke="#facc15" stroke-width="4" stroke-dasharray="12"/>
+<line id="net6" x1="940" y1="460" x2="1150" y2="560" stroke="#facc15" stroke-width="4" stroke-dasharray="12"/>
+
+<!-- alarm -->
+<circle id="alarmLamp" cx="1430" cy="60" r="28" fill="#14532d"/>
+<text x="1320" y="25" fill="white" font-size="20">Alarm Beacon</text>
+
+<!-- flow -->
+<circle id="flowdot" cx="300" cy="600" r="12" fill="#00ffff"/>
+
+
+<!-- leak animation -->
+<line id="leakPipe" x1="760" y1="600" x2="760" y2="680" stroke="#38bdf8" stroke-width="10" visibility="hidden"/>
+
+<circle id="leak1" cx="760" cy="690" r="10" fill="#38bdf8" visibility="hidden"/>
+<circle id="leak3" cx="735" cy="710" r="12" fill="#38bdf8" visibility="hidden"/>
+<circle id="leak4" cx="790" cy="740" r="14" fill="#38bdf8" visibility="hidden"/>
+
+<circle id="leak2" cx="780" cy="715" r="8" fill="#38bdf8" visibility="hidden"/>
+<text id="dangerText" x="680" y="735" fill="#ff4444" font-size="28" visibility="hidden">⚠ PIPELINE LEAK DETECTED</text>
+
+
+<!-- batch processing -->
+<rect x="980" y="250" width="120" height="70" rx="10" fill="#0f766e" stroke="white" stroke-width="3"/>
+<text x="995" y="292" fill="white" font-size="18">BATCH PROCESS</text>
+
+</svg>
+
+
+<div class="card" style="margin-top:12px">
+<b>SCADA Architecture Alignment</b><br><br>
+This simulator follows the standard SCADA architecture:
+<ul>
+<li>Field Devices (Sensors, Pump, Valve)</li>
+<li>PLC / RTU Layer</li>
+<li>Distributed Communication Network</li>
+<li>SCADA Supervisory Server</li>
+<li>Historian & Alarm Logging</li>
+<li>HMI / Operator Workstation</li>
+<li>Batch Processing & Graphics Layer</li>
+</ul>
+</div>
+
+<h3>Technical Components</h3>
+
+<table>
+<tr><th>Component</th><th>Qty</th><th>Purpose</th></tr>
+<tr><td>Sensors</td><td>3</td><td>Collect telemetry data</td></tr>
+<tr><td>PLC</td><td>1</td><td>Automation control logic</td></tr>
+<tr><td>RTU</td><td>1</td><td>Remote telemetry communications</td></tr>
+<tr><td>SCADA Server</td><td>1</td><td>Supervisory monitoring</td></tr>
+<tr><td>Historian</td><td>1</td><td>Data storage and trends</td></tr>
+<tr><td>HMI</td><td>1</td><td>Operator interface</td></tr>
+<tr><td>Pump</td><td>1</td><td>Fluid movement</td></tr>
+<tr><td>Valve</td><td>1</td><td>Flow regulation</td></tr>
+<tr><td>Alarm Beacon</td><td>1</td><td>Safety indication</td></tr>
+</table>
+
+</div>
+
+<div class="panel">
+
+<h2>SCADA Dashboard</h2>
+
+<div id="dangerBanner" style="
+display:none;
+background:#ff0000;
+color:white;
+padding:14px;
+font-size:24px;
+font-weight:bold;
+text-align:center;
+border-radius:10px;
+margin-bottom:12px;
+animation: blink 0.6s infinite;
+">
+🚨 CRITICAL INDUSTRIAL ALARM ACTIVE 🚨
+</div>
+
+
+<div class="cardgrid">
+
+<div class="card">
+Tank Level
+<div id="level" class="value ok">50%</div>
+</div>
+
+<div class="card">
+Pressure
+<div id="pressure" class="value ok">3.1 bar</div>
+</div>
+
+<div class="card">
+Temperature
+<div id="temp" class="value ok">31°C</div>
+</div>
+
+<div class="card">
+Network
+<div id="network" class="value ok">ONLINE</div>
+</div>
+
+<div class="card">
+Pump
+<div id="pumpstate" class="value ok">RUNNING</div>
+</div>
+
+<div class="card">
+Alarm
+<div id="alarm" class="value ok">NORMAL</div>
+</div>
+
+</div>
+
+<h3>Simulations</h3>
+
+<button onclick="networkFailure()">Network Failure</button>
+<button onclick="sensorFailure()">Sensor Failure</button>
+<button onclick="plcFailure()">PLC Failure</button>
+<button onclick="highPressure()">High Pressure</button>
+<button onclick="lowTank()">Low Tank</button>
+<button onclick="leakSimulation()">Pipeline Leak</button>
+<button onclick="resetPlant()">Reset Plant</button>
+
+
+<h3>MODBUS Protocol Simulation</h3>
+
+<table>
+<tr><th>Layer</th><th>Simulation Detail</th></tr>
+<tr><td>Master Device</td><td>SCADA Server / HMI</td></tr>
+<tr><td>Slave Device</td><td>PLC / RTU</td></tr>
+<tr><td>Physical Layer</td><td>RS232 / RS422 / RS485</td></tr>
+<tr><td>Protocol Mode</td><td>RTU / ASCII</td></tr>
+<tr><td>Function Codes</td><td>03 Read Holding Registers, 06 Write Register</td></tr>
+<tr><td>Error Checking</td><td>CRC / LRC validation</td></tr>
+</table>
+
+<div class="card" style="margin-top:12px">
+<b>Live MODBUS Traffic</b>
+<div id="modbusLog" style="
+margin-top:10px;
+background:#020617;
+height:150px;
+overflow:auto;
+padding:8px;
+font-family:Consolas;
+border-radius:8px;
+font-size:12px;
+color:#67e8f9;
+"></div>
+</div>
+
+<h3>Alarm/Event Log</h3>
+
+<div id="logs"></div>
+
+
+<h3>How SCADA Works</h3>
+
+<table>
+<tr><th>Step</th><th>Working Mechanism</th></tr>
+<tr><td>1. Data Collection</td><td>Sensors measure level, pressure, temperature, flow, voltage, and equipment state.</td></tr>
+<tr><td>2. PLC Processing</td><td>PLC receives sensor signals and executes ladder logic/control algorithms.</td></tr>
+<tr><td>3. Communication</td><td>Data travels over industrial networks using Modbus TCP, OPC UA, Ethernet/IP, DNP3, or IEC-104.</td></tr>
+<tr><td>4. SCADA Supervision</td><td>SCADA server monitors the entire plant in real time and raises alarms.</td></tr>
+<tr><td>5. Historian Logging</td><td>All telemetry and alarms are stored for trend analysis and reporting.</td></tr>
+<tr><td>6. Operator Action</td><td>Operators use HMI screens to acknowledge alarms and control equipment remotely.</td></tr>
+<tr><td>7. Automated Response</td><td>PLC can automatically stop pumps, close valves, or trigger shutdowns during faults.</td></tr>
+</table>
+
+<h3>Where SCADA Is Used</h3>
+
+<table>
+<tr><th>Industry</th><th>Typical Use Cases</th></tr>
+<tr><td>Power Grid</td><td>Substations, transmission monitoring, load balancing</td></tr>
+<tr><td>Water Treatment</td><td>Tank levels, chlorine dosing, pump automation</td></tr>
+<tr><td>Oil & Gas</td><td>Pipelines, compressor stations, refinery monitoring</td></tr>
+<tr><td>Manufacturing</td><td>Production lines, robotics, industrial automation</td></tr>
+<tr><td>Transportation</td><td>Railway signaling, traffic control systems</td></tr>
+<tr><td>Smart Buildings</td><td>HVAC, elevators, energy monitoring</td></tr>
+<tr><td>Renewable Energy</td><td>Solar farms, wind turbines, battery monitoring</td></tr>
+</table>
+
+
+</div>
+
+</div>
+
+<script>
+
+let tank=50;
+let pressure=3.1;
+let temp=31;
+
+let networkDown=false;
+let sensorDown=false;
+let plcDown=false;
+let leak=false;
+
+let alarmAudioCtx = null;
+
+function playAlarm(){
+
+try{
+
+if(!alarmAudioCtx){
+alarmAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+const osc = alarmAudioCtx.createOscillator();
+const gain = alarmAudioCtx.createGain();
+
+osc.type = 'square';
+osc.frequency.setValueAtTime(880, alarmAudioCtx.currentTime);
+
+gain.gain.setValueAtTime(0.08, alarmAudioCtx.currentTime);
+
+osc.connect(gain);
+gain.connect(alarmAudioCtx.destination);
+
+osc.start();
+osc.stop(alarmAudioCtx.currentTime + 0.35);
+
+}catch(e){
+console.log(e);
+}
+
+}
+
+
+function log(msg,type="log-normal"){
+let t=new Date().toLocaleTimeString();
+document.getElementById("logs").innerHTML=
+`<div class="${type}">[${t}] ${msg}</div>`+
+document.getElementById("logs").innerHTML;
+}
+
+function raiseAlarm(msg){
+
+document.getElementById("alarm").innerHTML=msg;
+document.getElementById("alarm").className="value bad";
+
+document.getElementById("alarmLamp").setAttribute("fill","#ff0000");
+
+document.getElementById("dangerBanner").style.display="block";
+
+document.body.style.background="#220808";
+
+playAlarm();
+
+log("🚨 ALARM: "+msg,"log-alarm");
+
+}
+
+function clearAlarm(){
+
+document.getElementById("alarm").innerHTML="NORMAL";
+document.getElementById("alarm").className="value ok";
+
+document.getElementById("alarmLamp").setAttribute("fill","#14532d");
+
+document.getElementById("dangerBanner").style.display="none";
+
+document.body.style.background="#07111f";
+
+}
+
+function update(){
+
+document.getElementById("level").innerHTML=tank.toFixed(1)+"%";
+document.getElementById("pressure").innerHTML=pressure.toFixed(1)+" bar";
+document.getElementById("temp").innerHTML=temp.toFixed(1)+" °C";
+
+document.getElementById("water").setAttribute("y",510-(tank*3.4));
+document.getElementById("water").setAttribute("height",tank*3.4);
+
+if(networkDown){
+document.getElementById("network").innerHTML="OFFLINE";
+document.getElementById("network").className="value bad";
+
+["net1","net2","net3","net4","net5","net6"].forEach(id=>{
+document.getElementById(id).setAttribute("stroke","#ff0000");
+});
+
+raiseAlarm("NETWORK FAILURE");
+}else{
+document.getElementById("network").innerHTML="ONLINE";
+document.getElementById("network").className="value ok";
+}
+
+if(sensorDown){
+document.getElementById("level").innerHTML="ERR";
+document.getElementById("pressure").innerHTML="ERR";
+document.getElementById("temp").innerHTML="ERR";
+raiseAlarm("SENSOR FAILURE");
+}
+
+if(plcDown){
+document.getElementById("plcBox").setAttribute("fill","#7f1d1d");
+document.getElementById("pumpstate").innerHTML="STOPPED";
+document.getElementById("pumpstate").className="value bad";
+document.getElementById("pump").setAttribute("fill","#991b1b");
+raiseAlarm("PLC OFFLINE");
+}else{
+document.getElementById("pumpstate").innerHTML="RUNNING";
+document.getElementById("pumpstate").className="value ok";
+}
+
+if(pressure>6){
+raiseAlarm("HIGH PRESSURE");
+}
+
+if(tank<15){
+raiseAlarm("LOW TANK LEVEL");
+}
+
+if(!networkDown && !sensorDown && !plcDown && pressure<=6 && tank>=15){
+clearAlarm();
+}
+
+}
+
+function networkFailure(){
+networkDown=!networkDown;
+log(networkDown?"SCADA communication lost":"Network restored","log-alarm");
+update();
+}
+
+function sensorFailure(){
+sensorDown=!sensorDown;
+log(sensorDown?"Sensor telemetry failed":"Sensors restored","log-alarm");
+update();
+}
+
+function plcFailure(){
+plcDown=!plcDown;
+log(plcDown?"PLC power failure":"PLC restarted","log-alarm");
+update();
+}
+
+function highPressure(){
+pressure=7;
+log("Pressure exceeded safety threshold","log-warn");
+update();
+}
+
+function lowTank(){
+tank=10;
+log("Tank level critically low","log-warn");
+update();
+}
+
+function leakSimulation(){
+leak=!leak;
+
+if(leak){
+
+document.getElementById("leakPipe").setAttribute("visibility","visible");
+document.getElementById("leak1").setAttribute("visibility","visible");
+
+document.getElementById("leak2").setAttribute("visibility","visible");
+document.getElementById("leak3").setAttribute("visibility","visible");
+document.getElementById("leak4").setAttribute("visibility","visible");
+
+document.getElementById("dangerText").setAttribute("visibility","visible");
+
+raiseAlarm("PIPELINE LEAK");
+
+log("CRITICAL: Pipeline rupture detected","log-alarm");
+log("Pressure dropping rapidly","log-alarm");
+log("Emergency maintenance crew dispatched","log-warn");
+
+}else{
+
+document.getElementById("leakPipe").setAttribute("visibility","hidden");
+document.getElementById("leak1").setAttribute("visibility","hidden");
+
+document.getElementById("leak2").setAttribute("visibility","hidden");
+document.getElementById("leak3").setAttribute("visibility","hidden");
+document.getElementById("leak4").setAttribute("visibility","hidden");
+
+document.getElementById("dangerText").setAttribute("visibility","hidden");
+
+log("Leak repaired and pipeline stabilized","log-normal");
+
+clearAlarm();
+}
+
+update();
+}
+
+function resetPlant(){
+tank=50;
+pressure=3.1;
+temp=31;
+networkDown=false;
+sensorDown=false;
+plcDown=false;
+leak=false;
+
+document.getElementById("plcBox").setAttribute("fill","#475569");
+
+["net1","net2","net3"].forEach(id=>{
+document.getElementById(id).setAttribute("stroke","#00ffff");
+});
+
+["net4","net5","net6"].forEach(id=>{
+document.getElementById(id).setAttribute("stroke","#facc15");
+});
+
+document.getElementById("pump").setAttribute("fill","#22c55e");
+
+clearAlarm();
+
+log("Plant reset completed","log-normal");
+
+update();
+}
+
+setInterval(()=>{
+
+if(leak){
+
+tank-=1.2;
+pressure-=0.25;
+
+document.getElementById("flowdot").setAttribute("fill","#ff4444");
+
+if(tank<25){
+raiseAlarm("CRITICAL FLUID LOSS");
+}
+
+}else{
+document.getElementById("flowdot").setAttribute("fill","#00ffff");
+}
+
+if(tank<0)tank=0;
+
+update();
+
+},1200);
+
+let pos=300;
+
+setInterval(()=>{
+
+if(!plcDown){
+
+pos+=7;
+
+if(pos>1180){
+pos=300;
+}
+
+document.getElementById("flowdot").setAttribute("cx",pos);
+
+}else{
+document.getElementById("flowdot").style.display="none";
+}
+
+},100);
+
+log("SCADA system initialized");
+log("PLC online");
+log("Historian synchronized");
+log("HMI workstation connected");
+
+function modbusMessage(type,msg){
+
+const logbox = document.getElementById("modbusLog");
+
+const t = new Date().toLocaleTimeString();
+
+const color = type==="ERR" ? "#ff6666" :
+type==="RESP" ? "#86efac" : "#67e8f9";
+
+logbox.innerHTML =
+`<div style="color:${color}">[${t}] ${type}: ${msg}</div>` +
+logbox.innerHTML;
+
+}
+
+setInterval(()=>{
+
+if(!networkDown && !plcDown){
+
+modbusMessage(
+"REQ",
+"Master→Slave | FC03 Read Holding Registers | Addr 40001"
+);
+
+setTimeout(()=>{
+
+modbusMessage(
+"RESP",
+"Slave→Master | Tank="+tank.toFixed(1)+"% | Pressure="+pressure.toFixed(1)+" bar"
+);
+
+},500);
+
+}
+
+if(networkDown){
+
+modbusMessage(
+"ERR",
+"Timeout Error: No response from PLC over RS485"
+);
+
+}
+
+if(sensorDown){
+
+modbusMessage(
+"ERR",
+"CRC Error detected in telemetry frame"
+);
+
+}
+
+},4500);
+
+
+setInterval(()=>{
+
+let lamp=document.getElementById("alarmLamp");
+
+if(document.getElementById("alarm").innerHTML !== "NORMAL"){
+
+lamp.style.opacity = lamp.style.opacity=="0.3" ? "1" : "0.3";
+
+}
+
+},400);
+
+
+update();
+
+
+
+function modbusAnalyzer(type,msg,color="#67e8f9"){
+
+const box = document.getElementById("modbusAnalyzer");
+
+if(!box) return;
+
+const t = new Date().toLocaleTimeString();
+
+box.innerHTML =
+`<div style="color:${color}">[${t}] ${type} | ${msg}</div>` +
+box.innerHTML;
+
+}
+
+setInterval(()=>{
+
+const tankEl = document.getElementById("regTank");
+const pressureEl = document.getElementById("regPressure");
+const tempEl = document.getElementById("regTemp");
+const pumpEl = document.getElementById("regPump");
+const valveEl = document.getElementById("regValve");
+
+if(tankEl){
+
+tankEl.innerHTML = tank.toFixed(1)+"%";
+pressureEl.innerHTML = pressure.toFixed(1)+" bar";
+tempEl.innerHTML = temp.toFixed(1)+" °C";
+
+pumpEl.innerHTML = plcDown ? "OFF" : "ON";
+valveEl.innerHTML = leak ? "UNSTABLE" : "OPEN";
+
+}
+
+if(!networkDown && !plcDown){
+
+modbusAnalyzer(
+"TX",
+"01 03 9C 41 00 02 CRC | Read Holding Registers 40001-40002"
+);
+
+setTimeout(()=>{
+
+modbusAnalyzer(
+"RX",
+`01 03 Tank=${tank.toFixed(1)} Pressure=${pressure.toFixed(1)} CRC_OK`,
+"#86efac"
+);
+
+},600);
+
+}
+
+if(networkDown){
+
+modbusAnalyzer(
+"ERROR",
+"RS485 Timeout - No response from slave device",
+"#ff6666"
+);
+
+}
+
+if(sensorDown){
+
+modbusAnalyzer(
+"ERROR",
+"CRC Validation Failed - Corrupted telemetry frame",
+"#facc15"
+);
+
+}
+
+if(leak){
+
+modbusAnalyzer(
+"ALERT",
+"Pressure register dropping rapidly due to pipeline rupture",
+"#ff6666"
+);
+
+}
+
+},3500);
+
+
+</script>
+
+
+<div class="panel" style="margin:12px">
+
+<h2>Dedicated MODBUS RTU/TCP Communication Simulator</h2>
+
+<div style="
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+">
+
+<div>
+
+<h3>MODBUS Architecture</h3>
+
+<table>
+<tr><th>Role</th><th>Device</th></tr>
+<tr><td>Master</td><td>SCADA Server / HMI</td></tr>
+<tr><td>Slave</td><td>PLC / RTU</td></tr>
+<tr><td>Physical Layer</td><td>RS485 / Ethernet</td></tr>
+<tr><td>Transmission Mode</td><td>RTU / ASCII / TCP</td></tr>
+<tr><td>Error Check</td><td>CRC / LRC</td></tr>
+</table>
+
+<h3>MODBUS Packet Structure</h3>
+
+<table>
+<tr><th>Field</th><th>Description</th></tr>
+<tr><td>Slave Address</td><td>Target PLC/RTU device</td></tr>
+<tr><td>Function Code</td><td>Read/Write operation</td></tr>
+<tr><td>Data</td><td>Registers/coils information</td></tr>
+<tr><td>CRC/LRC</td><td>Error integrity validation</td></tr>
+</table>
+
+</div>
+
+<div>
+
+<h3>Live MODBUS Register Map</h3>
+
+<table>
+<tr><th>Register</th><th>Description</th><th>Value</th></tr>
+<tr><td>40001</td><td>Tank Level</td><td id="regTank">50%</td></tr>
+<tr><td>40002</td><td>Pressure</td><td id="regPressure">3.1 bar</td></tr>
+<tr><td>40003</td><td>Temperature</td><td id="regTemp">31°C</td></tr>
+<tr><td>00001</td><td>Pump Coil</td><td id="regPump">ON</td></tr>
+<tr><td>00002</td><td>Valve Coil</td><td id="regValve">OPEN</td></tr>
+</table>
+
+<h3>Live MODBUS Frame Analyzer</h3>
+
+<div id="modbusAnalyzer" style="
+background:#020617;
+height:240px;
+overflow:auto;
+padding:10px;
+border-radius:10px;
+font-family:Consolas;
+font-size:12px;
+color:#67e8f9;
+border:1px solid #243247;
+"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
