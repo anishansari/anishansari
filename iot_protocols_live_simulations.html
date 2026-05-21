@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Futuristic IoT Protocols | Live Simulations</title>
+  <style>
+    :root {
+      --bg: #06111f;
+      --panel: rgba(13, 25, 45, 0.86);
+      --panel2: rgba(18, 37, 68, 0.92);
+      --cyan: #1ee8ff;
+      --blue: #4d8dff;
+      --green: #53ff9f;
+      --orange: #ffb347;
+      --red: #ff4d6d;
+      --text: #eef7ff;
+      --muted: #9eb4d3;
+      --line: rgba(94, 211, 255, 0.35);
+      --glow: 0 0 22px rgba(30, 232, 255, 0.45);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(30, 232, 255, 0.16), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(83, 255, 159, 0.12), transparent 26%),
+        linear-gradient(135deg, #04101e 0%, #07172b 52%, #030915 100%);
+      overflow-x: hidden;
+    }
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(30,232,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,232,255,.06) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black, transparent 90%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    header {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 48px 22px;
+      position: relative;
+    }
+    header h1 {
+      font-size: clamp(38px, 8vw, 88px);
+      line-height: 0.95;
+      margin: 0 0 22px;
+      letter-spacing: -2px;
+      text-shadow: 0 0 35px rgba(30,232,255,.35);
+    }
+    .accent { color: var(--cyan); }
+    header p {
+      max-width: 900px;
+      margin: 0 auto 34px;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 23px);
+      line-height: 1.5;
+    }
+    .hero-card {
+      max-width: 1050px;
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(9,23,43,.86), rgba(8,18,35,.65));
+      box-shadow: var(--glow), inset 0 0 0 1px rgba(255,255,255,.04);
+      backdrop-filter: blur(12px);
+    }
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .nav a, button {
+      border: 1px solid rgba(30,232,255,.35);
+      color: var(--text);
+      background: rgba(30,232,255,.09);
+      border-radius: 999px;
+      padding: 11px 16px;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: .2px;
+      transition: transform .2s, background .2s, box-shadow .2s;
+    }
+    .nav a:hover, button:hover { transform: translateY(-2px); background: rgba(30,232,255,.18); box-shadow: var(--glow); }
+    main { max-width: 1220px; margin: 0 auto; padding: 0 20px 80px; }
+    section {
+      margin: 32px 0 72px;
+      padding: 28px;
+      border: 1px solid rgba(30,232,255,.22);
+      background: var(--panel);
+      border-radius: 30px;
+      box-shadow: 0 16px 50px rgba(0,0,0,.28);
+      backdrop-filter: blur(14px);
+    }
+    .topic-head { display: grid; grid-template-columns: 1.1fr .9fr; gap: 22px; align-items: center; }
+    h2 { font-size: clamp(30px, 5vw, 52px); margin: 0 0 12px; letter-spacing: -1px; }
+    h3 { margin: 0 0 12px; color: var(--cyan); }
+    p, li { color: #d7e6fa; line-height: 1.55; }
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 22px; }
+    .card {
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 20px;
+      padding: 18px;
+      min-height: 150px;
+    }
+    .card strong { display:block; margin-bottom: 9px; color: var(--green); }
+    .sim {
+      margin-top: 26px;
+      background: linear-gradient(145deg, rgba(3,11,22,.92), rgba(17,38,70,.75));
+      border: 1px solid rgba(83,255,159,.2);
+      border-radius: 26px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .sim::before {
+      content: "";
+      position: absolute;
+      inset: -100px;
+      background: radial-gradient(circle, rgba(30,232,255,.09), transparent 35%);
+      animation: scan 8s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes scan { from { transform: translateX(-20%);} to { transform: translateX(20%);} }
+    .sim-title { display:flex; align-items:center; justify-content:space-between; gap: 12px; margin-bottom: 14px; position:relative; z-index:1; }
+    .sim-title h3 { margin: 0; }
+    .stage {
+      position: relative;
+      min-height: 360px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.20);
+      overflow: hidden;
+      z-index: 1;
+    }
+    .node {
+      position: absolute;
+      width: 122px;
+      min-height: 64px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 10px;
+      border-radius: 18px;
+      background: rgba(12,31,58,.92);
+      border: 1px solid rgba(30,232,255,.48);
+      box-shadow: 0 0 20px rgba(30,232,255,.18);
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .node.green { border-color: rgba(83,255,159,.6); box-shadow: 0 0 20px rgba(83,255,159,.20); }
+    .node.orange { border-color: rgba(255,179,71,.6); box-shadow: 0 0 20px rgba(255,179,71,.20); }
+    .node.red { border-color: rgba(255,77,109,.6); box-shadow: 0 0 20px rgba(255,77,109,.20); }
+    .line { position:absolute; height:2px; background: rgba(30,232,255,.45); transform-origin:left center; }
+    .packet {
+      position: absolute;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px var(--green), 0 0 35px var(--green);
+      opacity: 0;
+    }
+    .wave {
+      position:absolute; border: 2px solid rgba(30,232,255,.65); border-radius:50%; opacity:0;
+      animation: wave 2.1s ease-out infinite;
+    }
+    @keyframes wave {
+      0% { width: 10px; height: 10px; opacity: .9; }
+      100% { width: 190px; height: 190px; opacity: 0; }
+    }
+    .explain {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+      position:relative; z-index:1;
+    }
+    .log {
+      min-height: 120px;
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(0,0,0,.24);
+      border: 1px solid rgba(255,255,255,.08);
+      color: #bfefff;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 13px;
+      white-space: pre-line;
+    }
+    .teacher-note { padding: 14px; border-radius:16px; background:rgba(83,255,159,.08); border:1px solid rgba(83,255,159,.18); }
+    .choice-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top:16px; }
+    .choice { border:1px solid rgba(30,232,255,.25); border-radius:16px; padding:14px; background:rgba(255,255,255,.045); cursor:pointer; }
+    .choice.active { border-color: var(--green); box-shadow: 0 0 18px rgba(83,255,159,.22); }
+    .matrix { display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
+    .pill { display:inline-block; color:#06111f; background:var(--green); border-radius:999px; padding:5px 10px; font-size:12px; font-weight:900; margin-bottom:8px; }
+    footer { text-align:center; padding:40px 20px; color:var(--muted); }
+    @media (max-width: 900px) {
+      .topic-head, .cards, .explain, .matrix { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: 1fr; }
+      .choice-grid { grid-template-columns: 1fr; }
+      section { padding: 18px; }
+      .stage { min-height: 440px; }
+      .node { width: 105px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<header>
+  <div class="hero-card">
+    <h1>Futuristic <span class="accent">IoT Protocols</span><br/>Live Simulation Lab</h1>
+    <p>Interactive teaching slides in HTML. Each topic explains what it is, the IoT problem it solves, where it is used, when to choose it, and then shows a live simulation.</p>
+    <div class="nav">
+      <a href="#ieee">IEEE 802.15.4</a><a href="#bacnet">BACnet</a><a href="#network">Network Layer</a><a href="#security">Security</a><a href="#rfid">RFID Protocols</a><a href="#standards">Unified Data Standards</a><a href="#matrix">Selection Matrix</a>
+    </div>
+  </div>
+</header>
+<main>
+
+<section id="ieee">
+  <div class="topic-head">
+    <div><h2>IEEE 802.15.4</h2><p>A low-cost, low-data-rate wireless access technology for battery-operated low-rate wireless personal area networks. It defines how small devices communicate at the physical and MAC layers.</p></div>
+    <div class="cards"><div class="card"><strong>What is this?</strong>Wireless foundation for low-power IoT networks.</div><div class="card"><strong>Problem solved</strong>Small sensors need long battery life and simple local communication.</div><div class="card"><strong>Used in</strong>Zigbee, Thread, 6LoWPAN, smart utility networks, WSNs.</div><div class="card"><strong>Choose when</strong>Low power, low data rate, short-range mesh or star network.</div></div>
+  </div>
+  <div class="sim"><div class="sim-title"><h3>Live Simulation: Sensor Packet Flow</h3><button onclick="runIEEE()">Run simulation</button></div><div class="stage" id="ieeeStage"></div><div class="explain"><div class="log" id="ieeeLog">Click Run simulation.</div><div class="teacher-note"><b>Explain to students:</b> the sensor wakes up, sends a small frame through PHY/MAC, reaches a coordinator, then the gateway forwards data to the IoT cloud. This is why IEEE 802.15.4 is useful for battery sensor networks.</div></div></div>
+</section>
+
+<section id="bacnet">
+  <div class="topic-head"><div><h2>BACnet Protocol</h2><p>A building automation protocol that lets HVAC, lighting, alarms, access control, and energy devices communicate with a building management system.</p></div><div class="cards"><div class="card"><strong>What is this?</strong>Common language for smart building devices.</div><div class="card"><strong>Problem solved</strong>Different vendor systems need interoperability.</div><div class="card"><strong>Used in</strong>Hospitals, campuses, airports, offices, data centers.</div><div class="card"><strong>Choose when</strong>The IoT system controls building automation equipment.</div></div></div>
+  <div class="sim"><div class="sim-title"><h3>Live Simulation: Smart Building Control</h3><button onclick="runBACnet()">Run simulation</button></div><div class="stage" id="bacnetStage"></div><div class="explain"><div class="log" id="bacnetLog">Click Run simulation.</div><div class="teacher-note"><b>Explain to students:</b> BACnet represents building devices as objects and services. A temperature sensor reports a value, the controller decides, and the HVAC actuator changes the room condition.</div></div></div>
+</section>
+
+<section id="network">
+  <div class="topic-head"><div><h2>Network Layer</h2><p>The IoT routing layer that handles addressing, path selection, forwarding, and multi-hop connectivity between nodes, gateways, edge systems, and cloud platforms.</p></div><div class="cards"><div class="card"><strong>What is this?</strong>Routing intelligence of the IoT network.</div><div class="card"><strong>Problem solved</strong>Packets must reach destination even across lossy networks.</div><div class="card"><strong>Used in</strong>Mesh networks, smart cities, WSNs, industrial IoT.</div><div class="card"><strong>Choose when</strong>Devices are spread out or need multi-hop paths.</div></div></div>
+  <div class="sim"><div class="sim-title"><h3>Live Simulation: Multi-Hop Routing and Reroute</h3><button onclick="runNetwork()">Run simulation</button></div><div class="stage" id="networkStage"></div><div class="explain"><div class="log" id="networkLog">Click Run simulation.</div><div class="teacher-note"><b>Explain to students:</b> the network layer chooses the best available route. If one link fails, the packet can be rerouted through another node so the cloud still receives the data.</div></div></div>
+</section>
+
+<section id="security">
+  <div class="topic-head"><div><h2>IoT Security</h2><p>Security protects device identity, authentication, encrypted data, integrity checks, firmware, access control, and cloud services across the full IoT stack.</p></div><div class="cards"><div class="card"><strong>What is this?</strong>Trust layer for connected devices.</div><div class="card"><strong>Problem solved</strong>Hacking, packet sniffing, firmware modification, unauthorized access.</div><div class="card"><strong>Used in</strong>Smart homes, SCADA, healthcare, utilities, factories.</div><div class="card"><strong>Choose when</strong>Always, especially for safety-critical or sensitive IoT systems.</div></div></div>
+  <div class="sim"><div class="sim-title"><h3>Live Simulation: Secure Message Journey</h3><button onclick="runSecurity()">Run simulation</button></div><div class="stage" id="securityStage"></div><div class="explain"><div class="log" id="securityLog">Click Run simulation.</div><div class="teacher-note"><b>Explain to students:</b> security is not one step. The device authenticates, encrypts the payload, the cloud verifies integrity, and attacker traffic is rejected.</div></div></div>
+</section>
+
+<section id="rfid">
+  <div class="topic-head"><div><h2>RFID Protocols</h2><p>RFID protocols define how radio tags and readers communicate to identify, track, and authenticate physical objects without line-of-sight scanning.</p></div><div class="cards"><div class="card"><strong>What is this?</strong>Radio identity standard for objects.</div><div class="card"><strong>Problem solved</strong>Manual barcode scanning is slow and needs line of sight.</div><div class="card"><strong>Used in</strong>Supply chain, access cards, passports, libraries, animal tracking.</div><div class="card"><strong>Choose when</strong>You need fast physical object identification.</div></div></div>
+  <div class="sim"><div class="sim-title"><h3>Live Simulation: RFID Read Cycle</h3><button onclick="runRFID()">Run simulation</button></div><div class="stage" id="rfidStage"></div><div class="explain"><div class="log" id="rfidLog">Click Run simulation.</div><div class="teacher-note"><b>Explain to students:</b> a passive tag has no battery. The reader emits radio energy, the tag powers up, responds with its ID, and the backend updates inventory or access status.</div></div>
+    <div class="choice-grid" id="rfidChoices"></div><div class="log" id="rfidChoiceLog">Click a use case below to choose the RFID protocol.</div>
+  </div>
+</section>
+
+<section id="standards">
+  <div class="topic-head"><div><h2>Unified Data Standards and Protocols</h2><p>Unified standards provide common data models, message formats, names, and meanings so different IoT devices, platforms, and analytics systems understand each other.</p></div><div class="cards"><div class="card"><strong>What is this?</strong>Shared language for IoT data.</div><div class="card"><strong>Problem solved</strong>Fragmented formats block analytics and interoperability.</div><div class="card"><strong>Used in</strong>Smart cities, industrial IoT, digital twins, healthcare IoT.</div><div class="card"><strong>Choose when</strong>Multiple vendors or systems need to share data.</div></div></div>
+  <div class="sim"><div class="sim-title"><h3>Live Simulation: Data Normalization Pipeline</h3><button onclick="runStandards()">Run simulation</button></div><div class="stage" id="standardsStage"></div><div class="explain"><div class="log" id="standardsLog">Click Run simulation.</div><div class="teacher-note"><b>Explain to students:</b> different devices send different formats. The gateway converts them into a unified model, allowing dashboards, AI analytics, and digital twins to use clean data.</div></div></div>
+</section>
+
+<section id="matrix">
+  <h2>Protocol Selection Matrix</h2>
+  <div class="matrix">
+    <div class="card"><span class="pill">IEEE 802.15.4</span><strong>Choose for:</strong> battery sensor networks, short range, low data rate, mesh/star IoT.</div>
+    <div class="card"><span class="pill">BACnet</span><strong>Choose for:</strong> smart buildings, HVAC, lighting, BMS, vendor interoperability.</div>
+    <div class="card"><span class="pill">Network Layer</span><strong>Choose for:</strong> routing, addressing, multi-hop communication, IP/cloud integration.</div>
+    <div class="card"><span class="pill">Security</span><strong>Choose for:</strong> every IoT system, especially sensitive or safety-critical deployments.</div>
+    <div class="card"><span class="pill">RFID</span><strong>Choose for:</strong> object identity, access cards, inventory, logistics, non-line-of-sight tracking.</div>
+    <div class="card"><span class="pill">Unified Standards</span><strong>Choose for:</strong> cross-vendor data sharing, digital twins, analytics, scalable platforms.</div>
+  </div>
+</section>
+</main>
+<footer>IoT Protocol Simulation Lab | Use keyboard or scroll to present topic by topic.</footer>
+<script>
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function setLog(id, text){ document.getElementById(id).textContent = text; }
+function clearStage(id){ document.getElementById(id).innerHTML = ''; }
+function node(stage, text, x, y, cls=''){
+  const el=document.createElement('div'); el.className='node '+cls; el.style.left=x+'%'; el.style.top=y+'%'; el.innerHTML=text; stage.appendChild(el); return el;
+}
+function line(stage, x1,y1,x2,y2, color){
+  const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy); const a=Math.atan2(dy,dx)*180/Math.PI;
+  const l=document.createElement('div'); l.className='line'; l.style.left=x1+'%'; l.style.top=y1+'%'; l.style.width=len+'%'; l.style.transform='rotate('+a+'deg)'; if(color) l.style.background=color; stage.appendChild(l); return l;
+}
+async function packet(stage, points, color='var(--green)'){
+  const p=document.createElement('div'); p.className='packet'; p.style.background=color; p.style.boxShadow='0 0 18px '+color+', 0 0 35px '+color; stage.appendChild(p);
+  for(let i=0;i<points.length;i++){
+    p.style.transition='all .85s ease-in-out'; p.style.opacity=1; p.style.left=points[i][0]+'%'; p.style.top=points[i][1]+'%'; await sleep(900);
+  }
+  p.style.opacity=0; await sleep(250); p.remove();
+}
+function wave(stage,x,y,delay=0){ const w=document.createElement('div'); w.className='wave'; w.style.left=x+'%'; w.style.top=y+'%'; w.style.animationDelay=delay+'s'; stage.appendChild(w); return w; }
+
+async function runIEEE(){
+  const s=document.getElementById('ieeeStage'); clearStage('ieeeStage');
+  node(s,'Battery<br>Sensor',8,42,'green'); node(s,'PHY + MAC<br>802.15.4',30,42); node(s,'Coordinator',52,42,'orange'); node(s,'Gateway',72,42); node(s,'IoT Cloud',86,42,'green');
+  line(s,18,50,33,50); line(s,42,50,55,50); line(s,64,50,75,50); line(s,82,50,90,50);
+  setLog('ieeeLog','1. Sensor wakes up\n2. Temperature measured\n3. MAC frame created\n4. Radio sends packet'); await packet(s,[[13,48],[35,48]], 'var(--green)');
+  setLog('ieeeLog','5. Coordinator receives the frame\n6. Gateway prepares cloud message'); await packet(s,[[35,48],[57,48],[76,48]], 'var(--cyan)');
+  setLog('ieeeLog','7. Cloud dashboard updates\nResult: low-power IoT data delivered'); await packet(s,[[76,48],[90,48]], 'var(--orange)');
+}
+async function runBACnet(){
+  const s=document.getElementById('bacnetStage'); clearStage('bacnetStage');
+  node(s,'Room Temp<br>Sensor',8,25,'green'); node(s,'BACnet<br>Controller',38,42,'orange'); node(s,'HVAC<br>Actuator',70,25); node(s,'Building<br>Dashboard',70,62,'green');
+  line(s,18,34,42,50); line(s,50,50,74,34); line(s,50,53,74,70); node(s,'Room status:<br><span id="roomStatus">HOT</span>',35,70,'red');
+  setLog('bacnetLog','1. Sensor object reports: Present_Value = 29°C'); await packet(s,[[13,31],[43,48]], 'var(--green)');
+  setLog('bacnetLog','2. Controller compares value with setpoint\n3. Command sent to HVAC actuator'); await packet(s,[[43,48],[75,31]], 'var(--cyan)');
+  document.getElementById('roomStatus').textContent='OPTIMIZED';
+  setLog('bacnetLog','4. HVAC cooling starts\n5. Dashboard updates comfort and energy state'); await packet(s,[[75,31],[75,68]], 'var(--orange)');
+}
+async function runNetwork(){
+  const s=document.getElementById('networkStage'); clearStage('networkStage');
+  node(s,'Node A<br>Sensor',6,50,'green'); node(s,'Router B',30,28); node(s,'Router C',54,28); node(s,'Router D',30,70); node(s,'Gateway',76,50,'orange'); node(s,'Cloud',88,50,'green');
+  line(s,15,57,34,35); line(s,40,35,58,35, 'rgba(255,77,109,.65)'); line(s,15,60,34,78); line(s,40,78,80,58); line(s,64,36,80,55); line(s,84,58,91,58);
+  setLog('networkLog','Route attempt 1: A -> B -> C -> Gateway'); await packet(s,[[11,56],[35,34]], 'var(--green)');
+  setLog('networkLog','Link B -> C fails. Network layer recalculates route.'); await sleep(700);
+  await packet(s,[[35,34],[35,76],[79,56],[91,56]], 'var(--cyan)');
+  setLog('networkLog','Successful reroute: A -> B -> D -> Gateway -> Cloud\nResult: data survives link failure.');
+}
+async function runSecurity(){
+  const s=document.getElementById('securityStage'); clearStage('securityStage');
+  node(s,'IoT Device',8,45,'green'); node(s,'Secure<br>Gateway',35,45); node(s,'Cloud<br>Verifier',62,45,'orange'); node(s,'Attacker',35,75,'red'); node(s,'App<br>Dashboard',84,45,'green');
+  line(s,18,53,39,53); line(s,47,53,66,53); line(s,74,53,88,53); line(s,42,80,66,57,'rgba(255,77,109,.5)');
+  setLog('securityLog','1. Device authenticates with gateway.'); await packet(s,[[13,51],[40,51]], 'var(--green)');
+  setLog('securityLog','2. Payload is encrypted and forwarded.'); await packet(s,[[40,51],[67,51]], 'var(--cyan)');
+  setLog('securityLog','3. Attacker sends fake packet. Integrity check fails.'); await packet(s,[[40,78],[66,55]], 'var(--red)');
+  node(s,'BLOCKED',54,72,'red'); await sleep(500);
+  setLog('securityLog','4. Valid packet reaches dashboard.\nResult: trusted data accepted, malicious traffic blocked.'); await packet(s,[[67,51],[88,51]], 'var(--green)');
+}
+async function runRFID(){
+  const s=document.getElementById('rfidStage'); clearStage('rfidStage');
+  node(s,'RFID<br>Reader',16,40,'orange'); node(s,'Passive<br>Tag',48,40,'green'); node(s,'Middleware',70,40); node(s,'IoT<br>Database',86,40,'green');
+  line(s,26,48,52,48); line(s,58,48,73,48); line(s,79,48,90,48);
+  wave(s,22,46,0); wave(s,22,46,.5); wave(s,22,46,1);
+  setLog('rfidLog','1. Reader emits radio energy.\n2. Passive tag powers up.'); await sleep(1600);
+  setLog('rfidLog','3. Tag sends ID response back to reader.'); await packet(s,[[51,47],[20,47]], 'var(--green)');
+  setLog('rfidLog','4. Reader forwards ID to middleware and database.'); await packet(s,[[20,47],[72,47],[88,47]], 'var(--cyan)');
+  setLog('rfidLog','Result: object identified without line-of-sight scanning.');
+}
+const rfidData=[
+  ['Animal tracking','ISO 11784/11785, LF 134.2 kHz','Best for implanted or attached animal transponders.'],
+  ['Passport / bank card','ISO/IEC 14443, HF 13.56 MHz','Close-range and higher security identification.'],
+  ['Library / asset tracking','ISO/IEC 15693, HF 13.56 MHz','Flexible longer HF reading for assets and libraries.'],
+  ['Warehouse pallets','EPC Gen2 / ISO 18000-6C, UHF 860-960 MHz','Medium to long-range inventory reading.'],
+  ['Container tracking','ISO/IEC 18000 series','Covers several frequencies and active/passive tag scenarios.'],
+  ['Access control','ISO/IEC 14443 or 15693','Depends on security level and range needed.']
+];
+function initRFIDChoices(){ const c=document.getElementById('rfidChoices'); c.innerHTML=''; rfidData.forEach((d,i)=>{ const el=document.createElement('div'); el.className='choice'; el.innerHTML='<b>'+d[0]+'</b><br><span>'+d[1]+'</span>'; el.onclick=()=>{document.querySelectorAll('#rfidChoices .choice').forEach(x=>x.classList.remove('active')); el.classList.add('active'); setLog('rfidChoiceLog','Use case: '+d[0]+'\nRecommended: '+d[1]+'\nWhy: '+d[2]);}; c.appendChild(el); }); }
+initRFIDChoices();
+async function runStandards(){
+  const s=document.getElementById('standardsStage'); clearStage('standardsStage');
+  node(s,'Device A<br>{ JSON }',5,22,'green'); node(s,'Device B<br>Binary',5,48,'orange'); node(s,'RFID Event<br>EPC Code',5,74); node(s,'Gateway<br>Normalizer',38,48,'green'); node(s,'Unified<br>Data Model',61,48,'orange'); node(s,'AI Analytics<br>Digital Twin',83,48,'green');
+  line(s,15,30,42,55); line(s,15,56,42,56); line(s,15,82,42,58); line(s,49,56,64,56); line(s,72,56,86,56);
+  setLog('standardsLog','1. Heterogeneous devices send incompatible raw data.'); await packet(s,[[10,28],[43,54]], 'var(--green)'); await packet(s,[[10,54],[43,54]], 'var(--orange)'); await packet(s,[[10,80],[43,56]], 'var(--cyan)');
+  setLog('standardsLog','2. Gateway maps all messages into one shared model.'); await packet(s,[[43,54],[65,54]], 'var(--green)');
+  setLog('standardsLog','3. Analytics and digital twin consume clean, consistent data.'); await packet(s,[[65,54],[87,54]], 'var(--cyan)');
+}
+</script>
+</body>
+</html>
