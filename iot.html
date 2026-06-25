@@ -1,364 +1,942 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Futuristic IoT Protocols | Live Simulations</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTEVT IoT Unit 6 Topics 6.9 to 6.14</title>
   <style>
     :root {
-      --bg: #06111f;
-      --panel: rgba(13, 25, 45, 0.86);
-      --panel2: rgba(18, 37, 68, 0.92);
-      --cyan: #1ee8ff;
-      --blue: #4d8dff;
-      --green: #53ff9f;
-      --orange: #ffb347;
-      --red: #ff4d6d;
-      --text: #eef7ff;
-      --muted: #9eb4d3;
-      --line: rgba(94, 211, 255, 0.35);
-      --glow: 0 0 22px rgba(30, 232, 255, 0.45);
+      --bg: #07111f;
+      --bg2: #0e1e33;
+      --panel: rgba(255,255,255,0.10);
+      --panel2: rgba(255,255,255,0.16);
+      --text: #f7fbff;
+      --muted: #c7d7ea;
+      --accent: #60e6d2;
+      --accent2: #8a7dff;
+      --accent3: #ffcc70;
+      --danger: #ff7f99;
+      --shadow: 0 30px 90px rgba(0,0,0,0.45);
+      --radius: 28px;
     }
+
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
+
+    html, body {
       margin: 0;
-      font-family: Inter, Segoe UI, Arial, sans-serif;
+      min-height: 100%;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(30, 232, 255, 0.16), transparent 28%),
-        radial-gradient(circle at 85% 10%, rgba(83, 255, 159, 0.12), transparent 26%),
-        linear-gradient(135deg, #04101e 0%, #07172b 52%, #030915 100%);
-      overflow-x: hidden;
-    }
-    .grid-bg {
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(30,232,255,.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(30,232,255,.06) 1px, transparent 1px);
-      background-size: 44px 44px;
-      mask-image: linear-gradient(to bottom, black, transparent 90%);
-      pointer-events: none;
-      z-index: -1;
-    }
-    header {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding: 48px 22px;
-      position: relative;
-    }
-    header h1 {
-      font-size: clamp(38px, 8vw, 88px);
-      line-height: 0.95;
-      margin: 0 0 22px;
-      letter-spacing: -2px;
-      text-shadow: 0 0 35px rgba(30,232,255,.35);
-    }
-    .accent { color: var(--cyan); }
-    header p {
-      max-width: 900px;
-      margin: 0 auto 34px;
-      color: var(--muted);
-      font-size: clamp(17px, 2vw, 23px);
-      line-height: 1.5;
-    }
-    .hero-card {
-      max-width: 1050px;
-      padding: 34px;
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      background: linear-gradient(180deg, rgba(9,23,43,.86), rgba(8,18,35,.65));
-      box-shadow: var(--glow), inset 0 0 0 1px rgba(255,255,255,.04);
-      backdrop-filter: blur(12px);
-    }
-    .nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-    .nav a, button {
-      border: 1px solid rgba(30,232,255,.35);
-      color: var(--text);
-      background: rgba(30,232,255,.09);
-      border-radius: 999px;
-      padding: 11px 16px;
-      text-decoration: none;
-      cursor: pointer;
-      font-weight: 700;
-      letter-spacing: .2px;
-      transition: transform .2s, background .2s, box-shadow .2s;
-    }
-    .nav a:hover, button:hover { transform: translateY(-2px); background: rgba(30,232,255,.18); box-shadow: var(--glow); }
-    main { max-width: 1220px; margin: 0 auto; padding: 0 20px 80px; }
-    section {
-      margin: 32px 0 72px;
-      padding: 28px;
-      border: 1px solid rgba(30,232,255,.22);
-      background: var(--panel);
-      border-radius: 30px;
-      box-shadow: 0 16px 50px rgba(0,0,0,.28);
-      backdrop-filter: blur(14px);
-    }
-    .topic-head { display: grid; grid-template-columns: 1.1fr .9fr; gap: 22px; align-items: center; }
-    h2 { font-size: clamp(30px, 5vw, 52px); margin: 0 0 12px; letter-spacing: -1px; }
-    h3 { margin: 0 0 12px; color: var(--cyan); }
-    p, li { color: #d7e6fa; line-height: 1.55; }
-    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 22px; }
-    .card {
-      background: rgba(255,255,255,.045);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 20px;
-      padding: 18px;
-      min-height: 150px;
-    }
-    .card strong { display:block; margin-bottom: 9px; color: var(--green); }
-    .sim {
-      margin-top: 26px;
-      background: linear-gradient(145deg, rgba(3,11,22,.92), rgba(17,38,70,.75));
-      border: 1px solid rgba(83,255,159,.2);
-      border-radius: 26px;
-      padding: 20px;
-      position: relative;
+      background: radial-gradient(circle at 20% 20%, rgba(96,230,210,0.18), transparent 30%),
+                  radial-gradient(circle at 80% 10%, rgba(138,125,255,0.22), transparent 28%),
+                  linear-gradient(135deg, var(--bg), var(--bg2));
       overflow: hidden;
     }
-    .sim::before {
+
+    body::before,
+    body::after {
       content: "";
-      position: absolute;
-      inset: -100px;
-      background: radial-gradient(circle, rgba(30,232,255,.09), transparent 35%);
-      animation: scan 8s linear infinite;
+      position: fixed;
+      inset: auto;
+      width: 42vw;
+      height: 42vw;
+      border-radius: 999px;
+      filter: blur(38px);
+      opacity: 0.5;
       pointer-events: none;
+      animation: floatBlob 12s ease-in-out infinite alternate;
+      z-index: 0;
     }
-    @keyframes scan { from { transform: translateX(-20%);} to { transform: translateX(20%);} }
-    .sim-title { display:flex; align-items:center; justify-content:space-between; gap: 12px; margin-bottom: 14px; position:relative; z-index:1; }
-    .sim-title h3 { margin: 0; }
-    .stage {
+
+    body::before {
+      left: -12vw;
+      bottom: -15vw;
+      background: rgba(96,230,210,0.35);
+    }
+
+    body::after {
+      right: -14vw;
+      top: 8vh;
+      background: rgba(138,125,255,0.36);
+      animation-duration: 15s;
+      animation-delay: -4s;
+    }
+
+    @keyframes floatBlob {
+      from { transform: translate3d(0,0,0) scale(1); }
+      to { transform: translate3d(6vw,-4vh,0) scale(1.12); }
+    }
+
+    .deck {
       position: relative;
-      min-height: 360px;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.20);
-      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
       z-index: 1;
     }
-    .node {
+
+    .slide {
       position: absolute;
-      width: 122px;
-      min-height: 64px;
+      inset: 0;
+      padding: 6vh 7vw 8vh;
+      opacity: 0;
+      transform: translateX(7%) scale(0.98);
+      pointer-events: none;
+      transition: opacity 550ms ease, transform 650ms cubic-bezier(.2,.9,.2,1);
       display: grid;
       place-items: center;
-      text-align: center;
-      padding: 10px;
-      border-radius: 18px;
-      background: rgba(12,31,58,.92);
-      border: 1px solid rgba(30,232,255,.48);
-      box-shadow: 0 0 20px rgba(30,232,255,.18);
-      font-weight: 800;
-      font-size: 13px;
     }
-    .node.green { border-color: rgba(83,255,159,.6); box-shadow: 0 0 20px rgba(83,255,159,.20); }
-    .node.orange { border-color: rgba(255,179,71,.6); box-shadow: 0 0 20px rgba(255,179,71,.20); }
-    .node.red { border-color: rgba(255,77,109,.6); box-shadow: 0 0 20px rgba(255,77,109,.20); }
-    .line { position:absolute; height:2px; background: rgba(30,232,255,.45); transform-origin:left center; }
-    .packet {
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .slide.previous {
+      transform: translateX(-7%) scale(0.98);
+    }
+
+    .canvas {
+      width: min(1180px, 100%);
+      min-height: min(710px, 82vh);
+      background: linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .canvas::before {
+      content: "";
       position: absolute;
-      width: 18px; height: 18px; border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 18px var(--green), 0 0 35px var(--green);
-      opacity: 0;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at 70% 20%, black, transparent 65%);
+      opacity: 0.3;
+      pointer-events: none;
     }
-    .wave {
-      position:absolute; border: 2px solid rgba(30,232,255,.65); border-radius:50%; opacity:0;
-      animation: wave 2.1s ease-out infinite;
+
+    .inner {
+      position: relative;
+      z-index: 2;
+      padding: clamp(34px, 5vw, 64px);
+      min-height: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 28px;
     }
-    @keyframes wave {
-      0% { width: 10px; height: 10px; opacity: .9; }
-      100% { width: 190px; height: 190px; opacity: 0; }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      font-size: clamp(44px, 7vw, 92px);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
     }
-    .explain {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 14px;
-      position:relative; z-index:1;
+
+    h2 {
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 1;
+      letter-spacing: -0.045em;
     }
-    .log {
-      min-height: 120px;
-      border-radius: 16px;
-      padding: 14px;
-      background: rgba(0,0,0,.24);
-      border: 1px solid rgba(255,255,255,.08);
-      color: #bfefff;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    h3 {
+      font-size: clamp(20px, 2.1vw, 30px);
+      letter-spacing: -0.025em;
+    }
+
+    p, li {
+      color: var(--muted);
+      font-size: clamp(16px, 1.4vw, 21px);
+      line-height: 1.55;
+    }
+
+    ul { margin: 0; padding-left: 1.2em; }
+    li { margin: 8px 0; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: max-content;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(96,230,210,0.14);
+      border: 1px solid rgba(96,230,210,0.35);
+      color: #dffef9;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
       font-size: 13px;
-      white-space: pre-line;
     }
-    .teacher-note { padding: 14px; border-radius:16px; background:rgba(83,255,159,.08); border:1px solid rgba(83,255,159,.18); }
-    .choice-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top:16px; }
-    .choice { border:1px solid rgba(30,232,255,.25); border-radius:16px; padding:14px; background:rgba(255,255,255,.045); cursor:pointer; }
-    .choice.active { border-color: var(--green); box-shadow: 0 0 18px rgba(83,255,159,.22); }
-    .matrix { display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
-    .pill { display:inline-block; color:#06111f; background:var(--green); border-radius:999px; padding:5px 10px; font-size:12px; font-weight:900; margin-bottom:8px; }
-    footer { text-align:center; padding:40px 20px; color:var(--muted); }
-    @media (max-width: 900px) {
-      .topic-head, .cards, .explain, .matrix { grid-template-columns: 1fr; }
-      .cards { grid-template-columns: 1fr; }
-      .choice-grid { grid-template-columns: 1fr; }
-      section { padding: 18px; }
-      .stage { min-height: 440px; }
-      .node { width: 105px; font-size: 12px; }
+
+    .grad {
+      background: linear-gradient(92deg, var(--accent), #fff, var(--accent3));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      max-width: 860px;
+      font-size: clamp(18px, 1.6vw, 25px);
+    }
+
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      padding: 22px;
+      border-radius: 22px;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.18);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: -40% auto auto -20%;
+      width: 180px;
+      height: 180px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .card h3 { margin-bottom: 10px; }
+    .card p, .card li { font-size: clamp(14px, 1.15vw, 18px); }
+
+    .icon {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(96,230,210,0.25), rgba(138,125,255,0.25));
+      border: 1px solid rgba(255,255,255,0.18);
+      font-size: 25px;
+      margin-bottom: 16px;
+    }
+
+    .topic-number {
+      font-size: clamp(70px, 11vw, 160px);
+      line-height: 0.8;
+      font-weight: 900;
+      color: rgba(255,255,255,0.09);
+      position: absolute;
+      right: 4vw;
+      bottom: 4vh;
+      letter-spacing: -0.08em;
+      user-select: none;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .step {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.16);
+      text-align: center;
+      min-height: 126px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .step strong {
+      font-size: clamp(16px, 1.3vw, 20px);
+    }
+
+    .step span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.11);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #f5fbff;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.09);
+    }
+
+    .mini-table th, .mini-table td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.14);
+      color: var(--muted);
+      font-size: clamp(14px, 1.1vw, 17px);
+    }
+
+    .mini-table th {
+      color: var(--text);
+      background: rgba(255,255,255,0.11);
+      font-size: clamp(14px, 1.1vw, 18px);
+    }
+
+    .mini-table tr:last-child td { border-bottom: 0; }
+
+    .nav {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 999px;
+      background: rgba(5, 12, 22, 0.70);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.25);
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      color: var(--text);
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.18); }
+
+    .counter {
+      color: var(--muted);
+      font-weight: 700;
+      min-width: 72px;
+      text-align: center;
+    }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 5px;
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      z-index: 30;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+      transition: width 350ms ease;
+    }
+
+    .outline-toggle {
+      position: fixed;
+      top: 22px;
+      right: 24px;
+      z-index: 22;
+    }
+
+    .outline {
+      position: fixed;
+      top: 74px;
+      right: 24px;
+      width: min(360px, calc(100vw - 48px));
+      max-height: calc(100vh - 120px);
+      overflow: auto;
+      padding: 14px;
+      border-radius: 24px;
+      background: rgba(5, 12, 22, 0.82);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+      z-index: 21;
+      transform: translateY(-12px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .outline.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .outline button {
+      width: 100%;
+      text-align: left;
+      margin: 5px 0;
+      padding: 12px 14px;
+      border-radius: 15px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .outline button.active,
+    .outline button:hover {
+      color: var(--text);
+      border-color: rgba(96,230,210,0.35);
+      background: rgba(96,230,210,0.12);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 500ms ease, transform 550ms ease;
+    }
+
+    .active .reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .active .reveal:nth-child(1) { transition-delay: 60ms; }
+    .active .reveal:nth-child(2) { transition-delay: 150ms; }
+    .active .reveal:nth-child(3) { transition-delay: 240ms; }
+    .active .reveal:nth-child(4) { transition-delay: 330ms; }
+    .active .reveal:nth-child(5) { transition-delay: 420ms; }
+    .active .reveal:nth-child(6) { transition-delay: 510ms; }
+
+    .quote {
+      padding: 28px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(96,230,210,0.16), rgba(138,125,255,0.14));
+      border: 1px solid rgba(255,255,255,0.20);
+      font-size: clamp(21px, 2.1vw, 32px);
+      line-height: 1.35;
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    .code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 18px;
+      padding: 18px;
+      color: #e8fff9;
+      font-size: clamp(14px, 1.2vw, 17px);
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .big-icon {
+      font-size: clamp(92px, 12vw, 180px);
+      line-height: 1;
+      filter: drop-shadow(0 20px 35px rgba(0,0,0,0.35));
+      animation: pulseIcon 2.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseIcon {
+      from { transform: translateY(0) rotate(-2deg) scale(1); }
+      to { transform: translateY(-12px) rotate(2deg) scale(1.04); }
+    }
+
+    @media (max-width: 820px) {
+      html, body { overflow: auto; }
+      .deck { height: auto; min-height: 100vh; }
+      .slide { position: relative; min-height: 100vh; padding: 80px 18px 110px; display: none; }
+      .slide.active { display: grid; }
+      .canvas { min-height: auto; }
+      .inner { padding: 28px; }
+      .grid.two, .grid.three, .grid.four, .flow, .split { grid-template-columns: 1fr; }
+      .nav { width: calc(100vw - 28px); justify-content: center; }
+      .outline-toggle { right: 14px; }
+      .outline { right: 14px; }
+      .topic-number { display: none; }
+    }
+
+    @media print {
+      html, body { overflow: visible; background: #ffffff; color: #111827; }
+      body::before, body::after, .nav, .progress, .outline, .outline-toggle { display: none !important; }
+      .deck { width: auto; height: auto; }
+      .slide, .slide.active, .slide.previous {
+        position: relative;
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+        page-break-after: always;
+        height: 100vh;
+        padding: 20px;
+      }
+      .canvas { background: #0b1524; box-shadow: none; border: 0; }
     }
   </style>
 </head>
 <body>
-<div class="grid-bg"></div>
-<header>
-  <div class="hero-card">
-    <h1>Futuristic <span class="accent">IoT Protocols</span><br/>Live Simulation Lab</h1>
-    <p>Interactive teaching slides in HTML. Each topic explains what it is, the IoT problem it solves, where it is used, when to choose it, and then shows a live simulation.</p>
-    <div class="nav">
-      <a href="#ieee">IEEE 802.15.4</a><a href="#bacnet">BACnet</a><a href="#network">Network Layer</a><a href="#security">Security</a><a href="#rfid">RFID Protocols</a><a href="#standards">Unified Data Standards</a><a href="#matrix">Selection Matrix</a>
-    </div>
-  </div>
-</header>
-<main>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <button class="btn outline-toggle" id="outlineToggle">Topics</button>
+  <aside class="outline" id="outline"></aside>
 
-<section id="ieee">
-  <div class="topic-head">
-    <div><h2>IEEE 802.15.4</h2><p>A low-cost, low-data-rate wireless access technology for battery-operated low-rate wireless personal area networks. It defines how small devices communicate at the physical and MAC layers.</p></div>
-    <div class="cards"><div class="card"><strong>What is this?</strong>Wireless foundation for low-power IoT networks.</div><div class="card"><strong>Problem solved</strong>Small sensors need long battery life and simple local communication.</div><div class="card"><strong>Used in</strong>Zigbee, Thread, 6LoWPAN, smart utility networks, WSNs.</div><div class="card"><strong>Choose when</strong>Low power, low data rate, short-range mesh or star network.</div></div>
-  </div>
-  <div class="sim"><div class="sim-title"><h3>Live Simulation: Sensor Packet Flow</h3><button onclick="runIEEE()">Run simulation</button></div><div class="stage" id="ieeeStage"></div><div class="explain"><div class="log" id="ieeeLog">Click Run simulation.</div><div class="teacher-note"><b>Explanation:</b> the sensor wakes up, sends a small frame through PHY/MAC, reaches a coordinator, then the gateway forwards data to the IoT cloud. This is why IEEE 802.15.4 is useful for battery sensor networks.</div></div></div>
-</section>
+  <main class="deck" id="deck">
+    <section class="slide active" data-title="Cover">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">CTEVT Diploma Level IoT</span>
+          <h1 class="reveal">Unit 6 <span class="grad">Topic Notes</span></h1>
+          <p class="subtitle reveal">A presentation-style HTML page for topics 6.9 to 6.14. Labs are excluded as requested.</p>
+          <div class="pill-list reveal">
+            <span class="pill">Data Analytics</span>
+            <span class="pill">IoT Tools</span>
+            <span class="pill">Cloud Storage</span>
+            <span class="pill">APIs</span>
+            <span class="pill">Cloud for IoT</span>
+            <span class="pill">AWS IoT</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<section id="bacnet">
-  <div class="topic-head"><div><h2>BACnet Protocol</h2><p>A building automation protocol that lets HVAC, lighting, alarms, access control, and energy devices communicate with a building management system.</p></div><div class="cards"><div class="card"><strong>What is this?</strong>Common language for smart building devices.</div><div class="card"><strong>Problem solved</strong>Different vendor systems need interoperability.</div><div class="card"><strong>Used in</strong>Hospitals, campuses, airports, offices, data centers.</div><div class="card"><strong>Choose when</strong>The IoT system controls building automation equipment.</div></div></div>
-  <div class="sim"><div class="sim-title"><h3>Live Simulation: Smart Building Control</h3><button onclick="runBACnet()">Run simulation</button></div><div class="stage" id="bacnetStage"></div><div class="explain"><div class="log" id="bacnetLog">Click Run simulation.</div><div class="teacher-note"><b>Explanation:</b> BACnet represents building devices as objects and services. A temperature sensor reports a value, the controller decides, and the HVAC actuator changes the room condition.</div></div></div>
-</section>
+    <section class="slide" data-title="Course Map">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">Learning Map</span>
+          <h2 class="reveal">Topics covered</h2>
+          <div class="grid three reveal">
+            <div class="card"><div class="icon">📊</div><h3>6.9 Data Analytics for IoT</h3><p>Turning sensor data into information, insight, prediction, and action.</p></div>
+            <div class="card"><div class="icon">🛠️</div><h3>6.10 Software and Management Tools</h3><p>Tools for building, monitoring, securing, and managing IoT systems.</p></div>
+            <div class="card"><div class="icon">☁️</div><h3>6.11 Cloud Storage and Communication</h3><p>Storage models and communication patterns used by connected devices.</p></div>
+            <div class="card"><div class="icon">🔌</div><h3>6.12 APIs</h3><p>Interfaces that allow devices, apps, dashboards, and cloud systems to interact.</p></div>
+            <div class="card"><div class="icon">🌐</div><h3>6.13 Cloud for IoT</h3><p>Cloud-based storage, processing, analytics, control, and integration.</p></div>
+            <div class="card"><div class="icon">🧩</div><h3>6.14 AWS for IoT</h3><p>Amazon Web Services components for secure and scalable IoT systems.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<section id="network">
-  <div class="topic-head"><div><h2>Network Layer</h2><p>The IoT routing layer that handles addressing, path selection, forwarding, and multi-hop connectivity between nodes, gateways, edge systems, and cloud platforms.</p></div><div class="cards"><div class="card"><strong>What is this?</strong>Routing intelligence of the IoT network.</div><div class="card"><strong>Problem solved</strong>Packets must reach destination even across lossy networks.</div><div class="card"><strong>Used in</strong>Mesh networks, smart cities, WSNs, industrial IoT.</div><div class="card"><strong>Choose when</strong>Devices are spread out or need multi-hop paths.</div></div></div>
-  <div class="sim"><div class="sim-title"><h3>Live Simulation: Multi-Hop Routing and Reroute</h3><button onclick="runNetwork()">Run simulation</button></div><div class="stage" id="networkStage"></div><div class="explain"><div class="log" id="networkLog">Click Run simulation.</div><div class="teacher-note"><b>Explanation:</b> the network layer chooses the best available route. If one link fails, the packet can be rerouted through another node so the cloud still receives the data.</div></div></div>
-</section>
+    <section class="slide" data-title="6.9 Data Analytics for IoT">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">6.9</span>
+          <div class="split">
+            <div>
+              <h2 class="reveal">Data Analytics for IoT</h2>
+              <p class="subtitle reveal">IoT analytics means collecting, cleaning, processing, visualizing, and interpreting data generated by IoT devices.</p>
+              <p class="reveal">IoT data often comes as a time series, such as temperature every minute, GPS location every few seconds, or power consumption every hour.</p>
+            </div>
+            <div class="card reveal">
+              <h3>Why it matters</h3>
+              <ul>
+                <li>Converts raw readings into useful information.</li>
+                <li>Detects abnormal events such as overheating or water leakage.</li>
+                <li>Supports automation, monitoring, and decision making.</li>
+                <li>Helps create dashboards, reports, alerts, and predictions.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="topic-number">6.9</div>
+        </div>
+      </div>
+    </section>
 
-<section id="security">
-  <div class="topic-head"><div><h2>IoT Security</h2><p>Security protects device identity, authentication, encrypted data, integrity checks, firmware, access control, and cloud services across the full IoT stack.</p></div><div class="cards"><div class="card"><strong>What is this?</strong>Trust layer for connected devices.</div><div class="card"><strong>Problem solved</strong>Hacking, packet sniffing, firmware modification, unauthorized access.</div><div class="card"><strong>Used in</strong>Smart homes, SCADA, healthcare, utilities, factories.</div><div class="card"><strong>Choose when</strong>Always, especially for safety-critical or sensitive IoT systems.</div></div></div>
-  <div class="sim"><div class="sim-title"><h3>Live Simulation: Secure Message Journey</h3><button onclick="runSecurity()">Run simulation</button></div><div class="stage" id="securityStage"></div><div class="explain"><div class="log" id="securityLog">Click Run simulation.</div><div class="teacher-note"><b>Explanation:</b> security is not one step. The device authenticates, encrypts the payload, the cloud verifies integrity, and attacker traffic is rejected.</div></div></div>
-</section>
+    <section class="slide" data-title="IoT Analytics Pipeline">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">Analytics Pipeline</span>
+          <h2 class="reveal">From sensor reading to smart decision</h2>
+          <div class="flow reveal">
+            <div class="step"><strong>1. Sense</strong><span>Sensor collects physical data.</span></div>
+            <div class="step"><strong>2. Send</strong><span>Device sends data through MQTT, HTTP, Wi-Fi, LoRaWAN, or cellular.</span></div>
+            <div class="step"><strong>3. Store</strong><span>Data is saved in cloud, database, or time-series storage.</span></div>
+            <div class="step"><strong>4. Analyze</strong><span>System calculates trends, thresholds, patterns, or predictions.</span></div>
+            <div class="step"><strong>5. Act</strong><span>Dashboard, alert, report, or automatic control is triggered.</span></div>
+          </div>
+          <div class="quote reveal">Raw data becomes valuable only when it leads to a clear action.</div>
+        </div>
+      </div>
+    </section>
 
-<section id="rfid">
-  <div class="topic-head"><div><h2>RFID Protocols</h2><p>RFID protocols define how radio tags and readers communicate to identify, track, and authenticate physical objects without line-of-sight scanning.</p></div><div class="cards"><div class="card"><strong>What is this?</strong>Radio identity standard for objects.</div><div class="card"><strong>Problem solved</strong>Manual barcode scanning is slow and needs line of sight.</div><div class="card"><strong>Used in</strong>Supply chain, access cards, passports, libraries, animal tracking.</div><div class="card"><strong>Choose when</strong>You need fast physical object identification.</div></div></div>
-  <div class="sim"><div class="sim-title"><h3>Live Simulation: RFID Read Cycle</h3><button onclick="runRFID()">Run simulation</button></div><div class="stage" id="rfidStage"></div><div class="explain"><div class="log" id="rfidLog">Click Run simulation.</div><div class="teacher-note"><b>Explanation:</b> a passive tag has no battery. The reader emits radio energy, the tag powers up, responds with its ID, and the backend updates inventory or access status.</div></div>
-    <div class="choice-grid" id="rfidChoices"></div><div class="log" id="rfidChoiceLog">Click a use case below to choose the RFID protocol.</div>
-  </div>
-</section>
+    <section class="slide" data-title="Types of IoT Analytics">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">Analytics Types</span>
+          <h2 class="reveal">Four common types of analytics</h2>
+          <table class="mini-table reveal">
+            <thead><tr><th>Type</th><th>Question answered</th><th>IoT example</th></tr></thead>
+            <tbody>
+              <tr><td>Descriptive</td><td>What happened?</td><td>Daily average temperature from a sensor.</td></tr>
+              <tr><td>Diagnostic</td><td>Why did it happen?</td><td>Temperature increased because the cooling fan was off.</td></tr>
+              <tr><td>Predictive</td><td>What may happen next?</td><td>Predicting machine failure from vibration changes.</td></tr>
+              <tr><td>Prescriptive</td><td>What action should be taken?</td><td>Start irrigation when soil moisture is below a limit.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-<section id="standards">
-  <div class="topic-head"><div><h2>Unified Data Standards and Protocols</h2><p>Unified standards provide common data models, message formats, names, and meanings so different IoT devices, platforms, and analytics systems understand each other.</p></div><div class="cards"><div class="card"><strong>What is this?</strong>Shared language for IoT data.</div><div class="card"><strong>Problem solved</strong>Fragmented formats block analytics and interoperability.</div><div class="card"><strong>Used in</strong>Smart cities, industrial IoT, digital twins, healthcare IoT.</div><div class="card"><strong>Choose when</strong>Multiple vendors or systems need to share data.</div></div></div>
-  <div class="sim"><div class="sim-title"><h3>Live Simulation: Data Normalization Pipeline</h3><button onclick="runStandards()">Run simulation</button></div><div class="stage" id="standardsStage"></div><div class="explain"><div class="log" id="standardsLog">Click Run simulation.</div><div class="teacher-note"><b>Explanation:</b> different devices send different formats. The gateway converts them into a unified model, allowing dashboards, AI analytics, and digital twins to use clean data.</div></div></div>
-</section>
+    <section class="slide" data-title="6.10 Software and Management Tools">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">6.10</span>
+          <h2 class="reveal">Software and Management Tools for IoT</h2>
+          <p class="subtitle reveal">IoT software is used to program devices, connect them to networks, process data, build dashboards, and manage devices remotely.</p>
+          <div class="grid three reveal">
+            <div class="card"><div class="icon">💻</div><h3>Development</h3><p>Arduino IDE, Python, Raspberry Pi tools, ESP32 tools, PlatformIO.</p></div>
+            <div class="card"><div class="icon">📡</div><h3>Communication</h3><p>MQTT brokers, HTTP clients, CoAP tools, MQTT Explorer, MQTTX.</p></div>
+            <div class="card"><div class="icon">📈</div><h3>Visualization</h3><p>Node-RED, Grafana, ThingsBoard, Blynk, ThingSpeak dashboards.</p></div>
+          </div>
+          <div class="topic-number">6.10</div>
+        </div>
+      </div>
+    </section>
 
-<section id="matrix">
-  <h2>Protocol Selection Matrix</h2>
-  <div class="matrix">
-    <div class="card"><span class="pill">IEEE 802.15.4</span><strong>Choose for:</strong> battery sensor networks, short range, low data rate, mesh/star IoT.</div>
-    <div class="card"><span class="pill">BACnet</span><strong>Choose for:</strong> smart buildings, HVAC, lighting, BMS, vendor interoperability.</div>
-    <div class="card"><span class="pill">Network Layer</span><strong>Choose for:</strong> routing, addressing, multi-hop communication, IP/cloud integration.</div>
-    <div class="card"><span class="pill">Security</span><strong>Choose for:</strong> every IoT system, especially sensitive or safety-critical deployments.</div>
-    <div class="card"><span class="pill">RFID</span><strong>Choose for:</strong> object identity, access cards, inventory, logistics, non-line-of-sight tracking.</div>
-    <div class="card"><span class="pill">Unified Standards</span><strong>Choose for:</strong> cross-vendor data sharing, digital twins, analytics, scalable platforms.</div>
-  </div>
-</section>
-</main>
-<footer>IoT Protocol Simulation Lab | Use keyboard or scroll to present topic by topic.</footer>
-<script>
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-function setLog(id, text){ document.getElementById(id).textContent = text; }
-function clearStage(id){ document.getElementById(id).innerHTML = ''; }
-function node(stage, text, x, y, cls=''){
-  const el=document.createElement('div'); el.className='node '+cls; el.style.left=x+'%'; el.style.top=y+'%'; el.innerHTML=text; stage.appendChild(el); return el;
-}
-function line(stage, x1,y1,x2,y2, color){
-  const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy); const a=Math.atan2(dy,dx)*180/Math.PI;
-  const l=document.createElement('div'); l.className='line'; l.style.left=x1+'%'; l.style.top=y1+'%'; l.style.width=len+'%'; l.style.transform='rotate('+a+'deg)'; if(color) l.style.background=color; stage.appendChild(l); return l;
-}
-async function packet(stage, points, color='var(--green)'){
-  const p=document.createElement('div'); p.className='packet'; p.style.background=color; p.style.boxShadow='0 0 18px '+color+', 0 0 35px '+color; stage.appendChild(p);
-  for(let i=0;i<points.length;i++){
-    p.style.transition='all .85s ease-in-out'; p.style.opacity=1; p.style.left=points[i][0]+'%'; p.style.top=points[i][1]+'%'; await sleep(900);
-  }
-  p.style.opacity=0; await sleep(250); p.remove();
-}
-function wave(stage,x,y,delay=0){ const w=document.createElement('div'); w.className='wave'; w.style.left=x+'%'; w.style.top=y+'%'; w.style.animationDelay=delay+'s'; stage.appendChild(w); return w; }
+    <section class="slide" data-title="IoT Tool Stack">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">Tool Stack</span>
+          <h2 class="reveal">Main tool categories</h2>
+          <div class="grid two reveal">
+            <div class="card">
+              <h3>Device programming tools</h3>
+              <ul><li>Used to write and upload code to microcontrollers.</li><li>Examples: Arduino IDE, Thonny, VS Code, PlatformIO.</li></ul>
+            </div>
+            <div class="card">
+              <h3>Data and server tools</h3>
+              <ul><li>Used to receive, store, and process IoT readings.</li><li>Examples: Node-RED, Mosquitto, MySQL, MongoDB, InfluxDB.</li></ul>
+            </div>
+            <div class="card">
+              <h3>Cloud platform tools</h3>
+              <ul><li>Used for dashboards, device registration, and monitoring.</li><li>Examples: ThingsBoard, Arduino Cloud, AWS IoT, Firebase.</li></ul>
+            </div>
+            <div class="card">
+              <h3>Security and management tools</h3>
+              <ul><li>Used for authentication, updates, logs, and device health.</li><li>Examples: certificates, API keys, policies, OTA tools.</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-async function runIEEE(){
-  const s=document.getElementById('ieeeStage'); clearStage('ieeeStage');
-  node(s,'Battery<br>Sensor',8,42,'green'); node(s,'PHY + MAC<br>802.15.4',30,42); node(s,'Coordinator',52,42,'orange'); node(s,'Gateway',72,42); node(s,'IoT Cloud',86,42,'green');
-  line(s,18,50,33,50); line(s,42,50,55,50); line(s,64,50,75,50); line(s,82,50,90,50);
-  setLog('ieeeLog','1. Sensor wakes up\n2. Temperature measured\n3. MAC frame created\n4. Radio sends packet'); await packet(s,[[13,48],[35,48]], 'var(--green)');
-  setLog('ieeeLog','5. Coordinator receives the frame\n6. Gateway prepares cloud message'); await packet(s,[[35,48],[57,48],[76,48]], 'var(--cyan)');
-  setLog('ieeeLog','7. Cloud dashboard updates\nResult: low-power IoT data delivered'); await packet(s,[[76,48],[90,48]], 'var(--orange)');
-}
-async function runBACnet(){
-  const s=document.getElementById('bacnetStage'); clearStage('bacnetStage');
-  node(s,'Room Temp<br>Sensor',8,25,'green'); node(s,'BACnet<br>Controller',38,42,'orange'); node(s,'HVAC<br>Actuator',70,25); node(s,'Building<br>Dashboard',70,62,'green');
-  line(s,18,34,42,50); line(s,50,50,74,34); line(s,50,53,74,70); node(s,'Room status:<br><span id="roomStatus">HOT</span>',35,70,'red');
-  setLog('bacnetLog','1. Sensor object reports: Present_Value = 29°C'); await packet(s,[[13,31],[43,48]], 'var(--green)');
-  setLog('bacnetLog','2. Controller compares value with setpoint\n3. Command sent to HVAC actuator'); await packet(s,[[43,48],[75,31]], 'var(--cyan)');
-  document.getElementById('roomStatus').textContent='OPTIMIZED';
-  setLog('bacnetLog','4. HVAC cooling starts\n5. Dashboard updates comfort and energy state'); await packet(s,[[75,31],[75,68]], 'var(--orange)');
-}
-async function runNetwork(){
-  const s=document.getElementById('networkStage'); clearStage('networkStage');
-  node(s,'Node A<br>Sensor',6,50,'green'); node(s,'Router B',30,28); node(s,'Router C',54,28); node(s,'Router D',30,70); node(s,'Gateway',76,50,'orange'); node(s,'Cloud',88,50,'green');
-  line(s,15,57,34,35); line(s,40,35,58,35, 'rgba(255,77,109,.65)'); line(s,15,60,34,78); line(s,40,78,80,58); line(s,64,36,80,55); line(s,84,58,91,58);
-  setLog('networkLog','Route attempt 1: A -> B -> C -> Gateway'); await packet(s,[[11,56],[35,34]], 'var(--green)');
-  setLog('networkLog','Link B -> C fails. Network layer recalculates route.'); await sleep(700);
-  await packet(s,[[35,34],[35,76],[79,56],[91,56]], 'var(--cyan)');
-  setLog('networkLog','Successful reroute: A -> B -> D -> Gateway -> Cloud\nResult: data survives link failure.');
-}
-async function runSecurity(){
-  const s=document.getElementById('securityStage'); clearStage('securityStage');
-  node(s,'IoT Device',8,45,'green'); node(s,'Secure<br>Gateway',35,45); node(s,'Cloud<br>Verifier',62,45,'orange'); node(s,'Attacker',35,75,'red'); node(s,'App<br>Dashboard',84,45,'green');
-  line(s,18,53,39,53); line(s,47,53,66,53); line(s,74,53,88,53); line(s,42,80,66,57,'rgba(255,77,109,.5)');
-  setLog('securityLog','1. Device authenticates with gateway.'); await packet(s,[[13,51],[40,51]], 'var(--green)');
-  setLog('securityLog','2. Payload is encrypted and forwarded.'); await packet(s,[[40,51],[67,51]], 'var(--cyan)');
-  setLog('securityLog','3. Attacker sends fake packet. Integrity check fails.'); await packet(s,[[40,78],[66,55]], 'var(--red)');
-  node(s,'BLOCKED',54,72,'red'); await sleep(500);
-  setLog('securityLog','4. Valid packet reaches dashboard.\nResult: trusted data accepted, malicious traffic blocked.'); await packet(s,[[67,51],[88,51]], 'var(--green)');
-}
-async function runRFID(){
-  const s=document.getElementById('rfidStage'); clearStage('rfidStage');
-  node(s,'RFID<br>Reader',16,40,'orange'); node(s,'Passive<br>Tag',48,40,'green'); node(s,'Middleware',70,40); node(s,'IoT<br>Database',86,40,'green');
-  line(s,26,48,52,48); line(s,58,48,73,48); line(s,79,48,90,48);
-  wave(s,22,46,0); wave(s,22,46,.5); wave(s,22,46,1);
-  setLog('rfidLog','1. Reader emits radio energy.\n2. Passive tag powers up.'); await sleep(1600);
-  setLog('rfidLog','3. Tag sends ID response back to reader.'); await packet(s,[[51,47],[20,47]], 'var(--green)');
-  setLog('rfidLog','4. Reader forwards ID to middleware and database.'); await packet(s,[[20,47],[72,47],[88,47]], 'var(--cyan)');
-  setLog('rfidLog','Result: object identified without line-of-sight scanning.');
-}
-const rfidData=[
-  ['Animal tracking','ISO 11784/11785, LF 134.2 kHz','Best for implanted or attached animal transponders.'],
-  ['Passport / bank card','ISO/IEC 14443, HF 13.56 MHz','Close-range and higher security identification.'],
-  ['Library / asset tracking','ISO/IEC 15693, HF 13.56 MHz','Flexible longer HF reading for assets and libraries.'],
-  ['Warehouse pallets','EPC Gen2 / ISO 18000-6C, UHF 860-960 MHz','Medium to long-range inventory reading.'],
-  ['Container tracking','ISO/IEC 18000 series','Covers several frequencies and active/passive tag scenarios.'],
-  ['Access control','ISO/IEC 14443 or 15693','Depends on security level and range needed.']
-];
-function initRFIDChoices(){ const c=document.getElementById('rfidChoices'); c.innerHTML=''; rfidData.forEach((d,i)=>{ const el=document.createElement('div'); el.className='choice'; el.innerHTML='<b>'+d[0]+'</b><br><span>'+d[1]+'</span>'; el.onclick=()=>{document.querySelectorAll('#rfidChoices .choice').forEach(x=>x.classList.remove('active')); el.classList.add('active'); setLog('rfidChoiceLog','Use case: '+d[0]+'\nRecommended: '+d[1]+'\nWhy: '+d[2]);}; c.appendChild(el); }); }
-initRFIDChoices();
-async function runStandards(){
-  const s=document.getElementById('standardsStage'); clearStage('standardsStage');
-  node(s,'Device A<br>{ JSON }',5,22,'green'); node(s,'Device B<br>Binary',5,48,'orange'); node(s,'RFID Event<br>EPC Code',5,74); node(s,'Gateway<br>Normalizer',38,48,'green'); node(s,'Unified<br>Data Model',61,48,'orange'); node(s,'AI Analytics<br>Digital Twin',83,48,'green');
-  line(s,15,30,42,55); line(s,15,56,42,56); line(s,15,82,42,58); line(s,49,56,64,56); line(s,72,56,86,56);
-  setLog('standardsLog','1. Heterogeneous devices send incompatible raw data.'); await packet(s,[[10,28],[43,54]], 'var(--green)'); await packet(s,[[10,54],[43,54]], 'var(--orange)'); await packet(s,[[10,80],[43,56]], 'var(--cyan)');
-  setLog('standardsLog','2. Gateway maps all messages into one shared model.'); await packet(s,[[43,54],[65,54]], 'var(--green)');
-  setLog('standardsLog','3. Analytics and digital twin consume clean, consistent data.'); await packet(s,[[65,54],[87,54]], 'var(--cyan)');
-}
-</script>
+    <section class="slide" data-title="IoT Device Management">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">Device Management</span>
+          <h2 class="reveal">Managing IoT devices at scale</h2>
+          <div class="pill-list reveal">
+            <span class="pill">Register device</span>
+            <span class="pill">Authenticate</span>
+            <span class="pill">Configure</span>
+            <span class="pill">Monitor health</span>
+            <span class="pill">Update firmware</span>
+            <span class="pill">Detect errors</span>
+            <span class="pill">Log activity</span>
+            <span class="pill">Deactivate safely</span>
+          </div>
+          <div class="grid two reveal">
+            <div class="card"><h3>Small IoT project</h3><p>Manual management may be enough for a few sensors and devices.</p></div>
+            <div class="card"><h3>Real IoT system</h3><p>Hundreds or thousands of devices need centralized monitoring, updates, security, and alerts.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="6.11 Cloud Storage Models">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">6.11</span>
+          <h2 class="reveal">Cloud Storage Models and Communication</h2>
+          <p class="subtitle reveal">IoT devices create continuous data. Cloud storage keeps that data available for dashboards, analytics, machine learning, reports, and future decisions.</p>
+          <div class="grid three reveal">
+            <div class="card"><div class="icon">🧊</div><h3>Object Storage</h3><p>Stores files, logs, images, backups, and raw IoT data with metadata.</p></div>
+            <div class="card"><div class="icon">🗄️</div><h3>Database Storage</h3><p>Stores structured or semi-structured readings for applications and dashboards.</p></div>
+            <div class="card"><div class="icon">⏱️</div><h3>Time-Series Storage</h3><p>Stores data linked with time, such as one reading per second or minute.</p></div>
+            <div class="card"><div class="icon">📁</div><h3>File Storage</h3><p>Stores shared files in folder-like structure for applications.</p></div>
+            <div class="card"><div class="icon">🧱</div><h3>Block Storage</h3><p>Used for virtual machines and high-performance systems.</p></div>
+            <div class="card"><div class="icon">🌊</div><h3>Data Lake</h3><p>Stores large raw data from many sources for big data analytics.</p></div>
+          </div>
+          <div class="topic-number">6.11</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="IoT Communication Models">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">Communication</span>
+          <h2 class="reveal">How IoT systems communicate</h2>
+          <div class="grid two reveal">
+            <div class="card"><h3>Device to Device</h3><p>Devices communicate directly, such as a smart switch controlling a smart light.</p></div>
+            <div class="card"><h3>Device to Gateway</h3><p>Sensors send data to a local gateway, which forwards it to the Internet or cloud.</p></div>
+            <div class="card"><h3>Device to Cloud</h3><p>Device sends data directly to a cloud platform using the Internet.</p></div>
+            <div class="card"><h3>Cloud to Device</h3><p>Cloud sends commands back to the device, such as turning a motor on or off.</p></div>
+          </div>
+          <div class="pill-list reveal">
+            <span class="pill">MQTT</span><span class="pill">HTTP or HTTPS</span><span class="pill">CoAP</span><span class="pill">WebSocket</span><span class="pill">Bluetooth</span><span class="pill">Wi-Fi</span><span class="pill">Zigbee</span><span class="pill">LoRaWAN</span><span class="pill">Cellular</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="6.12 APIs">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">6.12</span>
+          <div class="split">
+            <div>
+              <h2 class="reveal">APIs in IoT</h2>
+              <p class="subtitle reveal">An API, or Application Programming Interface, is a set of rules that allows one software system to communicate with another.</p>
+              <p class="reveal">In IoT, APIs connect devices, mobile apps, dashboards, databases, and cloud services.</p>
+            </div>
+            <div class="big-icon reveal">🔌</div>
+          </div>
+          <div class="topic-number">6.12</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="REST, MQTT, and WebSocket APIs">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">API Types</span>
+          <h2 class="reveal">Common API styles for IoT</h2>
+          <div class="grid three reveal">
+            <div class="card"><h3>REST API</h3><p>Uses HTTP methods such as GET, POST, PUT, and DELETE. Common in web and mobile apps.</p></div>
+            <div class="card"><h3>MQTT API</h3><p>Uses publish-subscribe topics. Best for lightweight IoT messaging.</p></div>
+            <div class="card"><h3>WebSocket API</h3><p>Supports real-time two-way communication between client and server.</p></div>
+          </div>
+          <div class="code reveal">Example REST request
+GET /devices/101/temperature
+
+Example MQTT topics
+home/kitchen/temperature
+home/kitchen/light/control</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="API Security">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">API Security</span>
+          <h2 class="reveal">APIs must be protected</h2>
+          <div class="grid four reveal">
+            <div class="card"><div class="icon">🔑</div><h3>Authentication</h3><p>Verifies who or what is connecting.</p></div>
+            <div class="card"><div class="icon">🛂</div><h3>Authorization</h3><p>Controls what actions are allowed.</p></div>
+            <div class="card"><div class="icon">🔒</div><h3>Encryption</h3><p>Protects data during transmission.</p></div>
+            <div class="card"><div class="icon">🧯</div><h3>Rate Limits</h3><p>Reduces misuse and overload.</p></div>
+          </div>
+          <p class="subtitle reveal">Because IoT APIs may control real devices, weak API security can create physical safety risks.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="6.13 Cloud for IoT">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">6.13</span>
+          <h2 class="reveal">Cloud for IoT</h2>
+          <p class="subtitle reveal">Cloud for IoT means using cloud computing services to store, process, analyze, manage, and control IoT data and devices.</p>
+          <div class="flow reveal">
+            <div class="step"><strong>Sensors</strong><span>Collect data from the physical world.</span></div>
+            <div class="step"><strong>Device</strong><span>ESP32, Arduino, Raspberry Pi, or industrial controller.</span></div>
+            <div class="step"><strong>Gateway</strong><span>Collects data and connects local network to cloud.</span></div>
+            <div class="step"><strong>Cloud</strong><span>Stores, processes, analyzes, and secures data.</span></div>
+            <div class="step"><strong>App</strong><span>Dashboard, mobile app, alert, or control panel.</span></div>
+          </div>
+          <div class="topic-number">6.13</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Cloud Benefits and Limitations">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">Cloud Evaluation</span>
+          <h2 class="reveal">Benefits and limitations</h2>
+          <div class="grid two reveal">
+            <div class="card">
+              <h3>Benefits</h3>
+              <ul>
+                <li>Large storage and high processing power.</li>
+                <li>Remote monitoring from anywhere.</li>
+                <li>Easy dashboard, alert, and report generation.</li>
+                <li>Scalable for many devices and users.</li>
+                <li>Supports analytics and machine learning.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Limitations</h3>
+              <ul>
+                <li>Requires reliable Internet connection.</li>
+                <li>May add delay for time-critical control.</li>
+                <li>Data privacy and security must be planned.</li>
+                <li>Cost can increase with high data volume.</li>
+                <li>Edge or fog computing may be needed near devices.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="6.14 AWS for IoT">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">6.14</span>
+          <h2 class="reveal">Amazon Web Services for IoT</h2>
+          <p class="subtitle reveal">AWS IoT is a set of cloud services from Amazon for connecting, securing, managing, and analyzing IoT devices.</p>
+          <div class="grid three reveal">
+            <div class="card"><div class="icon">🧠</div><h3>AWS IoT Core</h3><p>Main service for connecting devices to AWS cloud.</p></div>
+            <div class="card"><div class="icon">📜</div><h3>Thing Registry</h3><p>Stores information about IoT devices, called things.</p></div>
+            <div class="card"><div class="icon">📨</div><h3>Message Broker</h3><p>Supports publish-subscribe communication between devices and apps.</p></div>
+            <div class="card"><div class="icon">🪞</div><h3>Device Shadow</h3><p>Stores the latest known device state for apps and services.</p></div>
+            <div class="card"><div class="icon">⚙️</div><h3>Rules Engine</h3><p>Filters, transforms, and routes messages to other AWS services.</p></div>
+            <div class="card"><div class="icon">🛡️</div><h3>Security</h3><p>Uses certificates, policies, and permissions for safe access.</p></div>
+          </div>
+          <div class="topic-number">6.14</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="AWS IoT Working Flow">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">AWS IoT Flow</span>
+          <h2 class="reveal">Basic working of AWS IoT</h2>
+          <div class="flow reveal">
+            <div class="step"><strong>Register</strong><span>Create a thing and attach security credentials.</span></div>
+            <div class="step"><strong>Connect</strong><span>Device connects securely to AWS IoT Core.</span></div>
+            <div class="step"><strong>Publish</strong><span>Device sends data to an MQTT topic.</span></div>
+            <div class="step"><strong>Process</strong><span>Rules Engine sends data to storage or other services.</span></div>
+            <div class="step"><strong>Respond</strong><span>Application sends alerts, dashboards, or commands.</span></div>
+          </div>
+          <div class="code reveal">Example:
+Temperature sensor → AWS IoT Core → Rules Engine → Database or alert → User dashboard</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Final Summary">
+      <div class="canvas">
+        <div class="inner">
+          <span class="eyebrow reveal">Quick Revision</span>
+          <h2 class="reveal">Exam-focused summary</h2>
+          <table class="mini-table reveal">
+            <thead><tr><th>Topic</th><th>Remember this</th></tr></thead>
+            <tbody>
+              <tr><td>6.9 Data Analytics</td><td>Transforms sensor data into insights, alerts, predictions, and decisions.</td></tr>
+              <tr><td>6.10 IoT Tools</td><td>Tools help develop, connect, monitor, secure, and manage IoT devices.</td></tr>
+              <tr><td>6.11 Cloud Storage and Communication</td><td>Data storage models and protocols support reliable IoT data flow.</td></tr>
+              <tr><td>6.12 APIs</td><td>APIs connect devices, cloud, dashboards, apps, and services.</td></tr>
+              <tr><td>6.13 Cloud for IoT</td><td>Cloud provides scalable storage, processing, analytics, and remote control.</td></tr>
+              <tr><td>6.14 AWS IoT</td><td>AWS IoT Core connects and secures devices, then routes data to AWS services.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav" aria-label="Slide navigation">
+    <button class="btn" id="prevBtn">Prev</button>
+    <span class="counter" id="counter">1 / 18</span>
+    <button class="btn" id="nextBtn">Next</button>
+  </nav>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counter = document.getElementById('counter');
+    const bar = document.getElementById('bar');
+    const outline = document.getElementById('outline');
+    const outlineToggle = document.getElementById('outlineToggle');
+    let current = 0;
+
+    function renderOutline() {
+      outline.innerHTML = '';
+      slides.forEach((slide, index) => {
+        const btn = document.createElement('button');
+        btn.textContent = `${String(index + 1).padStart(2, '0')}  ${slide.dataset.title}`;
+        btn.addEventListener('click', () => {
+          goTo(index);
+          outline.classList.remove('open');
+        });
+        outline.appendChild(btn);
+      });
+    }
+
+    function goTo(index) {
+      const next = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, i) => {
+        slide.classList.remove('active', 'previous');
+        if (i < next) slide.classList.add('previous');
+        if (i === next) slide.classList.add('active');
+      });
+      current = next;
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      bar.style.width = `${((current + 1) / slides.length) * 100}%`;
+      [...outline.querySelectorAll('button')].forEach((btn, i) => btn.classList.toggle('active', i === current));
+      localStorage.setItem('iotDeckSlide', String(current));
+    }
+
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+    outlineToggle.addEventListener('click', () => outline.classList.toggle('open'));
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') goTo(current + 1);
+      if (event.key === 'ArrowLeft' || event.key === 'PageUp') goTo(current - 1);
+      if (event.key === 'Home') goTo(0);
+      if (event.key === 'End') goTo(slides.length - 1);
+      if (event.key.toLowerCase() === 'o') outline.classList.toggle('open');
+    });
+
+    renderOutline();
+    const saved = Number(localStorage.getItem('iotDeckSlide'));
+    goTo(Number.isInteger(saved) && saved >= 0 && saved < slides.length ? saved : 0);
+  </script>
 </body>
 </html>
