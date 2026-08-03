@@ -208,8 +208,19 @@ pre .c{color:var(--pink)}pre .a{color:var(--yel)}pre .v{color:var(--mint)}pre .m
 
 #bar{position:fixed;left:0;bottom:0;height:4px;background:var(--acc);width:0;
   transition:width .35s ease;z-index:50;box-shadow:0 0 16px var(--acc)}
-#num{position:fixed;right:20px;bottom:15px;font-size:12px;color:#454B60;
-  font-family:ui-monospace,monospace;z-index:50;letter-spacing:.1em}
+#nav{position:fixed;right:16px;bottom:12px;z-index:56;display:flex;align-items:center;gap:9px;
+  background:rgba(15,16,23,.86);border:1px solid #232637;border-radius:99px;padding:6px 10px;
+  -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px)}
+#nav button{width:clamp(38px,3.4vw,48px);height:clamp(38px,3.4vw,48px);border-radius:50%;
+  border:1px solid #2E3346;background:#1A1D2B;color:var(--ink);cursor:pointer;
+  font:700 clamp(20px,2vw,26px)/1 'Segoe UI',sans-serif;padding:0 0 3px 0;
+  display:flex;align-items:center;justify-content:center;transition:.14s;
+  -webkit-tap-highlight-color:transparent}
+#nav button:hover:not(:disabled){background:var(--acc);color:#04120D;border-color:var(--acc)}
+#nav button:active:not(:disabled){transform:translateY(1px)}
+#nav button:disabled{opacity:.25;cursor:default}
+#num{font-size:clamp(11px,1vw,13px);color:#6B7288;font-family:ui-monospace,monospace;
+  letter-spacing:.1em;min-width:58px;text-align:center;user-select:none}
 #help{position:fixed;left:20px;bottom:13px;font-size:11px;color:#3A4055;z-index:50}
 #notes{position:fixed;left:0;right:0;bottom:0;background:#0F1017;border-top:2px solid var(--yel);
   padding:16px 24px;font-size:15px;line-height:1.5;color:#C8CEDD;display:none;z-index:60;
@@ -665,8 +676,13 @@ Do NOT share this OTP with anyone. Bank never asks for your OTP.</div></div>
 </section>
 
 </div>
-<div id="bar"></div><div id="num">1 / 1</div>
-<div id="help">← → move · F fullscreen · N notes · Space replay</div>
+<div id="bar"></div>
+<div id="nav">
+  <button id="prevBtn" type="button" title="Previous slide (←)" aria-label="Previous slide">‹</button>
+  <span id="num">1 / 1</span>
+  <button id="nextBtn" type="button" title="Next slide (→)" aria-label="Next slide">›</button>
+</div>
+<div id="help">← → or the arrows · F fullscreen · N notes · Space replay</div>
 <div class="hint" id="hint">press F for fullscreen</div>
 <div id="notes"><b>Presenter note</b><span id="ntext"></span></div>
 
@@ -984,7 +1000,8 @@ const slides=[...document.querySelectorAll('.slide')];
 let i=0,notesOn=false;
 const bar=document.getElementById('bar'),num=document.getElementById('num'),
       notesEl=document.getElementById('notes'),ntext=document.getElementById('ntext'),
-      hint=document.getElementById('hint');
+      hint=document.getElementById('hint'),
+      prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn');
 
 function show(n){
   if(rafId){cancelAnimationFrame(rafId);rafId=null;}
@@ -1001,6 +1018,8 @@ function show(n){
     vdEl().className='vd';
     buildCycle(document.getElementById("demoFig"),6,0,false);
   }
+  prevBtn.disabled=(i===0);
+  nextBtn.disabled=(i===slides.length-1);
   if(i>0) hint.style.display='none';
 }
 
@@ -1019,11 +1038,10 @@ document.addEventListener('keydown',e=>{
     else show(i+1);}
 });
 
-document.addEventListener('click',e=>{
-  if(e.target.closest('#notes')) return;
-  if(e.target.closest('.nonav')) return;      /* demo + quiz never navigate */
-  show(e.clientX>window.innerWidth*0.35?i+1:i-1);
-});
+/* navigation is by the on-screen arrows and the keyboard only.
+   clicking the slide body deliberately does nothing — no accidental jumps. */
+prevBtn.addEventListener('click',()=>show(i-1));
+nextBtn.addEventListener('click',()=>show(i+1));
 
 document.getElementById("till").addEventListener("submit",ev=>{
   ev.preventDefault();
