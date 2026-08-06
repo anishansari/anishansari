@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EBPP & E‑Auctioning | Interactive Learning Deck</title>
+<style>
+  :root{
+    --bg:#07111f;
+    --surface:#0e1b2e;
+    --surface-2:#13243b;
+    --text:#f5f8ff;
+    --muted:#a9b8ce;
+    --accent:#64d8cb;
+    --accent-2:#ffca6a;
+    --accent-3:#a78bfa;
+    --danger:#ff7b8b;
+    --line:rgba(255,255,255,.12);
+    --shadow:0 24px 70px rgba(0,0,0,.35);
+    --radius:24px;
+  }
+  [data-theme="light"]{
+    --bg:#eef4fb;
+    --surface:#ffffff;
+    --surface-2:#f5f8fd;
+    --text:#122036;
+    --muted:#5b6b80;
+    --accent:#087f78;
+    --accent-2:#b86900;
+    --accent-3:#6d49c9;
+    --danger:#bc3147;
+    --line:rgba(18,32,54,.12);
+    --shadow:0 24px 70px rgba(36,64,96,.16);
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;overflow:hidden}
+  body{
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:
+      radial-gradient(circle at 15% 10%, color-mix(in srgb,var(--accent) 14%, transparent), transparent 28%),
+      radial-gradient(circle at 85% 85%, color-mix(in srgb,var(--accent-3) 13%, transparent), transparent 32%),
+      var(--bg);
+    color:var(--text);
+    transition:background .35s ease,color .35s ease;
+  }
+  button,a{font:inherit}
+  button{color:inherit}
+
+  .deck{height:100%;display:grid;grid-template-rows:58px 1fr 58px}
+  .topbar,.bottombar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 22px;background:color-mix(in srgb,var(--bg) 82%, transparent);
+    backdrop-filter:blur(16px);z-index:20
+  }
+  .topbar{border-bottom:1px solid var(--line)}
+  .bottombar{border-top:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.2px}
+  .brand-badge{
+    width:32px;height:32px;border-radius:10px;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--accent),var(--accent-3));color:#07111f;
+    box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 25%, transparent)
+  }
+  .toolbar{display:flex;gap:8px}
+  .icon-btn,.nav-btn,.pill-btn{
+    border:1px solid var(--line);background:var(--surface);cursor:pointer;
+    transition:transform .2s,border-color .2s,background .2s;
+  }
+  .icon-btn{width:38px;height:38px;border-radius:12px}
+  .icon-btn:hover,.nav-btn:hover,.pill-btn:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .stage{position:relative;overflow:hidden}
+  .slide{
+    position:absolute;inset:0;padding:clamp(24px,4vw,62px);
+    display:grid;align-content:center;opacity:0;pointer-events:none;
+    transform:translateX(70px) scale(.985);
+    transition:opacity .45s ease,transform .55s cubic-bezier(.22,.75,.2,1);
+  }
+  .slide.active{opacity:1;pointer-events:auto;transform:none}
+  .slide.exit-left{transform:translateX(-70px) scale(.985)}
+  .slide-inner{width:min(1180px,100%);margin:auto}
+  .eyebrow{
+    color:var(--accent);font-weight:800;text-transform:uppercase;
+    letter-spacing:.14em;font-size:.78rem;margin-bottom:14px
+  }
+  h1,h2,h3,p{margin-top:0}
+  h1{font-size:clamp(2.7rem,6vw,6.6rem);line-height:.92;letter-spacing:-.055em;margin-bottom:22px}
+  h2{font-size:clamp(2rem,4vw,4.5rem);line-height:1;letter-spacing:-.04em;margin-bottom:24px}
+  h3{font-size:1.05rem;margin-bottom:10px}
+  .lede{font-size:clamp(1.04rem,1.6vw,1.35rem);color:var(--muted);line-height:1.65;max-width:780px}
+  .gradient-text{
+    background:linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent-3));
+    -webkit-background-clip:text;background-clip:text;color:transparent
+  }
+  .hero-grid,.two-col{display:grid;grid-template-columns:1.12fr .88fr;gap:30px;align-items:center}
+  .hero-visual{
+    min-height:420px;border:1px solid var(--line);border-radius:32px;
+    background:linear-gradient(145deg,var(--surface),var(--surface-2));
+    box-shadow:var(--shadow);padding:26px;position:relative;overflow:hidden
+  }
+  .orb{position:absolute;border-radius:50%;filter:blur(1px);opacity:.9;animation:float 5s ease-in-out infinite}
+  .orb.a{width:110px;height:110px;right:10%;top:8%;background:color-mix(in srgb,var(--accent) 75%, transparent)}
+  .orb.b{width:72px;height:72px;left:11%;bottom:12%;background:color-mix(in srgb,var(--accent-3) 75%, transparent);animation-delay:-1.7s}
+  .flow-mini{position:relative;z-index:2;display:grid;gap:13px;margin-top:54px}
+  .flow-row{display:flex;align-items:center;gap:12px}
+  .node{
+    flex:1;padding:15px 16px;border-radius:16px;background:color-mix(in srgb,var(--surface) 88%, transparent);
+    border:1px solid var(--line);font-weight:700
+  }
+  .arrow{color:var(--accent);font-weight:900}
+  .hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:25px;position:relative;z-index:2}
+  .stat{padding:13px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--line);text-align:center}
+  .stat b{display:block;font-size:1.25rem;color:var(--accent-2)}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .card{
+    background:linear-gradient(145deg,var(--surface),var(--surface-2));
+    border:1px solid var(--line);border-radius:var(--radius);padding:24px;
+    box-shadow:0 12px 34px rgba(0,0,0,.12);position:relative;overflow:hidden;
+    transition:transform .25s,border-color .25s
+  }
+  .card:hover{transform:translateY(-7px);border-color:color-mix(in srgb,var(--accent) 65%, var(--line))}
+  .card::after{
+    content:"";position:absolute;width:100px;height:100px;border-radius:50%;
+    right:-50px;bottom:-50px;background:color-mix(in srgb,var(--accent) 12%, transparent)
+  }
+  .card-icon{
+    width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+    background:color-mix(in srgb,var(--accent) 16%, transparent);font-size:1.35rem;margin-bottom:18px
+  }
+  .card p,.small{color:var(--muted);line-height:1.55}
+  .tag{display:inline-flex;padding:6px 10px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%, transparent);color:var(--accent);font-size:.78rem;font-weight:800}
+  .source-note{font-size:.78rem;color:var(--muted);margin-top:14px}
+  .flow{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:stretch;margin-top:25px
+  }
+  .flow-step{
+    padding:20px 16px;border:1px solid var(--line);border-radius:18px;background:var(--surface);
+    cursor:pointer;transition:.25s;min-height:150px
+  }
+  .flow-step.active{border-color:var(--accent);transform:translateY(-6px);box-shadow:0 14px 36px color-mix(in srgb,var(--accent) 12%, transparent)}
+  .step-no{font-size:.76rem;color:var(--accent);font-weight:900;letter-spacing:.12em}
+  .detail-panel{
+    margin-top:18px;border:1px solid var(--line);border-radius:18px;padding:20px 22px;
+    background:color-mix(in srgb,var(--surface-2) 90%, transparent);min-height:94px
+  }
+  .model-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .model-block{padding:22px;border-radius:22px;border:1px solid var(--line);background:var(--surface)}
+  .model-block ul{margin:10px 0 0;padding-left:20px;color:var(--muted);line-height:1.8}
+  .auction-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .auction-card{cursor:pointer;min-height:260px}
+  .auction-card.selected{border-color:var(--accent-2);box-shadow:0 16px 45px color-mix(in srgb,var(--accent-2) 12%, transparent)}
+  .auction-meter{height:8px;border-radius:99px;background:var(--line);margin:18px 0;overflow:hidden}
+  .auction-meter span{height:100%;display:block;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .7s ease}
+  .simulator{
+    display:grid;grid-template-columns:.8fr 1.2fr;gap:22px;
+    border:1px solid var(--line);border-radius:26px;padding:24px;background:var(--surface)
+  }
+  .controls{display:grid;gap:16px}
+  label{color:var(--muted);font-size:.88rem}
+  input[type=range]{width:100%;accent-color:var(--accent)}
+  .bid-display{font-size:2.6rem;font-weight:900;color:var(--accent-2)}
+  .bid-lane{
+    display:flex;align-items:flex-end;gap:12px;height:230px;border-left:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 16px
+  }
+  .bid-bar{flex:1;min-width:48px;border-radius:12px 12px 3px 3px;background:linear-gradient(var(--accent),var(--accent-3));height:20%;transition:height .55s cubic-bezier(.2,.8,.2,1);position:relative}
+  .bid-bar span{position:absolute;top:-27px;left:50%;transform:translateX(-50%);font-size:.78rem;font-weight:800}
+  .winner{outline:3px solid var(--accent-2);filter:drop-shadow(0 8px 18px color-mix(in srgb,var(--accent-2) 30%, transparent))}
+  .quiz{
+    max-width:850px;margin:auto;padding:28px;border:1px solid var(--line);border-radius:28px;background:var(--surface);box-shadow:var(--shadow)
+  }
+  .answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+  .answer{padding:17px;border:1px solid var(--line);border-radius:16px;background:var(--surface-2);cursor:pointer;text-align:left}
+  .answer.correct{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 15%, var(--surface))}
+  .answer.wrong{border-color:var(--danger);background:color-mix(in srgb,var(--danger) 13%, var(--surface))}
+  .quiz-feedback{min-height:28px;margin-top:16px;color:var(--muted)}
+  .refs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .ref{padding:18px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
+  .ref a{color:var(--accent);text-decoration:none;word-break:break-word}
+  .source-chip{font-size:.75rem;font-weight:900;padding:5px 8px;border-radius:8px;background:var(--surface-2);display:inline-block;margin-bottom:10px}
+  .nav-btn{padding:10px 16px;border-radius:12px;font-weight:800}
+  .slide-count{font-variant-numeric:tabular-nums;color:var(--muted)}
+  .progress{position:absolute;left:0;right:0;bottom:57px;height:3px;background:transparent;z-index:21}
+  .progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent-3));transition:width .4s}
+  .dots{display:flex;gap:7px}
+  .dot{width:8px;height:8px;border:0;border-radius:99px;background:var(--line);padding:0;cursor:pointer;transition:.2s}
+  .dot.active{width:28px;background:var(--accent)}
+  .hint{color:var(--muted);font-size:.8rem}
+  .presenter-note{
+    position:fixed;right:18px;top:75px;max-width:310px;padding:16px;border:1px solid var(--line);
+    border-radius:16px;background:var(--surface);box-shadow:var(--shadow);z-index:40;display:none
+  }
+  .presenter-note.show{display:block;animation:pop .25s ease}
+  .reveal{opacity:0;transform:translateY(18px)}
+  .active .reveal{animation:reveal .65s forwards}
+  .active .reveal:nth-child(2){animation-delay:.08s}
+  .active .reveal:nth-child(3){animation-delay:.16s}
+  .active .reveal:nth-child(4){animation-delay:.24s}
+  .kbd{border:1px solid var(--line);border-bottom-width:3px;border-radius:7px;padding:2px 6px;background:var(--surface-2);font-size:.75rem}
+
+  @keyframes reveal{to{opacity:1;transform:none}}
+  @keyframes float{50%{transform:translateY(-16px) rotate(4deg)}}
+  @keyframes pop{from{opacity:0;transform:translateY(-8px) scale(.98)}}
+  @media (max-width:900px){
+    .hero-grid,.two-col,.simulator,.model-grid{grid-template-columns:1fr}
+    .hero-visual{min-height:300px}
+    .cards{grid-template-columns:1fr 1fr}
+    .auction-grid{grid-template-columns:1fr 1fr}
+    .flow{grid-template-columns:1fr 1fr}
+    .slide{overflow:auto;align-content:start}
+  }
+  @media (max-width:600px){
+    .cards,.auction-grid,.answers,.refs{grid-template-columns:1fr}
+    .topbar{padding:0 12px}.brand span:last-child{display:none}
+    .bottombar{padding:0 10px}.dots{display:none}
+    h1{font-size:2.8rem}.slide{padding:24px 18px 90px}
+    .hero-stats{grid-template-columns:1fr}.flow{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+  <header class="topbar">
+    <div class="brand"><div class="brand-badge">↗</div><span>Interactive Commerce Deck</span></div>
+    <div class="toolbar">
+      <button class="icon-btn" id="noteBtn" title="Presenter note">N</button>
+      <button class="icon-btn" id="themeBtn" title="Toggle theme">☼</button>
+      <button class="icon-btn" id="fullBtn" title="Fullscreen">⛶</button>
+    </div>
+  </header>
+
+  <main class="stage">
+    <section class="slide active" data-note="Open with a simple contrast: EBPP moves bills and payments; e-auctions discover prices through competition.">
+      <div class="slide-inner hero-grid">
+        <div>
+          <div class="eyebrow reveal">Electronic commerce · Unit 3</div>
+          <h1 class="reveal">EBPP <span class="gradient-text">&</span><br>E‑Auctioning</h1>
+          <p class="lede reveal">Two digital systems, two different jobs: one streamlines billing and payment; the other organizes competitive price discovery.</p>
+          <p class="hint reveal">Navigate with <span class="kbd">←</span> <span class="kbd">→</span>, swipe, or use the controls below.</p>
+        </div>
+        <div class="hero-visual reveal">
+          <div class="orb a"></div><div class="orb b"></div>
+          <div class="flow-mini">
+            <div class="flow-row"><div class="node">📄 Bill created</div><div class="arrow">→</div><div class="node">👤 Customer</div></div>
+            <div class="flow-row"><div class="node">🔨 Seller</div><div class="arrow">↔</div><div class="node">🙋 Bidders</div></div>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><b>EBPP</b><span>Present + Pay</span></div>
+            <div class="stat"><b>Auction</b><span>Bid + Discover</span></div>
+            <div class="stat"><b>Online</b><span>Fast + Reachable</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Use the three cards as the memorable EBPP definition: electronic delivery, review, and payment.">
+      <div class="slide-inner">
+        <div class="eyebrow reveal">Topic 01</div>
+        <h2 class="reveal">What is <span class="gradient-text">EBPP?</span></h2>
+        <p class="lede reveal">Electronic Billing Presentment and Payment is a digital system that lets organizations deliver bills online and lets customers review and pay them electronically.</p>
+        <div class="cards reveal">
+          <article class="card"><div class="card-icon">📨</div><h3>Present</h3><p>The bill or statement is delivered through a website, banking portal, email notice, or mobile channel.</p></article>
+          <article class="card"><div class="card-icon">👁️</div><h3>Review</h3><p>The customer checks the amount, due date, line items, and payment options before authorizing payment.</p></article>
+          <article class="card"><div class="card-icon">💳</div><h3>Pay</h3><p>Payment is initiated electronically, followed by confirmation and account reconciliation.</p></article>
+        </div>
+        <div class="source-note reveal">Notes basis: page 5. Expanded definition supported by Federal Reserve sources.</div>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Click each step. Emphasize that EBPP is not only payment. It includes presentment and confirmation.">
+      <div class="slide-inner">
+        <div class="eyebrow reveal">Click the blocks</div>
+        <h2 class="reveal">The EBPP <span class="gradient-text">flow</span></h2>
+        <div class="flow reveal" id="ebppFlow">
+          <div class="flow-step active" data-title="1. Bill generation" data-text="A service provider creates the bill from usage, subscription, purchase, or account data."><div class="step-no">STEP 01</div><h3>Generate</h3><p class="small">The bill is created.</p></div>
+          <div class="flow-step" data-title="2. Electronic presentment" data-text="The bill is made available digitally, often through a biller portal, bank portal, email notice, or mobile app."><div class="step-no">STEP 02</div><h3>Present</h3><p class="small">The customer receives access.</p></div>
+          <div class="flow-step" data-title="3. Review" data-text="The customer checks the amount, due date, details, and available payment methods."><div class="step-no">STEP 03</div><h3>Review</h3><p class="small">Information is verified.</p></div>
+          <div class="flow-step" data-title="4. Authorization and payment" data-text="The customer selects a method and authorizes an electronic transfer or card payment."><div class="step-no">STEP 04</div><h3>Pay</h3><p class="small">Funds are initiated.</p></div>
+          <div class="flow-step" data-title="5. Confirmation and reconciliation" data-text="The customer receives confirmation, while the biller updates its records and matches the payment to the account."><div class="step-no">STEP 05</div><h3>Confirm</h3><p class="small">Records are updated.</p></div>
+        </div>
+        <div class="detail-panel reveal"><strong id="flowTitle">1. Bill generation</strong><p id="flowText" class="small" style="margin:8px 0 0">A service provider creates the bill from usage, subscription, purchase, or account data.</p></div>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Keep the note terminology visible, then distinguish the common industry simplification.">
+      <div class="slide-inner">
+        <div class="eyebrow reveal">Models and channels</div>
+        <h2 class="reveal">How EBPP is <span class="gradient-text">organized</span></h2>
+        <div class="model-grid reveal">
+          <div class="model-block">
+            <span class="tag">From your notes</span>
+            <h3 style="margin-top:14px">Business-model labels listed</h3>
+            <ul>
+              <li>Biller-direct</li>
+              <li>Mobile consolidator</li>
+              <li>Online banking model</li>
+              <li>Thick consolidator</li>
+            </ul>
+            <p class="source-note">The wording above is preserved from page 5 of the uploaded notes.</p>
+          </div>
+          <div class="model-block">
+            <span class="tag">Common industry framing</span>
+            <h3 style="margin-top:14px">Two broad arrangements</h3>
+            <ul>
+              <li><b>Biller-direct:</b> the customer views and pays at the provider’s own site or app.</li>
+              <li><b>Aggregator / bank-consolidator:</b> bills from multiple providers appear in one portal.</li>
+            </ul>
+            <p class="source-note">This simplified framing is added from external reference material.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Connect benefits to both sides. Customers value convenience. Billers value lower handling cost and faster collection.">
+      <div class="slide-inner">
+        <div class="eyebrow reveal">Why it matters</div>
+        <h2 class="reveal">EBPP creates value on <span class="gradient-text">both sides</span></h2>
+        <div class="cards reveal">
+          <article class="card"><div class="card-icon">⚡</div><h3>Faster cycle</h3><p>Digital delivery, payment, and confirmation reduce delays compared with postal billing and mailed checks.</p></article>
+          <article class="card"><div class="card-icon">🧾</div><h3>Better records</h3><p>Electronic statements and receipts improve searchability, tracking, and reconciliation.</p></article>
+          <article class="card"><div class="card-icon">🌍</div><h3>Anywhere access</h3><p>Customers can review and pay through connected devices without visiting a physical counter.</p></article>
+          <article class="card"><div class="card-icon">💰</div><h3>Lower handling cost</h3><p>Organizations can reduce printing, postage, and manual processing.</p></article>
+          <article class="card"><div class="card-icon">🔁</div><h3>Recurring options</h3><p>Many systems support saved methods, scheduled payments, and automatic payment instructions.</p></article>
+          <article class="card"><div class="card-icon">🔐</div><h3>Control and security</h3><p>Authentication, authorization, secure connections, and audit trails protect the transaction process.</p></article>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="slide" data-note="Walk through the electricity-bill example from bill creation to settlement. Invite learners to click each stage and imagine the data exchanged.">
+      <div class="slide-inner">
+        <div class="eyebrow reveal">End-to-end example</div>
+        <h2 class="reveal">EBPP workflow: <span class="gradient-text">electricity bill</span></h2>
+        <div class="flow reveal" id="utilityFlow" style="grid-template-columns:repeat(6,1fr)">
+          <div class="flow-step active" data-title="1. Meter and billing data" data-text="The utility records consumption, applies the tariff, adds taxes or fees, and creates a customer invoice."><div class="step-no">01</div><h3>Calculate</h3><p class="small">Usage becomes a bill.</p></div>
+          <div class="flow-step" data-title="2. Bill presentment" data-text="The customer receives an email or app notification and opens the utility portal to view amount, due date, and usage details."><div class="step-no">02</div><h3>Present</h3><p class="small">Bill appears online.</p></div>
+          <div class="flow-step" data-title="3. Customer review" data-text="The customer checks the billing period, meter reading, previous balance, current charges, and available payment methods."><div class="step-no">03</div><h3>Review</h3><p class="small">Details are verified.</p></div>
+          <div class="flow-step" data-title="4. Payment authorization" data-text="The customer chooses bank transfer, card, wallet, or scheduled debit and confirms the amount and payment date."><div class="step-no">04</div><h3>Authorize</h3><p class="small">Permission is given.</p></div>
+          <div class="flow-step" data-title="5. Processing and settlement" data-text="The payment service routes the instruction through the relevant bank or card network. Funds move from the payer to the biller."><div class="step-no">05</div><h3>Settle</h3><p class="small">Funds are transferred.</p></div>
+          <div class="flow-step" data-title="6. Receipt and reconciliation" data-text="The utility marks the bill paid, issues an electronic receipt, and matches the payment with the customer account in its accounting system."><div class="step-no">06</div><h3>Reconcile</h3><p class="small">Records are closed.</p></div>
+        </div>
+        <div class="detail-panel reveal"><strong id="utilityTitle">1. Meter and billing data</strong><p id="utilityText" class="small" style="margin:8px 0 0">The utility records consumption, applies the tariff, adds taxes or fees, and creates a customer invoice.</p></div>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Explain that one screen hides several participants. The customer sees a simple payment button, but biller, gateway, bank, network, and accounting systems cooperate.">
+      <div class="slide-inner">
+        <div class="eyebrow reveal">Behind the screen</div>
+        <h2 class="reveal">Who participates in an <span class="gradient-text">EBPP transaction?</span></h2>
+        <div class="cards reveal">
+          <article class="card"><div class="card-icon">🏢</div><h3>Biller</h3><p>Creates the bill, publishes it, accepts payment instructions, and updates the customer account.</p></article>
+          <article class="card"><div class="card-icon">👤</div><h3>Customer</h3><p>Receives the bill, verifies the details, chooses a method, and authorizes payment.</p></article>
+          <article class="card"><div class="card-icon">🖥️</div><h3>Portal or aggregator</h3><p>Displays one bill or combines several billers in a bank or consolidated dashboard.</p></article>
+          <article class="card"><div class="card-icon">🔌</div><h3>Payment gateway</h3><p>Securely passes payment information and responses between the front end and processing institutions.</p></article>
+          <article class="card"><div class="card-icon">🏦</div><h3>Financial institutions</h3><p>The payer’s and biller’s banks authorize, clear, and settle the electronic transfer.</p></article>
+          <article class="card"><div class="card-icon">📚</div><h3>Accounting system</h3><p>Matches the incoming payment to the invoice and maintains the audit trail and receipt.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Use the examples to connect concepts with recognizable products. Clarify that a product can combine more than one model or channel.">
+      <div class="slide-inner">
+        <div class="eyebrow reveal">Working examples</div>
+        <h2 class="reveal">EBPP in <span class="gradient-text">real services</span></h2>
+        <div class="cards reveal">
+          <article class="card"><span class="tag">Bank / consolidator channel</span><h3 style="margin-top:14px">Chase Online Bill Pay</h3><p>A user signs in, selects or adds a payee, chooses an amount and date, and can make a one-time or recurring payment. This demonstrates a bank-centered bill-payment channel.</p><p class="source-note">Official Chase guidance.</p></article>
+          <article class="card"><span class="tag">Biller-direct pattern</span><h3 style="margin-top:14px">Utility or telecom portal</h3><p>A customer opens the provider’s own website or app, views the current statement, chooses a method, pays, and receives a receipt. This is the clearest biller-direct example.</p><p class="source-note">Illustrative workflow based on standard EBPP practice.</p></article>
+          <article class="card"><span class="tag">Recurring electronic billing</span><h3 style="margin-top:14px">PayPal invoices and automatic payments</h3><p>PayPal supports invoices, including recurring invoice schedules, and separately lets users manage automatic payment agreements and payment methods.</p><p class="source-note">Official PayPal help pages.</p></article>
+        </div>
+        <div class="detail-panel reveal"><strong>Important distinction:</strong><p class="small" style="margin:8px 0 0">A simple money transfer is not automatically EBPP. EBPP includes electronic bill presentation or invoice information, payment authorization, and usually confirmation or reconciliation.</p></div>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Define auctioning as a structured market mechanism. The key phrase is competitive bidding and price discovery.">
+      <div class="slide-inner two-col">
+        <div>
+          <div class="eyebrow reveal">Topic 02</div>
+          <h2 class="reveal">What is <span class="gradient-text">e‑auctioning?</span></h2>
+          <p class="lede reveal">An e‑auction is an online competitive bidding process used to sell or allocate goods, services, or assets. Its central economic function is often price discovery.</p>
+          <div class="card reveal" style="margin-top:22px">
+            <span class="tag">Core idea</span>
+            <h3 style="margin-top:13px">Rules determine the result</h3>
+            <p>Who can see bids, whether price moves up or down, and what the winner pays all depend on the auction format.</p>
+          </div>
+        </div>
+        <div class="hero-visual reveal" style="min-height:370px">
+          <div class="flow-mini" style="margin-top:10px">
+            <div class="node">1. Seller lists an item</div>
+            <div class="node">2. Auction rules are published</div>
+            <div class="node">3. Bidders compete online</div>
+            <div class="node">4. Winner and price are determined</div>
+            <div class="node">5. Payment and fulfillment follow</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Ask the audience to predict each format before clicking.">
+      <div class="slide-inner">
+        <div class="eyebrow reveal">Select a card</div>
+        <h2 class="reveal">Four auction <span class="gradient-text">formats</span></h2>
+        <div class="auction-grid reveal" id="auctionCards">
+          <article class="card auction-card selected" data-format="English" data-desc="Open ascending bids. The price rises until no one is willing to bid higher. The highest remaining bidder wins." data-meter="90">
+            <div class="card-icon">📈</div><h3>English</h3><p>Open, ascending price</p><div class="auction-meter"><span style="width:90%"></span></div><span class="tag">Highest bid wins</span>
+          </article>
+          <article class="card auction-card" data-format="Dutch" data-desc="The auctioneer starts high and lowers the price. The first bidder to accept the current price wins." data-meter="70">
+            <div class="card-icon">📉</div><h3>Dutch</h3><p>Open, descending price</p><div class="auction-meter"><span style="width:70%"></span></div><span class="tag">First acceptance wins</span>
+          </article>
+          <article class="card auction-card" data-format="Double" data-desc="Multiple buyers submit bids and multiple sellers submit asks. Trades occur when compatible prices can be matched." data-meter="78">
+            <div class="card-icon">↔️</div><h3>Double</h3><p>Many buyers and sellers</p><div class="auction-meter"><span style="width:78%"></span></div><span class="tag">Bids meet asks</span>
+          </article>
+          <article class="card auction-card" data-format="Vickrey" data-desc="Bidders submit sealed bids. The highest bid still wins because it shows the strongest willingness to buy. The price charged is the second-highest bid because that is the smallest amount needed to beat the nearest competitor." data-meter="84">
+            <div class="card-icon">✉️</div><h3>Vickrey</h3><p>Sealed, second-price</p><div class="auction-meter"><span style="width:84%"></span></div><span class="tag">Highest wins, pays second</span>
+          </article>
+        </div>
+        <div class="detail-panel reveal"><strong id="auctionTitle">English auction</strong><p id="auctionText" class="small" style="margin:8px 0 0">Open ascending bids. The price rises until no one is willing to bid higher. The highest remaining bidder wins.</p></div>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Explain the decision logic. The winner is selected by the auction rule, while the payment rule may be different. This is the key to Vickrey.">
+      <div class="slide-inner">
+        <div class="eyebrow reveal">Auction logic</div>
+        <h2 class="reveal">Why does each auction <span class="gradient-text">behave differently?</span></h2>
+        <div class="cards reveal">
+          <article class="card"><div class="card-icon">📈</div><h3>English logic</h3><p>Public competition pushes the price upward. When nobody is willing to bid more, the highest bidder wins and pays the final bid.</p><span class="tag">Open ascending</span></article>
+          <article class="card"><div class="card-icon">📉</div><h3>Dutch logic</h3><p>The seller starts high and lowers the price. The first buyer who accepts stops the auction, so speed matters.</p><span class="tag">Open descending</span></article>
+          <article class="card"><div class="card-icon">↔️</div><h3>Double logic</h3><p>Buyers submit bids and sellers submit asks. A trade happens only when a buyer's price can meet or beat a seller's price.</p><span class="tag">Bid meets ask</span></article>
+          <article class="card"><div class="card-icon">✉️</div><h3>Vickrey logic</h3><p>The highest bidder wins because they value the item most. They pay the second-highest bid because that is the price needed to defeat the closest rival.</p><span class="tag">Highest wins, pays second</span></article>
+          <article class="card"><div class="card-icon">🧠</div><h3>Why not pay the highest bid?</h3><p>In a sealed auction, paying your own bid can make people underbid. Second-price payment encourages bidders to write their true maximum value.</p><span class="tag">Truthful bidding</span></article>
+          <article class="card"><div class="card-icon">🏁</div><h3>Simple Vickrey example</h3><p>A bids 60, B bids 78, and C bids 52. B wins because 78 is highest, but pays 60 because 60 is the next best competing bid.</p><span class="tag">Winner ≠ payment amount</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Change bids, then switch formats. In Vickrey, make clear that highest bid chooses the winner, but the second-highest bid sets the payment.">
+      <div class="slide-inner">
+        <div class="eyebrow reveal">Interactive demonstration</div>
+        <h2 class="reveal">Run a mini <span class="gradient-text">auction</span></h2>
+        <div class="simulator reveal">
+          <div class="controls">
+            <div>
+              <label for="formatSelect">Auction format</label>
+              <select id="formatSelect" style="width:100%;margin-top:7px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--text)">
+                <option value="english">English</option>
+                <option value="dutch">Dutch</option>
+                <option value="double">Double</option>
+                <option value="vickrey">Vickrey</option>
+              </select>
+            </div>
+            <div><label>Bidder A: <b id="aVal">60</b></label><input id="aBid" type="range" min="10" max="100" value="60"></div>
+            <div><label>Bidder B: <b id="bVal">78</b></label><input id="bBid" type="range" min="10" max="100" value="78"></div>
+            <div><label>Bidder C: <b id="cVal">52</b></label><input id="cBid" type="range" min="10" max="100" value="52"></div>
+            <div><label>Seller ask / reserve: <b id="sVal">55</b></label><input id="sBid" type="range" min="10" max="100" value="55"></div>
+            <button class="pill-btn" id="runAuction" style="padding:13px;border-radius:13px;font-weight:900">Run auction</button>
+            <div><div class="small">Result</div><div class="bid-display" id="resultText">B wins: 78</div><p class="small" id="resultHelp" style="margin:6px 0 0">English: highest bid wins and pays the final/highest bid. Change format to see different rules.</p></div>
+          </div>
+          <div class="bid-lane">
+            <div class="bid-bar" id="barA" style="height:60%"><span>A · 60</span></div>
+            <div class="bid-bar winner" id="barB" style="height:78%"><span>B · 78</span></div>
+            <div class="bid-bar" id="barC" style="height:52%"><span>C · 52</span></div>
+            <div class="bid-bar" id="barS" style="height:55%;background:linear-gradient(var(--accent-2),var(--danger))"><span>Ask · 55</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="slide" data-note="Map the abstract formats to concrete settings. Avoid claiming every platform uses a pure textbook mechanism in every category.">
+      <div class="slide-inner">
+        <div class="eyebrow reveal">Reference examples</div>
+        <h2 class="reveal">Where auction formats <span class="gradient-text">appear</span></h2>
+        <div class="cards reveal">
+          <article class="card"><div class="card-icon">🛒</div><h3>eBay auction-style listing</h3><p>Seller chooses a starting price. Buyers bid against one another, and when the listing ends the highest bidder wins. eBay also offers automatic bidding, where the system raises a bidder’s offer up to a private maximum.</p><span class="tag">English-style ascending auction</span></article>
+          <article class="card"><div class="card-icon">🌷</div><h3>Dutch flower-market idea</h3><p>A high asking price is progressively reduced until a buyer accepts it. This is the classic descending-price model associated with Dutch auctions.</p><span class="tag">Dutch auction</span></article>
+          <article class="card"><div class="card-icon">📊</div><h3>Exchange order book</h3><p>Many buyers submit bids and many sellers submit asks. Compatible orders are matched, illustrating the logic of a double auction.</p><span class="tag">Double auction</span></article>
+          <article class="card"><div class="card-icon">🔒</div><h3>Sealed procurement exercise</h3><p>In a classroom Vickrey example, each supplier submits one private bid; the strongest bid wins under the stated rule, while the transaction price is based on the second-best bid.</p><span class="tag">Vickrey mechanism</span></article>
+        </div>
+        <p class="source-note reveal">eBay is a documented working example. The other cards explain standard textbook settings and mechanisms; a real platform may modify rules.</p>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Walk through eBay as a practical English-style auction. Explain proxy bidding carefully: visible price can be below the winner's maximum bid.">
+      <div class="slide-inner two-col">
+        <div>
+          <div class="eyebrow reveal">Worked auction example</div>
+          <h2 class="reveal">How an eBay-style auction <span class="gradient-text">works</span></h2>
+          <div class="flow-mini reveal">
+            <div class="node">1. Seller lists a camera with a starting price of $100</div>
+            <div class="node">2. A enters a maximum of $140; the visible bid rises only as needed</div>
+            <div class="node">3. B enters $155; the system automatically competes within each maximum</div>
+            <div class="node">4. C enters $150; B remains highest because B's maximum is larger</div>
+            <div class="node">5. At closing, B wins at the amount determined by the bid increment rules, not necessarily $155</div>
+          </div>
+        </div>
+        <div class="hero-visual reveal" style="min-height:420px">
+          <span class="tag">Automatic / proxy bidding</span>
+          <h3 style="font-size:1.5rem;margin-top:16px">Maximum bids</h3>
+          <div class="bid-lane" style="height:250px;margin-top:20px">
+            <div class="bid-bar" style="height:70%"><span>A · $140</span></div>
+            <div class="bid-bar winner" style="height:78%"><span>B · $155</span></div>
+            <div class="bid-bar" style="height:75%"><span>C · $150</span></div>
+          </div>
+          <p class="small" style="margin-top:16px">The highest maximum controls the lead, but the displayed price is generally increased only enough to remain ahead, subject to the platform’s increments and rules.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Use this slide to compare the two topics and prevent students from mixing up their objectives.">
+      <div class="slide-inner">
+        <div class="eyebrow reveal">Compare</div>
+        <h2 class="reveal">Same digital environment, <span class="gradient-text">different purpose</span></h2>
+        <div class="model-grid reveal">
+          <div class="model-block">
+            <span class="tag">EBPP</span>
+            <h3 style="margin-top:14px">Goal: settle an obligation</h3>
+            <ul>
+              <li>Starts with an existing bill</li>
+              <li>Customer reviews a stated amount</li>
+              <li>Payment closes or reduces the balance</li>
+              <li>Success means accurate, secure processing</li>
+            </ul>
+          </div>
+          <div class="model-block">
+            <span class="tag">E‑auction</span>
+            <h3 style="margin-top:14px">Goal: discover or allocate a price</h3>
+            <ul>
+              <li>Starts with an item, service, or asset</li>
+              <li>Participants submit competitive bids</li>
+              <li>Rules choose the winner and price</li>
+              <li>Success means a valid, transparent outcome</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-note="Let the learner answer. The correct answer is Vickrey.">
+      <div class="slide-inner">
+        <div class="quiz reveal">
+          <div class="eyebrow">Knowledge check</div>
+          <h2 style="font-size:clamp(1.8rem,3.5vw,3.4rem)">Which format makes the winner pay the <span class="gradient-text">second-highest bid?</span></h2>
+          <div class="answers" id="quizAnswers">
+            <button class="answer" data-answer="wrong">English auction</button>
+            <button class="answer" data-answer="wrong">Dutch auction</button>
+            <button class="answer" data-answer="wrong">Double auction</button>
+            <button class="answer" data-answer="correct">Vickrey auction</button>
+          </div>
+          <div class="quiz-feedback" id="quizFeedback">Choose one answer.</div>
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+
+  <div class="progress"><span id="progressBar"></span></div>
+
+  <footer class="bottombar">
+    <button class="nav-btn" id="prevBtn">← Previous</button>
+    <div class="dots" id="dots"></div>
+    <div class="slide-count"><span id="currentNo">01</span> / <span id="totalNo">11</span></div>
+    <button class="nav-btn" id="nextBtn">Next →</button>
+  </footer>
+</div>
+
+<div class="presenter-note" id="presenterNote">
+  <strong>Presenter note</strong>
+  <p id="noteText" class="small" style="margin:8px 0 0"></p>
+</div>
+
+<script>
+(() => {
+  const slides = [...document.querySelectorAll('.slide')];
+  const dotsEl = document.getElementById('dots');
+  const progress = document.getElementById('progressBar');
+  const currentNo = document.getElementById('currentNo');
+  const totalNo = document.getElementById('totalNo');
+  const noteText = document.getElementById('noteText');
+  let index = 0;
+  totalNo.textContent = String(slides.length).padStart(2,'0');
+
+  slides.forEach((_,i)=>{
+    const d=document.createElement('button');
+    d.className='dot'+(i===0?' active':'');
+    d.setAttribute('aria-label',`Go to slide ${i+1}`);
+    d.onclick=()=>go(i);
+    dotsEl.appendChild(d);
+  });
+  const dots=[...document.querySelectorAll('.dot')];
+
+  function go(next){
+    next=Math.max(0,Math.min(slides.length-1,next));
+    if(next===index) return;
+    const old=index;
+    slides[old].classList.remove('active');
+    slides[old].classList.toggle('exit-left',next>old);
+    setTimeout(()=>slides[old].classList.remove('exit-left'),550);
+    index=next;
+    slides[index].classList.add('active');
+    dots.forEach((d,i)=>d.classList.toggle('active',i===index));
+    progress.style.width=((index+1)/slides.length*100)+'%';
+    currentNo.textContent=String(index+1).padStart(2,'0');
+    noteText.textContent=slides[index].dataset.note||'';
+  }
+  progress.style.width=(1/slides.length*100)+'%';
+  noteText.textContent=slides[0].dataset.note||'';
+
+  document.getElementById('nextBtn').onclick=()=>go(index+1);
+  document.getElementById('prevBtn').onclick=()=>go(index-1);
+
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(index+1)}
+    if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(index-1)}
+    if(e.key==='Home')go(0);
+    if(e.key==='End')go(slides.length-1);
+  });
+
+  let touchX=0;
+  document.addEventListener('touchstart',e=>touchX=e.changedTouches[0].screenX,{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].screenX-touchX;
+    if(Math.abs(dx)>55) go(index+(dx<0?1:-1));
+  },{passive:true});
+
+  document.getElementById('themeBtn').onclick=()=>{
+    const root=document.documentElement;
+    root.dataset.theme=root.dataset.theme==='light'?'dark':'light';
+  };
+  document.getElementById('fullBtn').onclick=()=>{
+    if(!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  };
+  document.getElementById('noteBtn').onclick=()=>document.getElementById('presenterNote').classList.toggle('show');
+
+  document.querySelectorAll('#ebppFlow .flow-step').forEach(step=>{
+    step.onclick=()=>{
+      document.querySelectorAll('#ebppFlow .flow-step').forEach(s=>s.classList.remove('active'));
+      step.classList.add('active');
+      document.getElementById('flowTitle').textContent=step.dataset.title;
+      document.getElementById('flowText').textContent=step.dataset.text;
+    };
+  });
+
+  document.querySelectorAll('#utilityFlow .flow-step').forEach(step=>{
+    step.onclick=()=>{
+      document.querySelectorAll('#utilityFlow .flow-step').forEach(s=>s.classList.remove('active'));
+      step.classList.add('active');
+      document.getElementById('utilityTitle').textContent=step.dataset.title;
+      document.getElementById('utilityText').textContent=step.dataset.text;
+    };
+  });
+
+  document.querySelectorAll('.auction-card').forEach(card=>{
+    card.onclick=()=>{
+      document.querySelectorAll('.auction-card').forEach(c=>c.classList.remove('selected'));
+      card.classList.add('selected');
+      document.getElementById('auctionTitle').textContent=card.dataset.format+' auction';
+      document.getElementById('auctionText').textContent=card.dataset.desc;
+    };
+  });
+
+  const ranges=['a','b','c'];
+  function syncBars(){
+    ranges.forEach(x=>{
+      const v=document.getElementById(x+'Bid').value;
+      document.getElementById(x+'Val').textContent=v;
+      const bar=document.getElementById('bar'+x.toUpperCase());
+      bar.style.height=v+'%';
+      bar.querySelector('span').textContent=x.toUpperCase()+' · '+v;
+      bar.classList.remove('winner');
+    });
+    const ask=document.getElementById('sBid').value;
+    document.getElementById('sVal').textContent=ask;
+    const seller=document.getElementById('barS');
+    seller.style.height=ask+'%';
+    seller.querySelector('span').textContent='Ask · '+ask;
+    seller.classList.remove('winner');
+  }
+  ranges.forEach(x=>document.getElementById(x+'Bid').addEventListener('input',syncBars));
+  document.getElementById('sBid').addEventListener('input',syncBars);
+  document.getElementById('formatSelect').addEventListener('change',()=>document.getElementById('runAuction').click());
+  document.getElementById('runAuction').onclick=()=>{
+    syncBars();
+    const bids=ranges.map(x=>({name:x.toUpperCase(),value:+document.getElementById(x+'Bid').value})).sort((a,b)=>b.value-a.value);
+    const type=document.getElementById('formatSelect').value;
+    const ask=+document.getElementById('sBid').value;
+    const help=document.getElementById('resultHelp');
+    if(type==='vickrey'){
+      document.getElementById('bar'+bids[0].name).classList.add('winner');
+      document.getElementById('resultText').textContent=`${bids[0].name} wins: ${bids[1].value}`;
+      help.textContent='Vickrey: winner is the highest bidder; payment is the second-highest bid, because that is the closest rival price the winner had to beat.';
+    }else if(type==='dutch'){
+      document.getElementById('bar'+bids[0].name).classList.add('winner');
+      document.getElementById('resultText').textContent=`${bids[0].name} accepts: ${bids[0].value}`;
+      help.textContent='Dutch: price falls from high to low; the first bidder willing to accept wins.';
+    }else if(type==='double'){
+      if(bids[0].value>=ask){
+        document.getElementById('bar'+bids[0].name).classList.add('winner');
+        document.getElementById('barS').classList.add('winner');
+        document.getElementById('resultText').textContent=`Trade: ${bids[0].name} at ${ask}`;
+        help.textContent='Double auction demo: highest buyer bid is matched with the seller ask. Real markets may match many buyers and sellers.';
+      }else{
+        document.getElementById('resultText').textContent='No trade';
+        help.textContent='Double auction: no match occurs because no buyer bid reaches the seller ask.';
+      }
+    }else{
+      document.getElementById('bar'+bids[0].name).classList.add('winner');
+      document.getElementById('resultText').textContent=`${bids[0].name} wins: ${bids[0].value}`;
+      help.textContent='English: highest bid wins and pays the highest bid.';
+    }
+  };
+
+  document.querySelectorAll('.answer').forEach(btn=>{
+    btn.onclick=()=>{
+      document.querySelectorAll('.answer').forEach(b=>{b.classList.remove('correct','wrong');b.disabled=true});
+      if(btn.dataset.answer==='correct'){
+        btn.classList.add('correct');
+        document.getElementById('quizFeedback').textContent='Correct. The highest bidder wins, but the second-highest bid sets the payment amount.';
+      }else{
+        btn.classList.add('wrong');
+        document.querySelector('[data-answer="correct"]').classList.add('correct');
+        document.getElementById('quizFeedback').textContent='Not quite. The correct answer is the Vickrey auction.';
+      }
+    };
+  });
+})();
+</script>
+</body>
+</html>
