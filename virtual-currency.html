@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual Currency in E-Commerce — Unit 3</title>
+<style>
+:root{
+  --bg:#0f1115;
+  --panel:#171a21;
+  --ink:#f2f4f8;
+  --muted:#9aa4b2;
+  --accent:#4ade80;
+  --accent2:#60a5fa;
+  --warn:#fbbf24;
+  --danger:#f87171;
+  --line:#2a2f3a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  overflow:hidden;
+}
+#deck{position:relative;width:100vw;height:100vh}
+.slide{
+  position:absolute;inset:0;
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  padding:5vh 7vw 9vh;
+  animation:fade .35s ease;
+}
+.slide.active{display:flex}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+h1{font-size:clamp(32px,5.2vw,68px);line-height:1.08;letter-spacing:-.02em;font-weight:800}
+h2{font-size:clamp(24px,3.4vw,44px);line-height:1.15;letter-spacing:-.015em;font-weight:750;margin-bottom:.55em}
+h2 .num{color:var(--accent);font-weight:600;margin-right:.35em}
+h3{font-size:clamp(16px,1.6vw,22px);font-weight:650;color:var(--accent2);margin-bottom:.5em}
+p.lead{font-size:clamp(16px,1.9vw,26px);color:var(--muted);line-height:1.5;max-width:56ch}
+.kicker{
+  font-size:clamp(11px,1.05vw,14px);
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);font-weight:700;margin-bottom:1.1em;
+}
+ul{list-style:none;display:flex;flex-direction:column;gap:.75em;max-width:66ch}
+ul li{
+  font-size:clamp(15px,1.75vw,24px);line-height:1.4;
+  padding-left:1.5em;position:relative;color:#dfe4ec;
+}
+ul li::before{
+  content:"";position:absolute;left:0;top:.62em;
+  width:.5em;height:.5em;border-radius:50%;background:var(--accent);
+}
+ul li b,ul li strong{color:#fff;font-weight:700}
+ul.tight li{font-size:clamp(14px,1.5vw,20px)}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:2.6vw;align-items:start}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6vw}
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:14px;padding:1.5em 1.4em;
+}
+.card h3{margin-bottom:.4em}
+.card p{font-size:clamp(13px,1.35vw,18px);color:var(--muted);line-height:1.45}
+
+table{width:100%;border-collapse:collapse;font-size:clamp(12px,1.4vw,19px)}
+th,td{text-align:left;padding:.68em .7em;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--accent);font-weight:700;font-size:.92em;letter-spacing:.03em;text-transform:uppercase}
+td strong{color:#fff}
+td.dim{color:var(--muted)}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;margin-top:1.4em}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.2em 1em}
+.stat .v{font-size:clamp(20px,2.9vw,40px);font-weight:800;color:var(--accent);line-height:1.05}
+.stat .l{font-size:clamp(11px,1.15vw,15px);color:var(--muted);margin-top:.5em;line-height:1.35}
+
+.bars{display:flex;flex-direction:column;gap:1.05em;margin-top:.6em}
+.bar-row{display:grid;grid-template-columns:15ch 1fr auto;gap:1em;align-items:center}
+.bar-row .name{font-size:clamp(12px,1.35vw,18px);color:#dfe4ec}
+.track{height:clamp(16px,2.2vh,26px);background:#1e2230;border-radius:6px;overflow:hidden}
+.fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#22c55e,#4ade80);animation:grow 1s cubic-bezier(.2,.8,.2,1) both}
+.fill.blue{background:linear-gradient(90deg,#2563eb,#60a5fa)}
+@keyframes grow{from{width:0 !important}}
+.bar-row .val{font-size:clamp(12px,1.4vw,19px);font-weight:700;color:#fff;min-width:9ch;text-align:right}
+
+.chain{display:flex;align-items:center;gap:.5vw;flex-wrap:wrap;margin:.4em 0 1em}
+.node{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:.65em .9em;font-size:clamp(11px,1.15vw,16px)}
+.node.bad{border-color:#7f1d1d;color:#fca5a5}
+.node.good{border-color:#14532d;color:#86efac}
+.arrow{color:var(--muted);font-size:clamp(13px,1.3vw,18px)}
+
+.pill{display:inline-block;background:#1e2230;border:1px solid var(--line);border-radius:999px;padding:.35em .85em;font-size:clamp(11px,1.15vw,15px);color:var(--muted);margin:.2em .3em .2em 0}
+.pill.g{border-color:#14532d;color:#86efac}
+.pill.r{border-color:#7f1d1d;color:#fca5a5}
+
+.venn{display:flex;flex-direction:column;gap:0;align-items:flex-start;margin-top:.4em}
+.ring{border:2px solid;border-radius:12px;padding:1.1em 1.3em;width:100%}
+.ring .t{font-weight:750;font-size:clamp(14px,1.6vw,22px)}
+.ring .d{font-size:clamp(11px,1.2vw,16px);color:var(--muted);margin-top:.25em}
+.r1{border-color:#60a5fa}
+.r2{border-color:#4ade80;margin-left:2.2em;margin-top:-.5em;width:calc(100% - 2.2em)}
+.r3{border-color:#fbbf24;margin-left:4.4em;margin-top:-.5em;width:calc(100% - 4.4em)}
+
+.callout{
+  border-left:4px solid var(--warn);background:#1c1a12;
+  padding:1em 1.2em;border-radius:0 10px 10px 0;
+  font-size:clamp(13px,1.45vw,20px);line-height:1.45;color:#f5e9c8;margin-top:1em;
+}
+.callout.red{border-color:var(--danger);background:#1e1414;color:#fbd5d5}
+.callout b{color:#fff}
+
+/* problem → solution cards */
+.card .prob{
+  font-size:clamp(12px,1.3vw,17px);color:var(--muted);line-height:1.45;
+}
+.card .sol{
+  margin-top:.9em;padding-top:.85em;border-top:1px solid var(--line);
+  font-size:clamp(12px,1.32vw,17px);line-height:1.45;color:#c9f5d8;
+}
+.card .sol .tag{
+  display:block;font-size:.82em;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);font-weight:750;margin-bottom:.4em;
+}
+.card .sol b{color:#fff}
+.card .lbl{
+  display:block;font-size:.8em;letter-spacing:.11em;text-transform:uppercase;
+  color:#7a8494;font-weight:700;margin-bottom:.4em;
+}
+.unitnote{
+  font-size:clamp(11px,1.12vw,15px);color:#7a8494;margin-top:1.1em;line-height:1.5;
+}
+.unitnote b{color:#c3cbd6}
+
+.big-q{font-size:clamp(26px,4.4vw,58px);font-weight:800;line-height:1.15;letter-spacing:-.02em;max-width:22ch}
+.big-q em{color:var(--accent);font-style:normal}
+
+footer{
+  position:absolute;left:0;right:0;bottom:0;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 7vw 2.4vh;font-size:12px;color:#5b6472;
+}
+#bar{position:absolute;left:0;bottom:0;height:3px;background:var(--accent);transition:width .3s ease;z-index:5}
+.nav{position:fixed;right:2vw;bottom:2vh;display:flex;gap:8px;z-index:10}
+.nav button{
+  background:var(--panel);color:var(--muted);border:1px solid var(--line);
+  width:38px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;
+}
+.nav button:hover{color:#fff;border-color:var(--accent)}
+.src{font-size:clamp(10px,1.02vw,13px);color:#5b6472;margin-top:1.2em;line-height:1.5}
+@media (max-width:760px){
+  .two,.three{grid-template-columns:1fr;gap:1.2em}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .bar-row{grid-template-columns:11ch 1fr;}
+  .bar-row .val{grid-column:2;text-align:left}
+}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide active">
+  <div class="kicker">E-Commerce · Unit 3 · Electronic Payment Systems</div>
+  <h1>Virtual Currency<br>in E-Commerce</h1>
+  <p class="lead" style="margin-top:1.1em">Why digital-native money exists, what problems it solves for online business — and where Nepal's e-payment system stands today.</p>
+  <div style="margin-top:2em">
+    <span class="pill">Definition &amp; types</span>
+    <span class="pill">Why it's needed</span>
+    <span class="pill">Problems solved</span>
+    <span class="pill">Importance</span>
+    <span class="pill">Limitations</span>
+    <span class="pill">Nepal status 2026</span>
+  </div>
+</section>
+
+<!-- 2 AGENDA -->
+<section class="slide">
+  <h2><span class="num">01</span>What we'll cover</h2>
+  <div class="two">
+    <ul class="tight">
+      <li><b>What is virtual currency?</b> — definition and where it sits</li>
+      <li><b>Types</b> — closed, one-way, convertible</li>
+      <li><b>Why e-commerce needs it</b> — the three structural gaps</li>
+      <li><b>Problems it solves</b> — cost, micropayments, fraud, inclusion</li>
+    </ul>
+    <ul class="tight">
+      <li><b>Importance</b> — 12 points for the exam</li>
+      <li><b>Limitations</b> — volatility, regulation, security</li>
+      <li><b>Nepal today</b> — NRB data, FY 2024/25</li>
+      <li><b>What's next</b> — CBDC and the crypto ban</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 3 DEFINITION -->
+<section class="slide">
+  <h2><span class="num">02</span>What is virtual currency?</h2>
+  <p class="lead" style="font-size:clamp(17px,2.1vw,30px);color:#dfe4ec">A <b style="color:#fff">digital representation of value</b> that exists <b style="color:#fff">only in electronic form</b> — no physical note or coin.</p>
+  <ul style="margin-top:1.3em">
+    <li>Stored and transacted through <b>designated software, mobile or computer applications</b></li>
+    <li>Transactions occur over <b>secure dedicated networks or the Internet</b></li>
+    <li>Issued by <b>private parties or groups of developers</b> — not a central bank</li>
+    <li>Therefore <b>not legal tender</b>, and <b>mostly unregulated</b></li>
+  </ul>
+</section>
+
+<!-- 4 HIERARCHY -->
+<section class="slide">
+  <h2><span class="num">03</span>Digital ⊃ Virtual ⊃ Crypto</h2>
+  <div class="venn">
+    <div class="ring r1">
+      <div class="t">Digital Currency</div>
+      <div class="d">Any money in electronic form — including the balance in your bank account</div>
+    </div>
+    <div class="ring r2">
+      <div class="t">Virtual Currency</div>
+      <div class="d">Privately issued, not legal tender — game coins, loyalty points, platform wallets</div>
+    </div>
+    <div class="ring r3">
+      <div class="t">Cryptocurrency</div>
+      <div class="d">Uses cryptography + blockchain — Bitcoin, Ethereum, USDT</div>
+    </div>
+  </div>
+  <div class="callout">Exam line: <b>Virtual currency is a subset of digital currency, and includes cryptocurrencies and tokens issued by private organisations.</b></div>
+</section>
+
+<!-- 5 TYPES -->
+<section class="slide">
+  <h2><span class="num">04</span>Types relevant to e-commerce</h2>
+  <table>
+    <tr><th>Type</th><th>Meaning</th><th>E-commerce example</th></tr>
+    <tr><td><strong>Closed</strong></td><td class="dim">Cannot convert back to real money; usable inside one platform only</td><td class="dim">In-game gold, Amazon Coins, loyalty points, Daraz vouchers</td></tr>
+    <tr><td><strong>Unidirectional</strong></td><td class="dim">Real money → virtual currency, but not back</td><td class="dim">Airline miles, Steam Wallet</td></tr>
+    <tr><td><strong>Convertible (two-way)</strong></td><td class="dim">Can be bought and sold for real currency</td><td class="dim">Bitcoin, Ethereum, USDT stablecoins</td></tr>
+    <tr><td><strong>Centralized</strong></td><td class="dim">One issuer controls supply and the ledger</td><td class="dim">Platform wallet balances, game currencies</td></tr>
+    <tr><td><strong>Decentralized</strong></td><td class="dim">No single issuer; blockchain consensus</td><td class="dim">Bitcoin, Ethereum</td></tr>
+  </table>
+</section>
+
+<!-- 6 WHY NEEDED - question slide -->
+<section class="slide">
+  <div class="kicker">Question 1</div>
+  <div class="big-q">Why is virtual currency <em>needed</em> in e-commerce?</div>
+  <p class="lead" style="margin-top:1.2em">E-commerce is global, digital and 24/7. Traditional payment rails are national, paper-derived, and built for face-to-face retail.</p>
+</section>
+
+<!-- 7 THREE GAPS -->
+<section class="slide">
+  <h2><span class="num">05</span>Three structural gaps</h2>
+  <div class="three">
+    <div class="card">
+      <h3>a) Commerce is borderless — banking is not</h3>
+      <p>A seller in Nepal and a buyer in Germany hit currency conversion, correspondent-banking delays, and cards that may not be internationally enabled. Virtual currency is natively global.</p>
+    </div>
+    <div class="card">
+      <h3>b) Cards were never designed for the Internet</h3>
+      <p>The <b style="color:#fff">Cardholder Not Present (CNP)</b> problem — no card impression, no signature. This forces the heavy five-party clearing cycle.</p>
+    </div>
+    <div class="card">
+      <h3>c) Digital goods need digital-native money</h3>
+      <p>Selling a game skin, an article, a track or an API call means payments of Rs 5 or $0.05 — which cards cannot process economically.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 8 CHAIN COMPARISON -->
+<section class="slide">
+  <h2><span class="num">06</span>Collapsing the payment chain</h2>
+  <h3>Credit card — five parties, days to settle</h3>
+  <div class="chain">
+    <span class="node bad">Consumer</span><span class="arrow">→</span>
+    <span class="node bad">Merchant</span><span class="arrow">→</span>
+    <span class="node bad">Clearinghouse</span><span class="arrow">→</span>
+    <span class="node bad">Merchant Bank</span><span class="arrow">→</span>
+    <span class="node bad">Issuing Bank</span>
+  </div>
+  <h3 style="margin-top:1.4em">Virtual currency — near peer-to-peer, minutes to settle</h3>
+  <div class="chain">
+    <span class="node good">Consumer wallet</span><span class="arrow">→</span>
+    <span class="node good">Network</span><span class="arrow">→</span>
+    <span class="node good">Merchant wallet</span>
+  </div>
+  <div class="callout">Every removed intermediary is a removed <b>fee</b>, a removed <b>delay</b>, and a removed <b>point of failure</b>.</div>
+</section>
+
+<!-- 9 PROBLEMS Q -->
+<section class="slide">
+  <div class="kicker">Question 2</div>
+  <div class="big-q">What problems does it <em>solve</em>?</div>
+  <p class="lead" style="margin-top:1.2em">Eight concrete pain points in online commerce.</p>
+</section>
+
+<!-- 10 PROBLEMS 1-4 -->
+<section class="slide">
+  <h2><span class="num">07</span>Problems solved <span style="color:var(--muted);font-weight:400;font-size:.6em">(1 – 4)</span></h2>
+  <div class="two">
+    <div class="card">
+      <h3>i) High transaction cost</h3>
+      <div class="prob"><span class="lbl">The problem</span>Cards cost ~2–3% + a fixed fee on every sale, split among the clearinghouse, acquirer and issuer.</div>
+      <div class="sol"><span class="tag">✓ Virtual currency solves it by</span>Removing those intermediaries — payment goes wallet-to-wallet, so <b>the merchant keeps 2–3% more of every sale</b>.</div>
+    </div>
+    <div class="card">
+      <h3>ii) The micropayment problem</h3>
+      <div class="prob"><span class="lbl">The problem</span>Sell an article for Rs 5 when the card fee is Rs 4 and the business is impossible.</div>
+      <div class="sol"><span class="tag">✓ Virtual currency solves it by</span>Making cost-per-transaction near zero — so <b>pay-per-article, tipping, in-game items and metered APIs become viable</b>. The strongest single argument.</div>
+    </div>
+    <div class="card">
+      <h3>iii) Slow settlement</h3>
+      <div class="prob"><span class="lbl">The problem</span>Cards credit the merchant days later and bill the consumer on a monthly statement.</div>
+      <div class="sol"><span class="tag">✓ Virtual currency solves it by</span>Settling in minutes, 24/7 — <b>the merchant has usable cash the same day</b>, not next week.</div>
+    </div>
+    <div class="card">
+      <h3>iv) Chargeback &amp; CNP fraud</h3>
+      <div class="prob"><span class="lbl">The problem</span>A buyer can dispute a card charge months later ("friendly fraud") and the merchant loses the goods <i>and</i> the money.</div>
+      <div class="sol"><span class="tag">✓ Virtual currency solves it by</span>Making payments irreversible once confirmed — <b>chargeback fraud simply cannot happen</b>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 PROBLEMS 5-8 -->
+<section class="slide">
+  <h2><span class="num">08</span>Problems solved <span style="color:var(--muted);font-weight:400;font-size:.6em">(5 – 8)</span></h2>
+  <div class="two">
+    <div class="card">
+      <h3>v) Exposure of card data</h3>
+      <div class="prob"><span class="lbl">The problem</span>Every card purchase hands a card number to the merchant, building a database that can be breached.</div>
+      <div class="sol"><span class="tag">✓ Virtual currency solves it by</span>Revealing only a wallet address — <b>no reusable credential ever leaves the buyer</b>. Same privacy goal as SET's dual signature.</div>
+    </div>
+    <div class="card">
+      <h3>vi) Financial exclusion</h3>
+      <div class="prob"><span class="lbl">The problem</span>Card and bank penetration is low in developing markets, so a large share of people cannot buy online at all.</div>
+      <div class="sol"><span class="tag">✓ Virtual currency solves it by</span>Needing only a phone and Internet — no bank account, no credit history, no issuer approval. <b>It widens the merchant's addressable market</b>.</div>
+    </div>
+    <div class="card">
+      <h3>vii) Locked out of global marketplaces</h3>
+      <div class="prob"><span class="lbl">The problem</span>Buyers without an internationally-enabled card cannot pay foreign merchants.</div>
+      <div class="sol"><span class="tag">✓ Virtual currency solves it by</span>Bypassing the card network entirely — <b>the same token works in every country</b>, with no FX conversion chain.</div>
+    </div>
+    <div class="card">
+      <h3>viii) Weak retention &amp; platform economics</h3>
+      <div class="prob"><span class="lbl">The problem</span>Cash-out-at-checkout customers have no reason to come back; every sale must be won again.</div>
+      <div class="sol"><span class="tag">✓ Virtual currency solves it by</span>Committing money to the platform when loaded — creating <b>float, deferred revenue, repeat purchase and lock-in</b>. Why Amazon, Steam and Daraz all issue their own currency.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 IMPORTANCE Q -->
+<section class="slide">
+  <div class="kicker">Question 3</div>
+  <div class="big-q">What is its <em>importance</em> in e-commerce?</div>
+  <p class="lead" style="margin-top:1.2em">Twelve points — exam answer format.</p>
+</section>
+
+<!-- 13 IMPORTANCE LIST -->
+<section class="slide">
+  <h2><span class="num">09</span>Importance — 12 points</h2>
+  <div class="two">
+    <ul class="tight">
+      <li><b>Faster transaction speed</b> — settles in minutes, 24/7, no bank holidays</li>
+      <li><b>Lower transaction cost</b> — fewer intermediaries, low interchange</li>
+      <li><b>Global reach</b> — one currency for a worldwide customer base</li>
+      <li><b>Enables micropayments</b> — unlocks digital-goods business models</li>
+      <li><b>Ease of use</b> — a wallet app and an address; no card forms</li>
+      <li><b>Eliminates chargeback fraud</b> — irreversible, protects the merchant</li>
+    </ul>
+    <ul class="tight">
+      <li><b>Privacy &amp; security</b> — no card credential shared with the merchant</li>
+      <li><b>Financial inclusion</b> — serves unbanked and card-less customers</li>
+      <li><b>Less bank dependency</b> — no acquirer gatekeeping</li>
+      <li><b>Programmability</b> — smart-contract escrow releases payment on delivery</li>
+      <li><b>New business models</b> — virtual goods, NFTs, metaverse, creator economy</li>
+      <li><b>Loyalty &amp; marketing tool</b> — coins and cashback drive repeat purchase</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 14 LIMITATIONS -->
+<section class="slide">
+  <h2><span class="num">10</span>Limitations &amp; disadvantages</h2>
+  <div class="two">
+    <ul class="tight">
+      <li><b>Unregulated</b> — little or no legal recourse for buyers or investors</li>
+      <li><b>Can be hacked</b> — exchanges and hot wallets are targets; a lost private key means permanent loss</li>
+      <li><b>Price volatility</b> — a Rs 5,000 product may settle at Rs 4,200</li>
+      <li><b>Irreversibility cuts both ways</b> — good against fraud, bad for consumer protection</li>
+    </ul>
+    <ul class="tight">
+      <li><b>Scalability &amp; congestion</b> — fees can exceed the value of a micropayment</li>
+      <li><b>Anonymity enables misuse</b> — laundering, tax evasion, ransomware</li>
+      <li><b>Limited acceptance</b> — weak network effects vs. cards</li>
+      <li><b>Legally prohibited</b> in many jurisdictions — including Nepal</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 15 NEPAL CRYPTO -->
+<section class="slide">
+  <h2><span class="num">11</span>The Nepal context</h2>
+  <div class="callout red" style="font-size:clamp(15px,1.75vw,24px)">
+    <b>Cryptocurrency is illegal in Nepal.</b> NRB declared Bitcoin trading illegal in <b>August 2017</b> and reaffirmed the ban in later notices, grounded in the <b>Foreign Exchange (Regulation) Act</b>. Use, trade, investment and mining are all prohibited — and the ban remains in force in 2026.
+  </div>
+  <ul class="tight" style="margin-top:1.4em">
+    <li>Covers <b>all private cryptocurrencies</b> — Bitcoin, Ethereum, USDT, and every altcoin or stablecoin</li>
+    <li>Rationale: <b>monetary stability</b> and <b>anti–money laundering</b> concerns</li>
+    <li>So in Nepali e-commerce, the practical virtual currencies are <b>closed/platform currencies</b> — wallet balances, loyalty points, coins — not cryptocurrencies</li>
+  </ul>
+</section>
+
+<!-- 16 NEPAL SECTION DIVIDER -->
+<section class="slide">
+  <div class="kicker">Part 2</div>
+  <div class="big-q">Status of E-Payment Systems in <em>Nepal</em></div>
+  <p class="lead" style="margin-top:1.2em">Latest Nepal Rastra Bank data — FY 2024/25 and the current run-rate.</p>
+</section>
+
+<!-- 17 HEADLINE STATS -->
+<section class="slide">
+  <h2><span class="num">12</span>FY 2024/25 headline numbers</h2>
+  <div class="stats">
+    <div class="stat"><div class="v">NPR 98.43<span style="font-size:.42em"> trillion</span></div><div class="l">Total digital transactions, FY 2024/25</div></div>
+    <div class="stat"><div class="v">+71%</div><div class="l">Growth year-on-year</div></div>
+    <div class="stat"><div class="v">~3×</div><div class="l">Growth in five years — from NPR 34.42 trillion in FY 2020/21</div></div>
+    <div class="stat"><div class="v">22</div><div class="l">Operational digital wallets in Nepal</div></div>
+  </div>
+  <div class="callout" style="margin-top:1.4em">Your notes quote <b>NPR 712 billion (2018)</b> → <b>NPR 1,559 billion (2019)</b>. Those figures are six years out of date — the market is now measured in <b>trillions of rupees</b>.</div>
+  <p class="unitnote">All figures are in <b>Nepalese Rupees (NPR)</b>. &nbsp;·&nbsp; 1 billion = 100 crore &nbsp;·&nbsp; <b>1 trillion = 1,000 billion = 1 lakh crore = 10 kharba</b>. &nbsp;So NPR 98.43 trillion ≈ 98 lakh crore rupees of transactions in one year.</p>
+</section>
+
+<!-- 18 CHANNEL BREAKDOWN -->
+<section class="slide">
+  <h2><span class="num">13</span>By channel, FY 2024/25</h2>
+  <h3>Transaction value, in Nepalese Rupees</h3>
+  <div class="bars">
+    <div class="bar-row"><span class="name">RTGS</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">74.90 trillion</span></div>
+    <div class="bar-row"><span class="name">Faster Payment</span><span class="track"><span class="fill" style="width:7%"></span></span><span class="val">5.24 trillion</span></div>
+    <div class="bar-row"><span class="name">Mobile banking</span><span class="track"><span class="fill" style="width:6.7%"></span></span><span class="val">5.02 trillion</span></div>
+    <div class="bar-row"><span class="name">QR payments</span><span class="track"><span class="fill" style="width:1.3%"></span></span><span class="val">958 billion</span></div>
+  </div>
+  <h3 style="margin-top:1.8em">Five-year growth</h3>
+  <div class="bars">
+    <div class="bar-row"><span class="name">Mobile banking</span><span class="track"><span class="fill blue" style="width:92%"></span></span><span class="val">10× ↑</span></div>
+    <div class="bar-row"><span class="name">QR payments</span><span class="track"><span class="fill blue" style="width:100%"></span></span><span class="val">~50× ↑</span></div>
+  </div>
+  <p class="unitnote"><b>RTGS</b> = Real Time Gross Settlement — high-value bank-to-bank transfers, which is why it dominates. &nbsp;·&nbsp; Mobile banking: NPR 460 billion (FY 2020/21) → NPR 5.02 trillion. QR: NPR 20.28 billion → NPR 958.38 billion.</p>
+</section>
+
+<!-- 19 MONTHLY RUN RATE -->
+<section class="slide">
+  <h2><span class="num">14</span>Current monthly run-rate</h2>
+  <p class="lead" style="font-size:clamp(14px,1.5vw,20px);margin-bottom:1em">Single month, up to mid-June FY 2025/26</p>
+  <div class="stats">
+    <div class="stat"><div class="v">NPR 612<span style="font-size:.42em"> billion</span></div><div class="l">Mobile banking — now the most used channel</div></div>
+    <div class="stat"><div class="v">NPR 163<span style="font-size:.42em"> billion</span></div><div class="l">QR payments, across 59.26 million transactions</div></div>
+    <div class="stat"><div class="v">NPR 53<span style="font-size:.42em"> billion</span></div><div class="l">Digital wallets — eSewa, Khalti and others</div></div>
+    <div class="stat"><div class="v">~60<span style="font-size:.42em"> million</span></div><div class="l">Savings accounts in a country of ~30 million people</div></div>
+  </div>
+  <div class="callout" style="margin-top:1.4em">Five years ago the same month would have shown QR ~<b>NPR 2.5 billion</b>, mobile banking <b>NPR 48 billion</b>, wallets ~<b>NPR 10 billion</b>.</div>
+  <p class="unitnote">1 billion = 100 crore. So NPR 612 billion in one month ≈ <b>61,200 crore rupees</b> moving through mobile banking alone.</p>
+</section>
+
+<!-- 20 PLAYERS -->
+<section class="slide">
+  <h2><span class="num">15</span>Who runs the market</h2>
+  <div class="three">
+    <div class="card">
+      <h3>eSewa</h3>
+      <p><b style="color:#fff">8 million+</b> users<br><b style="color:#fff">150,000+</b> merchants<br><br>Nepal's first digital wallet — launched by F1Soft in 2009.</p>
+    </div>
+    <div class="card">
+      <h3>Fonepay</h3>
+      <p><b style="color:#fff">~20 million</b> customers<br><b style="color:#fff">1.3 million</b> merchants (~65% of registered businesses)<br><br>Integrated with ~95% of banks and financial institutions.</p>
+    </div>
+    <div class="card">
+      <h3>Khalti</h3>
+      <p><b style="color:#fff">~NPR 5 billion</b> monthly transactions<br><br>Strong in utility bills, top-ups and ticketing.</p>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:1.5em">All three sit on NRB's <b>NepalQR</b> interoperable standard — one QR code works across every wallet and bank app.</div>
+</section>
+
+<!-- 21 WHATS NEXT -->
+<section class="slide">
+  <h2><span class="num">16</span>What's next</h2>
+  <div class="two">
+    <div class="card">
+      <h3>CBDC — a digital Nepali rupee</h3>
+      <p>NRB built a <b style="color:#fff">prototype in August 2025</b> and is refining it. Rollout will start with <b style="color:#fff">business use</b> before the general public.</p>
+      <p style="margin-top:.8em">Key contrast: a CBDC is <b style="color:#fff">central-bank issued, regulated legal tender</b> — the opposite of an unregulated private virtual currency. It could let people without bank accounts transact digitally.</p>
+    </div>
+    <div class="card">
+      <h3>Digital lending</h3>
+      <p>NRB extended digital lending guidelines to MSMEs — short-term loans up to <b style="color:#fff">NPR 500,000</b> (1 year) and up to <b style="color:#fff">NPR 1 million</b> longer-term.</p>
+      <h3 style="margin-top:1em">Rising risk</h3>
+      <p>Phishing, OTP scams, fake bank and wallet sites. Per NRB's Strategic Analysis Report 2024: <b style="color:#fff">one in two people</b> involved in cyber-enabled financial fraud is aged 19–24, and <b style="color:#fff">one in three is a student</b>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 22 SUMMARY -->
+<section class="slide">
+  <h2><span class="num">17</span>Key takeaways</h2>
+  <ul>
+    <li>Virtual currency is <b>privately issued digital value</b> — a subset of digital currency that includes cryptocurrency</li>
+    <li>E-commerce needs it because commerce is <b>borderless</b>, cards are <b>not Internet-native</b>, and digital goods need <b>micropayments</b></li>
+    <li>It solves <b>cost, settlement delay, chargeback fraud, data exposure and financial exclusion</b></li>
+    <li>Its costs are <b>volatility, hackability, and the absence of regulation or legal recourse</b></li>
+    <li>Nepal has <b>banned cryptocurrency</b> but is booming on regulated rails — <b>NPR 98.43 trillion</b> (≈ 98 lakh crore rupees) in FY 2024/25, up 71%</li>
+    <li>The future here is a <b>central-bank digital currency</b>, not private virtual currency</li>
+  </ul>
+</section>
+
+<!-- 23 THANK YOU -->
+<section class="slide">
+  <div class="kicker">Thank you</div>
+  <h1>Questions?</h1>
+  <p class="src" style="margin-top:2.5em;max-width:80ch">
+    Sources — Nepal Rastra Bank Payment Systems Oversight Report; The Kathmandu Post, "A cashless shift in Nepal brings new ease and new risks" (June 2026); New Business Age, "Nepal's electronic payments nearly triple in five years"; MEA TechWatch, "Nepal's digital transactions surge 71% to Rs 98.43 trillion in FY 2024/25"; NRB notices on cryptocurrency under the Foreign Exchange (Regulation) Act. Course notes: EC Unit-3, Electronic Payment Systems.
+  </p>
+</section>
+
+</div>
+
+<div id="bar"></div>
+<div class="nav">
+  <button id="prev" title="Previous (←)">‹</button>
+  <button id="next" title="Next (→)">›</button>
+</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0;
+  var bar = document.getElementById('bar');
+
+  slides.forEach(function(s, idx){
+    var f = document.createElement('footer');
+    f.innerHTML = '<span>Virtual Currency in E-Commerce · Unit 3</span><span>' + (idx+1) + ' / ' + slides.length + '</span>';
+    s.appendChild(f);
+  });
+
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function(s, idx){ s.classList.toggle('active', idx === i); });
+    bar.style.width = ((i + 1) / slides.length * 100) + '%';
+    location.hash = i + 1;
+  }
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i+1); }
+    if(e.key === 'ArrowLeft'  || e.key === 'PageUp')                    { e.preventDefault(); show(i-1); }
+    if(e.key === 'Home') show(0);
+    if(e.key === 'End')  show(slides.length - 1);
+    if(e.key === 'f' || e.key === 'F'){
+      if(!document.fullscreenElement){ document.documentElement.requestFullscreen(); }
+      else { document.exitFullscreen(); }
+    }
+  });
+
+  document.getElementById('next').addEventListener('click', function(){ show(i+1); });
+  document.getElementById('prev').addEventListener('click', function(){ show(i-1); });
+
+  var x0 = null;
+  document.addEventListener('touchstart', function(e){ x0 = e.changedTouches[0].clientX; });
+  document.addEventListener('touchend', function(e){
+    if(x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if(Math.abs(dx) > 55) show(dx < 0 ? i+1 : i-1);
+    x0 = null;
+  });
+
+  var start = parseInt((location.hash || '').replace('#',''), 10);
+  show(isNaN(start) ? 0 : start - 1);
+})();
+</script>
+</body>
+</html>
