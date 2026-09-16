@@ -301,6 +301,89 @@ footer{
   100%{transform:translateY(110vh) rotate(360deg);opacity:.2}
 }
 
+
+/* --- Progress / fullscreen / replayable motion (no content changes) --- */
+.nav{
+  position:fixed;right:2vw;bottom:2vh;display:flex;gap:8px;z-index:10;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:70vw;
+}
+.nav button{
+  background:var(--panel);color:var(--muted);border:1px solid var(--line);
+  min-width:38px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;
+  padding:0 .65em;font-family:inherit;
+}
+.nav button:hover{color:#fff;border-color:var(--accent)}
+.nav button.wide{font-size:12px;font-weight:650;color:#dfe4ec}
+.progress-toast{
+  position:fixed;left:2vw;bottom:2.2vh;z-index:10;
+  background:#0f1a14;border:1px solid #14532d;color:#86efac;
+  border-radius:999px;padding:.35em .85em;font-size:12px;
+  opacity:0;pointer-events:none;transition:opacity .35s;
+}
+.progress-toast.show{opacity:1}
+
+/* Replayable staggered entrance for existing .chain .node */
+.chain.dm-anim .node{opacity:0;transform:translateY(14px)}
+.chain.dm-anim.playing .node{
+  animation:dmBuildIn .65s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.chain.dm-anim.playing .node:nth-child(1){animation-delay:.05s}
+.chain.dm-anim.playing .node:nth-child(2){animation-delay:.18s}
+.chain.dm-anim.playing .node:nth-child(3){animation-delay:.32s}
+.chain.dm-anim.playing .node:nth-child(4){animation-delay:.46s}
+.chain.dm-anim.playing .node:nth-child(5){animation-delay:.60s}
+.chain.dm-anim.playing .node:nth-child(6){animation-delay:.74s}
+.chain.dm-anim.playing .arrow{animation:dmBuildIn .4s ease forwards;animation-delay:.2s;opacity:0}
+@keyframes dmBuildIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* Cards / taps / stats entrance */
+.dm-motion .card,
+.dm-motion .tap,
+.dm-motion .reveal,
+.dm-motion .stat,
+.dm-motion .icon-chip{
+  opacity:0;transform:translateY(12px);
+}
+.dm-motion.playing .card,
+.dm-motion.playing .tap,
+.dm-motion.playing .reveal,
+.dm-motion.playing .stat,
+.dm-motion.playing .icon-chip{
+  animation:dmBuildIn .55s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.dm-motion.playing .card:nth-child(1),
+.dm-motion.playing .tap:nth-child(1),
+.dm-motion.playing .reveal:nth-child(1),
+.dm-motion.playing .stat:nth-child(1),
+.dm-motion.playing .icon-chip:nth-child(1){animation-delay:.05s}
+.dm-motion.playing .card:nth-child(2),
+.dm-motion.playing .tap:nth-child(2),
+.dm-motion.playing .reveal:nth-child(2),
+.dm-motion.playing .stat:nth-child(2),
+.dm-motion.playing .icon-chip:nth-child(2){animation-delay:.15s}
+.dm-motion.playing .card:nth-child(3),
+.dm-motion.playing .tap:nth-child(3),
+.dm-motion.playing .reveal:nth-child(3),
+.dm-motion.playing .stat:nth-child(3),
+.dm-motion.playing .icon-chip:nth-child(3){animation-delay:.25s}
+.dm-motion.playing .card:nth-child(4),
+.dm-motion.playing .tap:nth-child(4),
+.dm-motion.playing .reveal:nth-child(4),
+.dm-motion.playing .stat:nth-child(4),
+.dm-motion.playing .icon-chip:nth-child(4){animation-delay:.35s}
+.dm-motion.playing .card:nth-child(5),
+.dm-motion.playing .tap:nth-child(5),
+.dm-motion.playing .reveal:nth-child(5),
+.dm-motion.playing .stat:nth-child(5),
+.dm-motion.playing .icon-chip:nth-child(5){animation-delay:.45s}
+.dm-motion.playing .card:nth-child(n+6),
+.dm-motion.playing .tap:nth-child(n+6),
+.dm-motion.playing .reveal:nth-child(n+6),
+.dm-motion.playing .stat:nth-child(n+6),
+.dm-motion.playing .icon-chip:nth-child(n+6){animation-delay:.55s}
+
+.slide.active .fill{animation:grow 1s cubic-bezier(.2,.8,.2,1) both}
+
+
 </style>
 </head>
 <body>
@@ -1023,7 +1106,10 @@ footer{
 <div class="nav">
   <button id="prev" title="Previous (←)">‹</button>
   <button id="next" title="Next (→)">›</button>
+  <button id="fsBtn" class="wide" title="Fullscreen">⛶ Fullscreen</button>
+  <button id="clearProgress" class="wide" title="Clear saved progress">Clear progress</button>
 </div>
+<div id="progressToast" class="progress-toast">Resumed from last time</div>
 
 <script>
 (function(){
@@ -1065,6 +1151,80 @@ footer{
     });
   }
 
+  
+  var STORAGE_KEY = 'digitalMarketingSlide';
+  var COOKIE_NAME = 'digital_marketing_slide';
+  var COOKIE_DAYS = 400;
+
+  function setCookie(name, value, days){
+    try{
+      var maxAge = days * 24 * 60 * 60;
+      var c = document;
+      c["cookie"] = name + '=' + encodeURIComponent(String(value)) +
+        '; path=/; max-age=' + maxAge + '; SameSite=Lax';
+    }catch(e){}
+  }
+  function getCookie(name){
+    try{
+      var raw = document["cookie"] || '';
+      var parts = raw.split(';');
+      for(var c=0;c<parts.length;c++){
+        var p = parts[c].trim();
+        if(p.indexOf(name + '=') === 0){
+          return decodeURIComponent(p.substring(name.length + 1));
+        }
+      }
+    }catch(e){}
+    return null;
+  }
+  function clearCookie(name){
+    try{ document["cookie"] = name + '=; path=/; max-age=0; SameSite=Lax'; }catch(e){}
+  }
+  function saveProgress(slideIndex){
+    var v = String(slideIndex + 1);
+    try{ localStorage.setItem(STORAGE_KEY, v); }catch(e){}
+    setCookie(COOKIE_NAME, v, COOKIE_DAYS);
+  }
+  function loadProgress(){
+    var v = null;
+    try{ v = localStorage.getItem(STORAGE_KEY); }catch(e){}
+    if(!v) v = getCookie(COOKIE_NAME);
+    var n = parseInt(v, 10);
+    return isNaN(n) ? null : n;
+  }
+  function clearProgress(){
+    try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+    clearCookie(COOKIE_NAME);
+  }
+
+  function prepareMotion(slide){
+    if(!slide) return;
+    // Tag existing chains for staggered node animation (no content change)
+    Array.prototype.forEach.call(slide.querySelectorAll('.chain'), function(el){
+      el.classList.add('dm-anim');
+    });
+    // Tag grids of cards/taps/stats/reveals/chips
+    Array.prototype.forEach.call(slide.querySelectorAll('.two, .three, .stats, .tap-grid, .icon-row'), function(el){
+      el.classList.add('dm-motion');
+    });
+  }
+
+  function replayMotion(slide){
+    if(!slide) return;
+    prepareMotion(slide);
+    Array.prototype.forEach.call(slide.querySelectorAll('.dm-anim, .dm-motion'), function(el){
+      el.classList.remove('playing');
+      void el.offsetWidth;
+      el.classList.add('playing');
+    });
+    // restart bar fills if any
+    Array.prototype.forEach.call(slide.querySelectorAll('.fill'), function(el){
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = '';
+    });
+  }
+
   function show(n){
     var prev = i;
     i = Math.max(0, Math.min(slides.length - 1, n));
@@ -1072,10 +1232,13 @@ footer{
     slides.forEach(function(s, idx){ s.classList.toggle('active', idx === i); });
     bar.style.width = ((i + 1) / slides.length * 100) + '%';
     location.hash = i + 1;
+    saveProgress(i);
+    requestAnimationFrame(function(){ replayMotion(slides[i]); });
   }
 
   // Expose for data-goto pills
   window.__dmShow = show;
+
 
   document.addEventListener('keydown', function(e){
     var t = e.target;
@@ -1225,8 +1388,64 @@ footer{
     x0 = null;
   });
 
-  var start = parseInt((location.hash || '').replace('#',''), 10);
-  show(isNaN(start) ? 0 : start - 1);
+  var hashN = parseInt((location.hash || '').replace('#',''), 10);
+  var savedN = loadProgress();
+  var start;
+  var resumed = false;
+  if(!isNaN(hashN) && location.hash){
+    start = hashN;
+  } else if(savedN !== null){
+    start = savedN;
+    resumed = true;
+  } else {
+    start = 1;
+  }
+  // Prepare replay buttons once
+show(Math.max(0, start - 1));
+  if(resumed){
+    var toast = document.getElementById('progressToast');
+    if(toast){
+      toast.textContent = 'Resumed at slide ' + start + ' / ' + slides.length + ' (saved progress)';
+      toast.classList.add('show');
+      setTimeout(function(){ toast.classList.remove('show'); }, 3200);
+    }
+  }
+
+  var fsBtn = document.getElementById('fsBtn');
+  if(fsBtn){
+    fsBtn.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      document.documentElement.classList.add('force-motion');
+      if(!document.fullscreenElement){
+        var el = document.documentElement;
+        var req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+        if(req) req.call(el);
+      } else {
+        var ex = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+        if(ex) ex.call(document);
+      }
+    });
+    document.addEventListener('fullscreenchange', function(){
+      fsBtn.textContent = document.fullscreenElement ? '⛶ Exit full' : '⛶ Fullscreen';
+    });
+  }
+
+  var clearBtn = document.getElementById('clearProgress');
+  if(clearBtn){
+    clearBtn.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      clearProgress();
+      var toast = document.getElementById('progressToast');
+      if(toast){
+        toast.textContent = 'Progress cleared — next open starts at slide 1';
+        toast.classList.add('show');
+        setTimeout(function(){ toast.classList.remove('show'); }, 2800);
+      }
+    });
+  }
+
+  document.documentElement.classList.add('force-motion');
+
 })();
 </script>
 </body>
