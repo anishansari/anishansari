@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optimizing E-commerce Systems — Unit 7</title>
+<style>
+:root{
+  --bg:#0f1115;
+  --panel:#171a21;
+  --ink:#f2f4f8;
+  --muted:#9aa4b2;
+  --accent:#4ade80;
+  --accent2:#60a5fa;
+  --warn:#fbbf24;
+  --danger:#f87171;
+  --line:#2a2f3a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  overflow:hidden;
+}
+#deck{position:relative;width:100vw;height:100vh}
+.slide{
+  position:absolute;inset:0;
+  display:none;
+  flex-direction:column;
+  justify-content:flex-start;
+  padding:4.5vh 7vw 11vh;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  animation:fade .35s ease;
+}
+.slide.active{display:flex}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+h1{font-size:clamp(32px,5.2vw,68px);line-height:1.08;letter-spacing:-.02em;font-weight:800}
+h2{font-size:clamp(24px,3.4vw,44px);line-height:1.15;letter-spacing:-.015em;font-weight:750;margin-bottom:.55em}
+h2 .num{color:var(--accent);font-weight:600;margin-right:.35em}
+h3{font-size:clamp(16px,1.6vw,22px);font-weight:650;color:var(--accent2);margin-bottom:.5em}
+p.lead{font-size:clamp(16px,1.9vw,26px);color:var(--muted);line-height:1.5;max-width:56ch}
+.kicker{
+  font-size:clamp(11px,1.05vw,14px);
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);font-weight:700;margin-bottom:1.1em;
+}
+ul{list-style:none;display:flex;flex-direction:column;gap:.75em;max-width:66ch}
+ul li{
+  font-size:clamp(15px,1.75vw,24px);line-height:1.4;
+  padding-left:1.5em;position:relative;color:#dfe4ec;
+}
+ul li::before{
+  content:"";position:absolute;left:0;top:.62em;
+  width:.5em;height:.5em;border-radius:50%;background:var(--accent);
+}
+ul li b,ul li strong{color:#fff;font-weight:700}
+ul.tight li{font-size:clamp(14px,1.5vw,20px)}
+ul.tight{gap:.55em}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:2.6vw;align-items:start}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6vw}
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:14px;padding:1.5em 1.4em;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.card:hover{
+  transform:translateY(-3px);
+  border-color:#3d4658;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+}
+.card h3{margin-bottom:.4em}
+.card p{font-size:clamp(13px,1.35vw,18px);color:var(--muted);line-height:1.45}
+.icon{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:2em;height:2em;border-radius:50%;
+  background:#1e2230;border:1px solid var(--line);
+  font-size:clamp(14px,1.4vw,20px);margin-bottom:.55em;
+}
+
+table{width:100%;border-collapse:collapse;font-size:clamp(12px,1.4vw,19px)}
+th,td{text-align:left;padding:.68em .7em;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--accent);font-weight:700;font-size:.92em;letter-spacing:.03em;text-transform:uppercase}
+td strong{color:#fff}
+td.dim{color:var(--muted)}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;margin-top:1.4em}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.2em 1em}
+.stat .v{font-size:clamp(20px,2.9vw,40px);font-weight:800;color:var(--accent);line-height:1.05}
+.stat .l{font-size:clamp(11px,1.15vw,15px);color:var(--muted);margin-top:.5em;line-height:1.35}
+
+.bars{display:flex;flex-direction:column;gap:1.05em;margin-top:.6em}
+.bar-row{display:grid;grid-template-columns:15ch 1fr auto;gap:1em;align-items:center}
+.bar-row .name{font-size:clamp(12px,1.35vw,18px);color:#dfe4ec}
+.track{height:clamp(16px,2.2vh,26px);background:#1e2230;border-radius:6px;overflow:hidden}
+.fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#22c55e,#4ade80);animation:grow 1s cubic-bezier(.2,.8,.2,1) both}
+.fill.blue{background:linear-gradient(90deg,#2563eb,#60a5fa)}
+@keyframes grow{from{width:0 !important}}
+.bar-row .val{font-size:clamp(12px,1.4vw,19px);font-weight:700;color:#fff;min-width:9ch;text-align:right}
+
+.chain{display:flex;align-items:center;gap:.5vw;flex-wrap:wrap;margin:.4em 0 1em}
+.node{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:.65em .9em;font-size:clamp(11px,1.15vw,16px)}
+.node.bad{border-color:#7f1d1d;color:#fca5a5}
+.node.good{border-color:#14532d;color:#86efac}
+.arrow{color:var(--muted);font-size:clamp(13px,1.3vw,18px)}
+
+.pill{display:inline-block;background:#1e2230;border:1px solid var(--line);border-radius:999px;padding:.35em .85em;font-size:clamp(11px,1.15vw,15px);color:var(--muted);margin:.2em .3em .2em 0;cursor:default}
+.pill[data-goto]{cursor:pointer}
+.pill[data-goto]:hover{border-color:var(--accent);color:#86efac}
+.pill.g{border-color:#14532d;color:#86efac}
+.pill.r{border-color:#7f1d1d;color:#fca5a5}
+
+.venn{display:flex;flex-direction:column;gap:0;align-items:flex-start;margin-top:.4em}
+.ring{border:2px solid;border-radius:12px;padding:1.1em 1.3em;width:100%}
+.ring .t{font-weight:750;font-size:clamp(14px,1.6vw,22px)}
+.ring .d{font-size:clamp(11px,1.2vw,16px);color:var(--muted);margin-top:.25em}
+.r1{border-color:#60a5fa}
+.r2{border-color:#4ade80;margin-left:2.2em;margin-top:-.5em;width:calc(100% - 2.2em)}
+.r3{border-color:#fbbf24;margin-left:4.4em;margin-top:-.5em;width:calc(100% - 4.4em)}
+
+.callout{
+  border-left:4px solid var(--warn);background:#1c1a12;
+  padding:1em 1.2em;border-radius:0 10px 10px 0;
+  font-size:clamp(13px,1.45vw,20px);line-height:1.45;color:#f5e9c8;margin-top:1em;
+}
+.callout.red{border-color:var(--danger);background:#1e1414;color:#fbd5d5}
+.callout b{color:#fff}
+
+.example{
+  border-left:4px solid #22c55e;background:#0f1a14;
+  padding:.85em 1.1em;border-radius:0 10px 10px 0;
+  font-size:clamp(12px,1.3vw,17px);line-height:1.45;color:#b7e4c7;margin-top:.9em;
+}
+.example .ex-label{
+  display:block;font-size:.78em;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);font-weight:750;margin-bottom:.35em;
+}
+.example b{color:#fff}
+
+.benefit{margin-bottom:.15em}
+.benefit .so{
+  display:block;font-size:clamp(12px,1.25vw,16px);color:var(--muted);
+  margin-top:.2em;padding-left:0;font-weight:400;
+}
+
+.reveal{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:1em 1.15em;cursor:pointer;
+  transition:border-color .2s ease,transform .15s ease;
+  outline:none;
+}
+.reveal:hover,.reveal:focus{border-color:var(--accent2);transform:translateY(-2px)}
+.reveal .reveal-q{
+  font-size:clamp(13px,1.4vw,18px);font-weight:650;color:#e8ecf2;
+  display:flex;justify-content:space-between;align-items:center;gap:.8em;
+}
+.reveal .hint{font-size:.85em;color:var(--muted);font-weight:500;white-space:nowrap}
+.reveal-body{
+  display:none;margin-top:.75em;padding-top:.75em;border-top:1px solid var(--line);
+  font-size:clamp(12px,1.3vw,17px);color:var(--muted);line-height:1.45;
+}
+.reveal.open .reveal-body{display:block}
+.reveal.open .hint{color:var(--accent)}
+
+.quiz{max-width:52ch}
+.quiz .q{
+  font-size:clamp(18px,2.4vw,32px);font-weight:750;line-height:1.25;
+  margin-bottom:1.1em;letter-spacing:-.01em;
+}
+.quiz button{
+  display:block;width:100%;text-align:left;
+  background:var(--panel);color:#dfe4ec;border:1px solid var(--line);
+  border-radius:12px;padding:.9em 1.1em;margin-bottom:.65em;
+  font-size:clamp(14px,1.45vw,19px);cursor:pointer;
+  font-family:inherit;transition:border-color .15s,background .15s,transform .15s;
+}
+.quiz button:hover:not(:disabled){border-color:var(--accent2);transform:translateX(3px)}
+.quiz button.correct{border-color:#14532d;background:#0f1f15;color:#86efac}
+.quiz button.wrong{border-color:#7f1d1d;background:#1e1414;color:#fca5a5}
+.quiz button:disabled{cursor:default;opacity:.95}
+.quiz .explain{
+  display:none;margin-top:.6em;font-size:clamp(12px,1.3vw,17px);
+  color:var(--muted);line-height:1.45;padding:.8em 1em;
+  background:#1c1a12;border-radius:10px;border-left:3px solid var(--warn);
+}
+.quiz.answered .explain{display:block}
+
+.viz, svg.viz{
+  width:100%;max-height:38vh;display:block;object-fit:contain;border-radius:12px;
+  border:1px solid var(--line);background:#0a0c10;
+}
+.viz-wrap{margin:.55em 0 .85em;max-width:100%}
+.viz-wrap.compact svg.viz,.viz-wrap.compact .viz{max-height:22vh}
+.slide .two.viz-split{align-items:center}
+.checklist-strip{
+  display:flex;flex-wrap:wrap;gap:.45em;margin:.5em 0 1em;
+}
+.checklist-strip span{
+  display:inline-flex;align-items:center;gap:.35em;
+  background:var(--panel);border:1px solid var(--line);border-radius:999px;
+  padding:.35em .75em;font-size:clamp(11px,1.1vw,14px);color:var(--muted);
+}
+.checklist-strip span b{color:var(--accent);font-weight:800}
+
+
+.card .prob{
+  font-size:clamp(12px,1.3vw,17px);color:var(--muted);line-height:1.45;
+}
+.card .sol{
+  margin-top:.9em;padding-top:.85em;border-top:1px solid var(--line);
+  font-size:clamp(12px,1.32vw,17px);line-height:1.45;color:#c9f5d8;
+}
+.card .sol .tag{
+  display:block;font-size:.82em;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);font-weight:750;margin-bottom:.4em;
+}
+.card .sol b{color:#fff}
+.card .lbl{
+  display:block;font-size:.8em;letter-spacing:.11em;text-transform:uppercase;
+  color:#7a8494;font-weight:700;margin-bottom:.4em;
+}
+.unitnote{
+  font-size:clamp(11px,1.12vw,15px);color:#7a8494;margin-top:1.1em;line-height:1.5;
+}
+.unitnote b{color:#c3cbd6}
+
+.big-q{font-size:clamp(26px,4.4vw,58px);font-weight:800;line-height:1.15;letter-spacing:-.02em;max-width:22ch}
+.big-q em{color:var(--accent);font-style:normal}
+
+footer{
+  position:absolute;left:0;right:0;bottom:0;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 7vw 2.4vh;font-size:12px;color:#5b6472;
+}
+#bar{position:absolute;left:0;bottom:0;height:3px;background:var(--accent);transition:width .3s ease;z-index:5}
+.nav{position:fixed;right:2vw;bottom:2vh;display:flex;gap:8px;z-index:10}
+.nav button{
+  background:var(--panel);color:var(--muted);border:1px solid var(--line);
+  width:38px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;
+}
+.nav button:hover{color:#fff;border-color:var(--accent)}
+.src{font-size:clamp(10px,1.02vw,13px);color:#5b6472;margin-top:1.2em;line-height:1.5}
+@media (max-width:900px){
+  .two,.three{grid-template-columns:1fr;gap:1.2em}
+  .concept-grid{grid-template-columns:1fr !important}
+}
+@media (max-width:760px){
+  .two,.three{grid-template-columns:1fr;gap:1.2em}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .bar-row{grid-template-columns:11ch 1fr;}
+  .bar-row .val{grid-column:2;text-align:left}
+}
+
+.icon-row{
+  display:flex;flex-wrap:wrap;gap:.55em;margin-top:1em;
+}
+.icon-chip{
+  display:inline-flex;align-items:center;gap:.45em;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:999px;padding:.45em .95em;
+  font-size:clamp(12px,1.25vw,16px);color:#dfe4ec;
+  cursor:pointer;user-select:none;outline:none;
+  transition:border-color .15s,background .15s,transform .15s;
+}
+.icon-chip:hover,.icon-chip:focus{border-color:var(--accent2);transform:translateY(-1px)}
+.icon-chip.active{
+  border-color:var(--accent);background:#0f1f15;color:#86efac;
+}
+.icon-chip .ic{font-size:1.15em;line-height:1}
+.tip-panel{
+  margin-top:.85em;min-height:2.6em;
+  padding:.75em 1em;border-radius:10px;
+  background:#12151c;border:1px dashed var(--line);
+  font-size:clamp(12px,1.3vw,17px);color:var(--muted);line-height:1.45;
+}
+.tip-panel b{color:#fff}
+.tip-panel:empty{display:none}
+.tip-panel.has-tip{border-style:solid;border-color:#2d3a2d;background:#0f1a14;color:#b7e4c7}
+
+.tap-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(16ch,1fr));
+  gap:.85em;margin-top:.9em;
+}
+.tap{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:1em 1.05em;cursor:pointer;
+  outline:none;min-height:5.5em;
+  transition:border-color .15s,transform .15s;
+  position:relative;
+}
+.tap:hover,.tap:focus{border-color:var(--accent2);transform:translateY(-2px)}
+.tap-front{
+  font-size:clamp(13px,1.4vw,18px);font-weight:650;color:#e8ecf2;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:.5em;
+}
+.tap-front .hint{font-size:.78em;color:var(--muted);font-weight:500;white-space:nowrap}
+.tap-back{
+  display:none;margin-top:.7em;padding-top:.7em;border-top:1px solid var(--line);
+  font-size:clamp(12px,1.25vw,16px);color:var(--muted);line-height:1.45;
+}
+.tap.open{border-color:var(--accent)}
+.tap.open .tap-back{display:block}
+.tap.open .hint{color:var(--accent)}
+.tap[data-goto]{cursor:pointer}
+
+.confetti{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.35;
+}
+.confetti i{
+  position:absolute;width:8px;height:8px;border-radius:2px;
+  animation:fall 6s linear infinite;
+}
+@keyframes fall{
+  0%{transform:translateY(-10vh) rotate(0deg);opacity:0}
+  10%{opacity:1}
+  100%{transform:translateY(110vh) rotate(360deg);opacity:.2}
+}
+
+
+/* --- Progress / fullscreen / replayable motion (no content changes) --- */
+.nav{
+  position:fixed;right:2vw;bottom:2vh;display:flex;gap:8px;z-index:10;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:70vw;
+}
+.nav button{
+  background:var(--panel);color:var(--muted);border:1px solid var(--line);
+  min-width:38px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;
+  padding:0 .65em;font-family:inherit;
+}
+.nav button:hover{color:#fff;border-color:var(--accent)}
+.nav button.wide{font-size:12px;font-weight:650;color:#dfe4ec}
+.progress-toast{
+  position:fixed;left:2vw;bottom:2.2vh;z-index:10;
+  background:#0f1a14;border:1px solid #14532d;color:#86efac;
+  border-radius:999px;padding:.35em .85em;font-size:12px;
+  opacity:0;pointer-events:none;transition:opacity .35s;
+}
+.progress-toast.show{opacity:1}
+
+/* Staggered entrance for existing .chain .node */
+.chain.dm-anim .node{opacity:0;transform:translateY(14px)}
+.chain.dm-anim.playing .node{
+  animation:dmBuildIn .65s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.chain.dm-anim.playing .node:nth-child(1){animation-delay:.05s}
+.chain.dm-anim.playing .node:nth-child(2){animation-delay:.18s}
+.chain.dm-anim.playing .node:nth-child(3){animation-delay:.32s}
+.chain.dm-anim.playing .node:nth-child(4){animation-delay:.46s}
+.chain.dm-anim.playing .node:nth-child(5){animation-delay:.60s}
+.chain.dm-anim.playing .node:nth-child(6){animation-delay:.74s}
+.chain.dm-anim.playing .arrow{animation:dmBuildIn .4s ease forwards;animation-delay:.2s;opacity:0}
+@keyframes dmBuildIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* Cards / taps / stats entrance */
+.dm-motion .card,
+.dm-motion .tap,
+.dm-motion .reveal,
+.dm-motion .stat,
+.dm-motion .icon-chip{
+  opacity:0;transform:translateY(12px);
+}
+.dm-motion.playing .card,
+.dm-motion.playing .tap,
+.dm-motion.playing .reveal,
+.dm-motion.playing .stat,
+.dm-motion.playing .icon-chip{
+  animation:dmBuildIn .55s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.dm-motion.playing .card:nth-child(1),
+.dm-motion.playing .tap:nth-child(1),
+.dm-motion.playing .reveal:nth-child(1),
+.dm-motion.playing .stat:nth-child(1),
+.dm-motion.playing .icon-chip:nth-child(1){animation-delay:.05s}
+.dm-motion.playing .card:nth-child(2),
+.dm-motion.playing .tap:nth-child(2),
+.dm-motion.playing .reveal:nth-child(2),
+.dm-motion.playing .stat:nth-child(2),
+.dm-motion.playing .icon-chip:nth-child(2){animation-delay:.15s}
+.dm-motion.playing .card:nth-child(3),
+.dm-motion.playing .tap:nth-child(3),
+.dm-motion.playing .reveal:nth-child(3),
+.dm-motion.playing .stat:nth-child(3),
+.dm-motion.playing .icon-chip:nth-child(3){animation-delay:.25s}
+.dm-motion.playing .card:nth-child(4),
+.dm-motion.playing .tap:nth-child(4),
+.dm-motion.playing .reveal:nth-child(4),
+.dm-motion.playing .stat:nth-child(4),
+.dm-motion.playing .icon-chip:nth-child(4){animation-delay:.35s}
+.dm-motion.playing .card:nth-child(5),
+.dm-motion.playing .tap:nth-child(5),
+.dm-motion.playing .reveal:nth-child(5),
+.dm-motion.playing .stat:nth-child(5),
+.dm-motion.playing .icon-chip:nth-child(5){animation-delay:.45s}
+.dm-motion.playing .card:nth-child(n+6),
+.dm-motion.playing .tap:nth-child(n+6),
+.dm-motion.playing .reveal:nth-child(n+6),
+.dm-motion.playing .stat:nth-child(n+6),
+.dm-motion.playing .icon-chip:nth-child(n+6){animation-delay:.55s}
+
+.slide.active .fill{animation:grow 1s cubic-bezier(.2,.8,.2,1) both}
+
+
+
+/* === Concept teaching block === */
+.concept{margin:.45em 0 .85em;max-width:100%;width:100%}
+.concept-grid{display:grid;grid-template-columns:1fr;gap:.4em;width:100%;max-width:100%}
+@media (min-width:1100px){.concept-grid{grid-template-columns:1fr 1fr;gap:.45em}}
+.concept-row{
+  display:block;width:100%;max-width:100%;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:.55em .75em;cursor:pointer;outline:none;text-align:left;
+  font-family:inherit;color:inherit;transition:border-color .15s,background .15s;
+  overflow:visible;height:auto;
+}
+.concept-row:hover,.concept-row:focus{border-color:var(--accent2)}
+.concept-row.open{border-color:var(--accent);background:#0f1a14}
+.concept-q{
+  display:flex;align-items:center;gap:.55em;
+  font-size:clamp(12px,1.25vw,16px);font-weight:650;color:#e8ecf2;
+}
+.cq-n{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:1.55em;height:1.55em;border-radius:50%;flex-shrink:0;
+  background:#1e2230;border:1px solid var(--line);
+  font-size:.85em;color:var(--accent);font-weight:800;
+}
+.concept-row.open .cq-n{background:#14532d;border-color:#22c55e;color:#86efac}
+.concept-a{
+  display:none;margin-top:.45em;padding-top:.45em;border-top:1px solid var(--line);
+  font-size:clamp(13px,1.35vw,18px);line-height:1.45;color:#dfe4ec;
+  max-height:none;overflow:visible;
+}
+.concept-row.open .concept-a{display:block}
+.concept-a b{color:#fff}
+.concept-a .tight{margin:.35em 0 0;padding-left:1.15em}
+.concept-a .tight li{margin:.15em 0}
+.concept-tools{display:flex;gap:.5em;margin-bottom:.55em;flex-wrap:wrap}
+.concept-tools button{
+  background:#1e2230;border:1px solid var(--line);color:var(--muted);
+  border-radius:999px;padding:.3em .85em;font-size:clamp(11px,1.05vw,13px);
+  cursor:pointer;font-family:inherit;
+}
+.concept-tools button:hover{border-color:var(--accent);color:#86efac}
+
+/* Compact always-visible cards variant */
+.concept-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.5em 0 1em}
+@media (max-width:900px){.concept-cards{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.concept-cards{grid-template-columns:1fr}}
+.concept-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.75em .85em;
+}
+.concept-card .cq-label{
+  font-size:clamp(10px,1vw,12px);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);font-weight:750;margin-bottom:.35em;display:flex;align-items:center;gap:.4em;
+}
+.concept-card p{font-size:clamp(11px,1.15vw,15px);color:var(--muted);line-height:1.4}
+.concept-card p b{color:#fff}
+
+
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide active">
+  <div class="kicker">E-Commerce · Unit 7</div>
+  <h1>Optimizing<br>E-commerce Systems</h1>
+  <p class="lead" style="margin-top:.7em">Get found on Google, climb the rankings, and recommend the right products — SEO plus recommendation systems that keep shoppers buying.</p>
+  <div style="margin-top:1.1em">
+    <span class="pill" data-goto="3">SEO basics</span>
+    <span class="pill" data-goto="5">Spider · Index · Utility</span>
+    <span class="pill" data-goto="10">On-page vs Off-page</span>
+    <span class="pill" data-goto="15">PageRank &amp; activities</span>
+    <span class="pill" data-goto="19">Recommendation systems</span>
+    <span class="pill" data-goto="26">Takeaways</span>
+  </div>
+  <p class="unitnote" style="margin-top:1.4em">Arrow keys / Space to navigate · F for fullscreen · progress is saved automatically</p>
+</section>
+
+<!-- 2 AGENDA -->
+<section class="slide">
+  <div class="kicker">Roadmap</div>
+  <h2><span class="num">01</span>What we'll cover today</h2>
+  <div class="two">
+    <ul class="tight">
+      <li><b>SEO</b> — what it is, why the first 10 results matter</li>
+      <li><b>Search engine parts</b> — spider, index, search utility</li>
+      <li><b>On-page SEO</b> — content, keywords, speed, mobile</li>
+      <li><b>Off-page SEO</b> — backlinks, social, popularity</li>
+    </ul>
+    <ul class="tight">
+      <li><b>PageRank</b> — Google’s classic importance score</li>
+      <li><b>8 activities</b> — practical checklist to improve rank</li>
+      <li><b>Recommendation systems</b> — types, advantages, e-commerce use</li>
+      <li><b>Quizzes &amp; discussion</b> — stay awake, apply ideas</li>
+    </ul>
+  </div>
+  <div class="callout" style="margin-top:1.2em">Think Nepal: how does <b>Daraz</b> show up when you search “laptop Kathmandu”? How does it suggest another phone case after you buy one?</div>
+</section>
+
+<!-- 3 SEO CONCEPT -->
+<section class="slide">
+  <div class="kicker">Major concept</div>
+  <h2><span class="num">02</span>SEO — Search Engine Optimization</h2>
+  <p class="lead" style="margin-bottom:.5em;font-size:clamp(14px,1.5vw,20px);max-width:70ch">Click each row. Full answers — not one-liners.</p>
+<div class="viz-wrap compact">
+<svg class="viz" viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SERP first 10 organic results diagram">
+  <rect width="640" height="200" fill="#0a0c10"/>
+  <text x="16" y="22" fill="#4ade80" font-size="12" font-family="system-ui,sans-serif" font-weight="700">GOOGLE · SERP</text>
+  <rect x="16" y="32" width="280" height="28" rx="14" fill="#171a21" stroke="#2a2f3a"/>
+  <text x="30" y="50" fill="#9aa4b2" font-size="11" font-family="system-ui,sans-serif">laptop Kathmandu</text>
+  <circle cx="278" cy="46" r="8" fill="#60a5fa"/>
+  <!-- results -->
+  <g font-family="system-ui,sans-serif">
+    <rect x="16" y="72" width="300" height="22" rx="4" fill="#0f1a14" stroke="#22c55e"/>
+    <text x="24" y="87" fill="#86efac" font-size="11" font-weight="700">1 · Daraz — Laptops in Kathmandu</text>
+    <rect x="16" y="98" width="280" height="18" rx="3" fill="#171a21" stroke="#2a2f3a"/>
+    <text x="24" y="111" fill="#dfe4ec" font-size="10">2 · Local shop — Gaming laptop deals</text>
+    <rect x="16" y="120" width="260" height="18" rx="3" fill="#171a21" stroke="#2a2f3a"/>
+    <text x="24" y="133" fill="#dfe4ec" font-size="10">3 · Review blog — Best budget laptops</text>
+    <rect x="16" y="142" width="240" height="16" rx="3" fill="#12151c" stroke="#2a2f3a"/>
+    <text x="24" y="154" fill="#9aa4b2" font-size="10">4 … 10 · More organic results</text>
+    <text x="16" y="180" fill="#fbbf24" font-size="11" font-weight="650">★ Marketers want the first 10 listings</text>
+  </g>
+  <g font-family="system-ui,sans-serif">
+    <rect x="340" y="40" width="280" height="140" rx="10" fill="#171a21" stroke="#2a2f3a"/>
+    <text x="356" y="66" fill="#60a5fa" font-size="12" font-weight="700">Nepal callout</text>
+    <text x="356" y="92" fill="#dfe4ec" font-size="12">Query: “laptop Kathmandu”</text>
+    <text x="356" y="114" fill="#9aa4b2" font-size="11">Organic win → free clicks</text>
+    <text x="356" y="136" fill="#9aa4b2" font-size="11">Page 5 ≈ almost invisible</text>
+    <text x="356" y="160" fill="#4ade80" font-size="11" font-weight="650">SEO = climb into #1–10</text>
+  </g>
+</svg>
+</div>
+  <div class="concept">
+    <div class="concept-tools">
+      <button type="button" data-concept-action="open">Show all 6</button>
+      <button type="button" data-concept-action="close">Hide</button>
+    </div>
+    <div class="concept-grid">
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">1</span> What is this?</div><div class="concept-a"><b>SEO</b> means improving a web page’s ranking so the site appears near the top of search results. Marketers especially want a place in the <b>first 10 listings</b> — the first results page — because that is where most people click.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">2</span> What it does?</div><div class="concept-a">It makes your store <b>findable for free</b> (organic results). Careful keywords, frequent content updates, and a design search engines can read all help Google and others understand and trust your pages — so Daraz-style shops show up when buyers search.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">3</span> Why needed?</div><div class="concept-a">If you are invisible on Google, paid ads alone get expensive and traffic dies when the budget stops. SEO builds <b>ongoing discovery</b>: students searching “cheap sneakers Nepal” should land on you, not only on ads.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">4</span> When needed?</div><div class="concept-a">From day one of an online store — and again whenever you add products, change pages, or enter a competitive niche. Anytime rivals fight for the same keywords (phones, fashion, groceries), SEO work is continuous, not a one-time checkbox.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">5</span> Without it?</div><div class="concept-a">Your beautiful shop can sit on page 5 forever. Few users scroll that far, so sales stay low even if prices and delivery are good. You become dependent only on social posts, word of mouth, or paid ads.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">6</span> How it works?</div><div class="concept-a">You optimize <b>on the page</b> (content, titles, speed, mobile) and <b>off the page</b> (links, mentions, social proof). Search engines crawl, index, then rank. Better signals → higher place in those first 10 results marketers want.</div></button>
+    </div>
+  </div>
+</section>
+
+<!-- 4 SEO METHODS -->
+<section class="slide">
+  <div class="kicker">From the notes</div>
+  <h2><span class="num">03</span>How marketers improve ranking</h2>
+  <div class="three">
+    <div class="card">
+      <div class="icon">🔑</div>
+      <h3>Careful keywords</h3>
+      <p>Choose words buyers actually type — e.g. “running shoes size 42 Kathmandu,” not vague jargon. Place them naturally in titles and content.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📝</div>
+      <h3>Frequent content updates</h3>
+      <p>Fresh blogs, product guides, and FAQs signal a living site. Search engines prefer pages that keep improving over abandoned catalogs.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🕷️</div>
+      <h3>Readable by search engines</h3>
+      <p>Clear HTML, titles, meta info, and structure so spiders can collect URL, title, and keywords — not a locked image-only brochure.</p>
+    </div>
+  </div>
+  <div class="example" style="margin-top:1.2em">
+    <span class="ex-label">Nepal example</span>
+    A small electronics shop updates a post “Best budget phones under Rs 30,000 — 2026” with real specs. That keyword-rich, fresh page has a better chance to surface on Google than an empty homepage.
+  </div>
+</section>
+
+<!-- 5 SEARCH ENGINE PARTS OVERVIEW -->
+<section class="slide">
+  <div class="kicker">Inside Google / Bing</div>
+  <h2><span class="num">04</span>Three parts of a search engine</h2>
+<div class="viz-wrap compact">
+<svg class="viz" viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Spider Index Search utility pipeline">
+  <rect width="720" height="150" fill="#0a0c10"/>
+  <g font-family="system-ui,sans-serif">
+    <rect x="20" y="35" width="180" height="80" rx="12" fill="#171a21" stroke="#4ade80"/>
+    <text x="110" y="62" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="700">🕷️ Spider</text>
+    <text x="110" y="84" text-anchor="middle" fill="#dfe4ec" font-size="11">Crawls the web</text>
+    <text x="110" y="102" text-anchor="middle" fill="#9aa4b2" font-size="10">URL · title · keywords</text>
+    <path d="M210 75 L250 75" stroke="#60a5fa" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="260" y="35" width="180" height="80" rx="12" fill="#171a21" stroke="#60a5fa"/>
+    <text x="350" y="62" text-anchor="middle" fill="#60a5fa" font-size="13" font-weight="700">📚 Index</text>
+    <text x="350" y="84" text-anchor="middle" fill="#dfe4ec" font-size="11">Stores / updates</text>
+    <text x="350" y="102" text-anchor="middle" fill="#9aa4b2" font-size="10">Fast searchable DB</text>
+    <path d="M450 75 L490 75" stroke="#60a5fa" stroke-width="3"/>
+    <polygon points="490,70 505,75 490,80" fill="#60a5fa"/>
+    <rect x="510" y="35" width="190" height="80" rx="12" fill="#171a21" stroke="#fbbf24"/>
+    <text x="605" y="62" text-anchor="middle" fill="#fbbf24" font-size="13" font-weight="700">🔎 Search utility</text>
+    <text x="605" y="84" text-anchor="middle" fill="#dfe4ec" font-size="11">Ranks &amp; returns</text>
+    <text x="605" y="102" text-anchor="middle" fill="#9aa4b2" font-size="10">SERP of URL links</text>
+    <text x="360" y="140" text-anchor="middle" fill="#9aa4b2" font-size="11">Crawl → Store → Answer the shopper</text>
+  </g>
+</svg>
+</div>
+  <div class="chain dm-anim" style="margin:.4em 0 1.2em">
+    <div class="node good">1 · Spider</div>
+    <span class="arrow">→</span>
+    <div class="node good">2 · Index</div>
+    <span class="arrow">→</span>
+    <div class="node good">3 · Search utility</div>
+  </div>
+  <div class="three">
+    <div class="card">
+      <h3>Spider</h3>
+      <p>Auto-crawls the web and collects URL, title, keywords (often in meta tags), and info about other pages on the site.</p>
+    </div>
+    <div class="card">
+      <h3>Index</h3>
+      <p>The store / database. Spider returns data; the index checks if already stored or updates it. Built for <b>fast search</b>.</p>
+    </div>
+    <div class="card">
+      <h3>Search utility</h3>
+      <p>Takes the user’s terms, finds matches in the index, and generates a results page of URL links.</p>
+    </div>
+  </div>
+  <p class="unitnote">Next three slides zoom into each part — same teaching pattern so nobody sleeps.</p>
+</section>
+
+<!-- 6 SPIDER -->
+<section class="slide">
+  <div class="kicker">Part 1 of 3</div>
+  <h2><span class="num">05</span>The Spider (crawler)</h2>
+  <div class="concept">
+    <div class="concept-tools">
+      <button type="button" data-concept-action="open">Show all 6</button>
+      <button type="button" data-concept-action="close">Hide</button>
+    </div>
+    <div class="concept-grid">
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">1</span> What is this?</div><div class="concept-a">A <b>spider</b> (crawler) is an automatic program that walks the web following links. Googlebot is the famous example. It visits pages the way a curious shopper wanders aisles — but at massive scale, day and night.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">2</span> What it does?</div><div class="concept-a">It <b>collects</b> the page URL, title, keywords (often from meta tags), and information about other pages on the same site. That harvest is raw material for ranking later.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">3</span> Why needed?</div><div class="concept-a">Humans cannot visit every website. Without spiders, Google would not know your Daraz listing or college blog exists. Discovery starts with crawling.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">4</span> When needed?</div><div class="concept-a">Continuously — when you publish a new product page, change a title, or add a blog. Spiders return often; if your site blocks them or is broken, updates never get seen.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">5</span> Without it?</div><div class="concept-a">No crawl means no data for the index. Your URL never enters the searchable database, so the search utility cannot show you — even for perfect keywords.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">6</span> How it works?</div><div class="concept-a">Starts from known links, fetches HTML, reads titles and meta keywords, follows internal links to other pages on your site, then sends the package to the <b>index</b>.</div></button>
+    </div>
+  </div>
+  <div class="example"><span class="ex-label">Nepal</span>When you publish a new Daraz-style product URL, the spider must be able to follow links and read the title — otherwise “laptop Kathmandu” never discovers you.</div>
+</section>
+
+<!-- 7 INDEX -->
+<section class="slide">
+  <div class="kicker">Part 2 of 3</div>
+  <h2><span class="num">06</span>The Index (database)</h2>
+  <div class="concept">
+    <div class="concept-tools">
+      <button type="button" data-concept-action="open">Show all 6</button>
+      <button type="button" data-concept-action="close">Hide</button>
+    </div>
+    <div class="concept-grid">
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">1</span> What is this?</div><div class="concept-a">The <b>index</b> is the search engine’s store or database. It holds what spiders collected so queries can be answered in milliseconds instead of re-crawling the whole web every time.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">2</span> What it does?</div><div class="concept-a">When the spider returns data, the index <b>checks if the page is already stored</b> and either inserts it or <b>updates</b> the old record. It is designed for <b>fast search</b>.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">3</span> Why needed?</div><div class="concept-a">Matching “eSewa recharge” against billions of live pages in real time is impossible. An organized index turns the open web into a searchable library catalog.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">4</span> When needed?</div><div class="concept-a">Every search relies on it. Every time your content changes and gets re-crawled, the index should refresh so users see the new version in results.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">5</span> Without it?</div><div class="concept-a">Even if spiders crawl, there is nowhere durable to look up matches. Results would be empty, random, or painfully slow — useless for shopping.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">6</span> How it works?</div><div class="concept-a">Think of a giant dictionary of words → pages. Spider drops off facts; index stores/updates them; later the <b>search utility</b> looks up user terms inside this structure.</div></button>
+    </div>
+  </div>
+</section>
+
+<!-- 8 SEARCH UTILITY -->
+<section class="slide">
+  <div class="kicker">Part 3 of 3</div>
+  <h2><span class="num">07</span>The Search utility</h2>
+  <div class="concept">
+    <div class="concept-tools">
+      <button type="button" data-concept-action="open">Show all 6</button>
+      <button type="button" data-concept-action="close">Hide</button>
+    </div>
+    <div class="concept-grid">
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">1</span> What is this?</div><div class="concept-a">The <b>search utility</b> is the piece you actually use: the box on Google where you type words. It is the interface between humans and the huge index behind the curtain.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">2</span> What it does?</div><div class="concept-a">It takes the <b>user’s search terms</b>, finds matching entries in the index, and <b>generates a results page</b> made of URL links (titles, snippets, rankings).</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">3</span> Why needed?</div><div class="concept-a">An index alone is useless to shoppers. The utility turns a typed query into a ranked list so people can click through to stores, blogs, and product pages.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">4</span> When needed?</div><div class="concept-a">Every time someone searches — “Daraz free delivery,” “Netflix plans,” exam notes, restaurant menus. Peak shopping hours mean peak utility load.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">5</span> Without it?</div><div class="concept-a">Users would have no friendly way to ask the index questions. E-commerce discovery collapses; SEO would have nothing to optimize for.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">6</span> How it works?</div><div class="concept-a">Query → look up terms in index → apply ranking (including signals like PageRank and relevance) → paint the SERP (search engine results page) with clickable URLs.</div></button>
+    </div>
+  </div>
+</section>
+
+<!-- 9 QUIZ SEARCH PARTS -->
+<section class="slide">
+  <div class="kicker">Check understanding</div>
+  <h2><span class="num">08</span>Quick quiz — search engines</h2>
+  <div class="quiz">
+    <div class="q">Which part stores crawled data and is designed for fast lookup?</div>
+    <button type="button" data-correct="0">Spider</button>
+    <button type="button" data-correct="1">Index</button>
+    <button type="button" data-correct="0">Search utility</button>
+    <button type="button" data-correct="0">PageRank alone</button>
+    <div class="explain"><b>Index</b> is the database/store. The spider collects; the utility queries the index and builds the results page.</div>
+  </div>
+</section>
+
+<!-- 10 ON-PAGE SEO -->
+<section class="slide">
+  <div class="kicker">SEO family · On-page</div>
+  <h2><span class="num">09</span>On-page SEO</h2>
+  <p class="lead" style="max-width:70ch;margin-bottom:.7em">Looks at <b>what our site is about</b> — content and structure you control on your own pages.</p>
+  <div class="concept">
+    <div class="concept-tools">
+      <button type="button" data-concept-action="open">Show all 6</button>
+      <button type="button" data-concept-action="close">Hide</button>
+    </div>
+    <div class="concept-grid">
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">1</span> What is this?</div><div class="concept-a"><b>On-page SEO</b> is optimizing elements on your own website: good content, effective keywords, correct keyword placement, and a clear title for every page. You also analyze the whole site and internal linking.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">2</span> What it does?</div><div class="concept-a">It tells search engines (and humans) the topic of each URL. Techniques include <b>URL optimization</b>, internal/external links, page content optimization, and high-quality content that people actually want to read.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">3</span> Why needed?</div><div class="concept-a">If titles are “Untitled,” text is thin, or keywords are missing, spiders cannot understand your shop. Clarity on-page is the foundation before off-page popularity helps.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">4</span> When needed?</div><div class="concept-a">When launching pages, adding products, redesigning navigation, or fixing slow/mobile-unfriendly layouts. Any time your own HTML and content can be improved.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">5</span> Without it?</div><div class="concept-a">Even strong backlinks cannot fully rescue a confusing, slow, desktop-only site with keyword stuffing or empty descriptions. Rankings and conversions both suffer.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">6</span> How it works?</div><div class="concept-a">You tune factors the notes list: <b>internal linking, mobile friendliness, navigation, content quality, page speed</b> — plus titles, keyword placement, and readable URLs.</div></button>
+    </div>
+  </div>
+</section>
+
+<!-- 11 ON-PAGE FACTORS -->
+<section class="slide">
+  <div class="kicker">On-page deep dive</div>
+  <h2><span class="num">10</span>On-page factors &amp; techniques</h2>
+  <div class="two">
+    <div>
+      <h3>Core factors (notes)</h3>
+      <ul class="tight">
+        <li><b>Internal linking</b> — connect related product pages</li>
+        <li><b>Mobile friendliness</b> — thumbs, not just desktops</li>
+        <li><b>Navigation</b> — shoppers and spiders find paths</li>
+        <li><b>Content quality</b> — useful, not spammy</li>
+        <li><b>Page speed</b> — slow pages lose rank and carts</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Techniques</h3>
+      <div class="tap-grid">
+        <div class="tap" tabindex="0"><div class="tap-front">URL optimization <span class="hint">Tap</span></div><div class="tap-back">Short, readable URLs with keywords: <b>/mens-running-shoes</b> beats <b>/p?id=99281</b>.</div></div>
+        <div class="tap" tabindex="0"><div class="tap-front">Links in/out <span class="hint">Tap</span></div><div class="tap-back"><b>Internal</b> links guide users across your site; thoughtful <b>external</b> links can support credibility when relevant.</div></div>
+        <div class="tap" tabindex="0"><div class="tap-front">Page content <span class="hint">Tap</span></div><div class="tap-back">Place keywords where they fit: titles, headings, body — never spam. Every page needs a clear title.</div></div>
+        <div class="tap" tabindex="0"><div class="tap-front">High-quality content <span class="hint">Tap</span></div><div class="tap-back">Guides, comparisons, honest specs. Analyze the whole site so weak pages get rewritten, not ignored.</div></div>
+      </div>
+      <div class="example" style="margin-top:1em">
+        <span class="ex-label">Nepal tip</span>
+        Pokhara trekking shop: title “Gore-Tex jackets Kathmandu delivery,” fast mobile pages, and internal links from a “Dashain gift guide.”
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 OFF-PAGE SEO -->
+<section class="slide">
+  <div class="kicker">SEO family · Off-page</div>
+  <h2><span class="num">11</span>Off-page SEO</h2>
+  <p class="lead" style="max-width:70ch;margin-bottom:.7em">Looks at <b>how popular our site is</b> — signals from the rest of the web.</p>
+  <div class="concept">
+    <div class="concept-tools">
+      <button type="button" data-concept-action="open">Show all 6</button>
+      <button type="button" data-concept-action="close">Hide</button>
+    </div>
+    <div class="concept-grid">
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">1</span> What is this?</div><div class="concept-a"><b>Off-page SEO</b> covers work outside your HTML: link building, link popularity, link exchange, promoting the website, and direct linking from other places on the internet.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">2</span> What it does?</div><div class="concept-a">It builds reputation. When respected sites mention or link to you, search engines treat your pages as more important — similar to word-of-mouth, but measurable.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">3</span> Why needed?</div><div class="concept-a">Two shops can have similar on-page quality. The one with stronger <b>backlinks, mentions, and social proof</b> usually ranks higher because popularity is a trust signal.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">4</span> When needed?</div><div class="concept-a">After a solid on-page base, and ongoing as you grow — campaigns, PR, partnerships, Google Business Profile for local shops, and steady social engagement.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">5</span> Without it?</div><div class="concept-a">You may stay a “hidden gem”: great content, weak authority. Competitors with more quality links capture the first 10 listings instead.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">6</span> How it works?</div><div class="concept-a">Techniques from notes: <b>influencer outreach, social media engagement, social bookmarking, forum submission, article submission</b>. Factors: social media, backlinks, mentions, Google Business Profile.</div></button>
+    </div>
+  </div>
+</section>
+
+<!-- 13 OFF-PAGE TECHNIQUES -->
+<section class="slide">
+  <div class="kicker">Off-page toolkit</div>
+  <h2><span class="num">12</span>Off-page techniques &amp; factors</h2>
+  <div class="two">
+    <div>
+      <h3>Techniques (notes)</h3>
+      <ul class="tight">
+        <li><b>Influencer outreach</b> — creators mention your brand</li>
+        <li><b>Social media engagement</b> — posts, replies, shares</li>
+        <li><b>Social bookmarking</b> — save/share hubs</li>
+        <li><b>Forum submission</b> — helpful answers with context</li>
+        <li><b>Article submission</b> — guest posts / useful articles</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Popularity factors</h3>
+      <div class="stats" style="grid-template-columns:1fr 1fr;margin-top:0">
+        <div class="stat"><div class="v" style="font-size:clamp(16px,2vw,28px)">🔗</div><div class="l"><b>Backlinks</b> — other sites link to you</div></div>
+        <div class="stat"><div class="v" style="font-size:clamp(16px,2vw,28px)">💬</div><div class="l"><b>Mentions</b> — brand talked about online</div></div>
+        <div class="stat"><div class="v" style="font-size:clamp(16px,2vw,28px)">📱</div><div class="l"><b>Social media</b> — reach and engagement</div></div>
+        <div class="stat"><div class="v" style="font-size:clamp(16px,2vw,28px)">📍</div><div class="l"><b>Google Business Profile</b> — local visibility</div></div>
+      </div>
+      <div class="example" style="margin-top:1em">
+        <span class="ex-label">Example</span>
+        A Kathmandu café gets listed on Google Business Profile, shared on Instagram, and linked from a food blog — off-page signals stack.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 14 COMPARE -->
+<section class="slide">
+  <div class="kicker">Side by side</div>
+  <h2><span class="num">13</span>On-page vs Off-page</h2>
+<div class="viz-wrap">
+<svg class="viz" viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="On-page versus Off-page SEO split visual">
+  <rect width="700" height="210" fill="#0a0c10"/>
+  <g font-family="system-ui,sans-serif">
+    <!-- On-page box -->
+    <rect x="20" y="24" width="300" height="166" rx="12" fill="#171a21" stroke="#4ade80" stroke-width="2"/>
+    <text x="170" y="48" text-anchor="middle" fill="#4ade80" font-size="14" font-weight="700">ON-PAGE (inside site)</text>
+    <rect x="40" y="62" width="260" height="110" rx="8" fill="#0f1a14" stroke="#14532d"/>
+    <text x="55" y="88" fill="#dfe4ec" font-size="12">📄 Title &amp; content</text>
+    <text x="55" y="110" fill="#dfe4ec" font-size="12">🔑 Keywords &amp; URLs</text>
+    <text x="55" y="132" fill="#dfe4ec" font-size="12">⚡ Page speed · 📱 Mobile</text>
+    <text x="55" y="154" fill="#dfe4ec" font-size="12">🧭 Navigation · internal links</text>
+    <!-- Off-page -->
+    <rect x="380" y="24" width="300" height="166" rx="12" fill="#171a21" stroke="#60a5fa" stroke-width="2"/>
+    <text x="530" y="48" text-anchor="middle" fill="#60a5fa" font-size="14" font-weight="700">OFF-PAGE (outside)</text>
+    <circle cx="450" cy="105" r="28" fill="#1e2230" stroke="#60a5fa"/>
+    <text x="450" y="109" text-anchor="middle" fill="#dfe4ec" font-size="11">News</text>
+    <circle cx="530" cy="80" r="24" fill="#1e2230" stroke="#60a5fa"/>
+    <text x="530" y="84" text-anchor="middle" fill="#dfe4ec" font-size="10">Blog</text>
+    <circle cx="600" cy="110" r="26" fill="#1e2230" stroke="#fbbf24"/>
+    <text x="600" y="114" text-anchor="middle" fill="#dfe4ec" font-size="10">Social</text>
+    <rect x="470" y="140" width="120" height="28" rx="6" fill="#0f1a14" stroke="#4ade80"/>
+    <text x="530" y="158" text-anchor="middle" fill="#86efac" font-size="11" font-weight="650">Your shop</text>
+    <path d="M470 105 L470 140" stroke="#9aa4b2" stroke-width="1.5" marker-end="url(#a2)"/>
+    <path d="M530 104 L530 140" stroke="#9aa4b2" stroke-width="1.5"/>
+    <path d="M580 120 L540 140" stroke="#9aa4b2" stroke-width="1.5"/>
+    <text x="530" y="182" text-anchor="middle" fill="#9aa4b2" font-size="10">Backlinks · mentions · GBP</text>
+    <text x="350" y="110" text-anchor="middle" fill="#9aa4b2" font-size="18">vs</text>
+  </g>
+</svg>
+</div>
+  <table>
+    <thead>
+      <tr><th></th><th>On-page</th><th>Off-page</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Focus</strong></td><td>What our site is about</td><td>How popular our site is</td></tr>
+      <tr><td><strong>Where</strong></td><td>Your pages: content, titles, speed, mobile, nav</td><td>Outside: links, social, mentions, GBP</td></tr>
+      <tr><td><strong>Control</strong></td><td class="dim">High — you edit the site</td><td class="dim">Shared — others must link/mention</td></tr>
+      <tr><td><strong>Examples</strong></td><td>Keyword placement, internal links, compress images</td><td>Link building, influencer outreach, forums</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="margin-top:1.1em">You need <b>both</b>. On-page without popularity is a quiet library; popularity without clear pages is noise without a destination.</div>
+</section>
+
+<!-- 15 PAGERANK -->
+<section class="slide">
+  <div class="kicker">Classic Google idea</div>
+  <h2><span class="num">14</span>PageRank</h2>
+<div class="viz-wrap compact">
+<svg class="viz" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PageRank link graph important sites vote for your page">
+  <rect width="640" height="180" fill="#0a0c10"/>
+  <g font-family="system-ui,sans-serif">
+    <text x="20" y="24" fill="#fbbf24" font-size="12" font-weight="700">PageRank · links as votes (Larry Page)</text>
+    <!-- important sites -->
+    <circle cx="90" cy="80" r="36" fill="#171a21" stroke="#60a5fa" stroke-width="2"/>
+    <text x="90" y="76" text-anchor="middle" fill="#60a5fa" font-size="11" font-weight="700">News</text>
+    <text x="90" y="92" text-anchor="middle" fill="#9aa4b2" font-size="9">high authority</text>
+    <circle cx="90" cy="150" r="28" fill="#171a21" stroke="#60a5fa"/>
+    <text x="90" y="154" text-anchor="middle" fill="#dfe4ec" font-size="10">Uni</text>
+    <circle cx="220" cy="55" r="26" fill="#171a21" stroke="#4ade80"/>
+    <text x="220" y="59" text-anchor="middle" fill="#dfe4ec" font-size="10">Blog</text>
+    <!-- arrows to your page -->
+    <path d="M126 80 L280 100" stroke="#4ade80" stroke-width="2.5"/>
+    <path d="M118 140 L280 115" stroke="#4ade80" stroke-width="2"/>
+    <path d="M244 70 L290 100" stroke="#4ade80" stroke-width="1.8"/>
+    <polygon points="280,96 295,105 278,112" fill="#4ade80"/>
+    <!-- your page -->
+    <rect x="300" y="70" width="140" height="70" rx="12" fill="#0f1a14" stroke="#4ade80" stroke-width="2"/>
+    <text x="370" y="98" text-anchor="middle" fill="#86efac" font-size="13" font-weight="700">Your page</text>
+    <text x="370" y="118" text-anchor="middle" fill="#9aa4b2" font-size="10">more quality votes</text>
+    <!-- result -->
+    <path d="M450 105 L500 105" stroke="#fbbf24" stroke-width="2"/>
+    <polygon points="500,100 514,105 500,110" fill="#fbbf24"/>
+    <rect x="520" y="78" width="100" height="54" rx="10" fill="#171a21" stroke="#fbbf24"/>
+    <text x="570" y="102" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">↑ Rank</text>
+    <text x="570" y="118" text-anchor="middle" fill="#9aa4b2" font-size="10">importance</text>
+    <text x="320" y="168" fill="#9aa4b2" font-size="11">Quality &gt; quantity · one news link beats ten weak directories</text>
+  </g>
+</svg>
+</div>
+  <div class="concept">
+    <div class="concept-tools">
+      <button type="button" data-concept-action="open">Show all 6</button>
+      <button type="button" data-concept-action="close">Hide</button>
+    </div>
+    <div class="concept-grid">
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">1</span> What is this?</div><div class="concept-a"><b>PageRank</b> is a Google algorithm used to rank pages by measuring their <b>importance</b>. It is named after <b>Larry Page</b> (Google co-founder) — not “web page” alone, though it ranks pages.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">2</span> What it does?</div><div class="concept-a">It scores pages by looking at links: it counts both the <b>number and the quality</b> of links. Links from important sites count more than links from unknown blogs.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">3</span> Why needed?</div><div class="concept-a">Early web search was flooded with keyword spam. PageRank used the web’s link graph as votes of confidence so useful pages could rise above junk.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">4</span> When needed?</div><div class="concept-a">Whenever search engines must decide order among many relevant URLs. It was foundational historically; today it is <b>not the only algorithm</b>, but still the first and best-known.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">5</span> Without it?</div><div class="concept-a">Results could ignore reputation: a random page stuffed with keywords might outrank a trusted encyclopedia. Link quality voting reduced that chaos.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">6</span> How it works?</div><div class="concept-a">Important sites attract more links; those links pass importance. A backlink from a major news site helps more than ten weak directory links — quality over pure quantity.</div></button>
+    </div>
+  </div>
+</section>
+
+<!-- 16 ACTIVITIES 1-4 -->
+<section class="slide">
+  <div class="kicker">Improve your rank · Set A</div>
+  <h2><span class="num">15</span>8 SEO activities (1–4)</h2>
+<div class="checklist-strip" aria-hidden="true">
+  <span><b>1</b> Analytics</span><span><b>2</b> Optimize pages</span><span><b>3</b> Keyword content</span><span><b>4</b> Diversify links</span>
+  <span><b>5</b> Images</span><span><b>6</b> Mobile</span><span><b>7</b> Speed</span><span><b>8</b> Track</span>
+</div>
+  <div class="two">
+    <div class="reveal" tabindex="0">
+      <div class="reveal-q">1 · Use Google Analytics <span class="hint">Click</span></div>
+      <div class="reveal-body">Track metrics: traffic sources, popular pages, bounce rates. You cannot improve what you never measure — Analytics shows which SEO efforts move the needle.</div>
+    </div>
+    <div class="reveal" tabindex="0">
+      <div class="reveal-q">2 · Optimize existing pages <span class="hint">Click</span></div>
+      <div class="reveal-body">Fix titles, headings, thin content, and broken internal links on pages you already have. Often faster wins than only creating brand-new URLs.</div>
+    </div>
+    <div class="reveal" tabindex="0">
+      <div class="reveal-q">3 · Create keyword content (not spam) <span class="hint">Click</span></div>
+      <div class="reveal-body">Write guides and product copy based on real keywords people search — <b>without keyword stuffing</b>. Helpful content ranks; spam gets punished.</div>
+    </div>
+    <div class="reveal" tabindex="0">
+      <div class="reveal-q">4 · Diversify backlink portfolio <span class="hint">Click</span></div>
+      <div class="reveal-body">Earn links from varied, quality sources. Do not depend on one directory or one partner; a diverse mix looks more natural and resilient.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 17 ACTIVITIES 5-8 -->
+<section class="slide">
+  <div class="kicker">Improve your rank · Set B</div>
+  <h2><span class="num">16</span>8 SEO activities (5–8)</h2>
+<div class="checklist-strip" aria-hidden="true">
+  <span><b>1</b> Analytics</span><span><b>2</b> Optimize pages</span><span><b>3</b> Keyword content</span><span><b>4</b> Diversify links</span>
+  <span><b>5</b> Images</span><span><b>6</b> Mobile</span><span><b>7</b> Speed</span><span><b>8</b> Track</span>
+</div>
+  <div class="two">
+    <div class="reveal" tabindex="0">
+      <div class="reveal-q">5 · Optimize images <span class="hint">Click</span></div>
+      <div class="reveal-body">Add meaningful <b>alt text</b>, compress file size, and ensure images work on mobile. Heavy images kill page speed and accessibility.</div>
+    </div>
+    <div class="reveal" tabindex="0">
+      <div class="reveal-q">6 · Mobile-friendly site <span class="hint">Click</span></div>
+      <div class="reveal-body">Most shoppers browse on phones. Responsive layout, tap-friendly buttons, and readable text are ranking and conversion necessities.</div>
+    </div>
+    <div class="reveal" tabindex="0">
+      <div class="reveal-q">7 · Decrease load times <span class="hint">Click</span></div>
+      <div class="reveal-body">Faster pages keep users and please ranking systems. Compress assets, trim scripts, use caching — every second counts on Nepal mobile networks too.</div>
+    </div>
+    <div class="reveal" tabindex="0">
+      <div class="reveal-q">8 · Track results <span class="hint">Click</span></div>
+      <div class="reveal-body">Close the loop: watch rankings, traffic, and sales after changes. Tracking tells you what to double down on and what to stop.</div>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:1em">Full list from notes: Analytics → optimize pages → keyword content → diversify backlinks → images → mobile → speed → track.</div>
+</section>
+
+<!-- 18 QUIZ SEO -->
+<section class="slide">
+  <div class="kicker">Check understanding</div>
+  <h2><span class="num">17</span>Quiz — SEO</h2>
+  <div class="quiz">
+    <div class="q">PageRank is named after… and mainly measures importance using…</div>
+    <button type="button" data-correct="0">Sergey Brin · only keyword density</button>
+    <button type="button" data-correct="1">Larry Page · number and quality of links</button>
+    <button type="button" data-correct="0">Larry Page · only social media likes</button>
+    <button type="button" data-correct="0">Larry Page · page load time alone</button>
+    <div class="explain">Named after <b>Larry Page</b>. It counts <b>number and quality</b> of links. It is famous but no longer the only ranking algorithm.</div>
+  </div>
+</section>
+
+<!-- 19 RECSYS INTRO -->
+<section class="slide">
+  <div class="kicker">Second big topic</div>
+  <h2><span class="num">18</span>Recommendation systems</h2>
+<div class="viz-wrap">
+<svg class="viz" viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Content-based versus collaborative filtering">
+  <rect width="720" height="200" fill="#0a0c10"/>
+  <g font-family="system-ui,sans-serif">
+    <!-- Content-based -->
+    <rect x="16" y="16" width="330" height="168" rx="12" fill="#171a21" stroke="#4ade80"/>
+    <text x="181" y="40" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="700">Content-based</text>
+    <rect x="36" y="56" width="70" height="36" rx="6" fill="#0f1a14" stroke="#4ade80"/>
+    <text x="71" y="78" text-anchor="middle" fill="#dfe4ec" font-size="11">Item</text>
+    <path d="M116 74 L150 74" stroke="#60a5fa" stroke-width="2"/>
+    <polygon points="150,69 162,74 150,79" fill="#60a5fa"/>
+    <rect x="170" y="48" width="150" height="52" rx="6" fill="#0f1a14" stroke="#2a2f3a"/>
+    <text x="245" y="68" text-anchor="middle" fill="#dfe4ec" font-size="11">Similar items</text>
+    <text x="245" y="86" text-anchor="middle" fill="#9aa4b2" font-size="10">same features</text>
+    <text x="181" y="130" text-anchor="middle" fill="#9aa4b2" font-size="11">T-shirt → more tees / same brand</text>
+    <text x="181" y="155" text-anchor="middle" fill="#86efac" font-size="11">“Like this item”</text>
+    <!-- Collaborative -->
+    <rect x="374" y="16" width="330" height="168" rx="12" fill="#171a21" stroke="#60a5fa"/>
+    <text x="539" y="40" text-anchor="middle" fill="#60a5fa" font-size="13" font-weight="700">Collaborative</text>
+    <circle cx="430" cy="78" r="22" fill="#1e2230" stroke="#60a5fa"/>
+    <text x="430" y="82" text-anchor="middle" fill="#dfe4ec" font-size="10">You</text>
+    <circle cx="490" cy="78" r="18" fill="#1e2230" stroke="#9aa4b2"/>
+    <text x="490" y="82" text-anchor="middle" fill="#9aa4b2" font-size="9">U2</text>
+    <circle cx="540" cy="78" r="18" fill="#1e2230" stroke="#9aa4b2"/>
+    <text x="540" y="82" text-anchor="middle" fill="#9aa4b2" font-size="9">U3</text>
+    <path d="M560 78 L600 78" stroke="#fbbf24" stroke-width="2"/>
+    <polygon points="600,73 612,78 600,83" fill="#fbbf24"/>
+    <rect x="618" y="60" width="68" height="36" rx="6" fill="#0f1a14" stroke="#fbbf24"/>
+    <text x="652" y="82" text-anchor="middle" fill="#fbbf24" font-size="11">Y</text>
+    <text x="539" y="130" text-anchor="middle" fill="#9aa4b2" font-size="11">Bought X → also bought Y</text>
+    <text x="539" y="155" text-anchor="middle" fill="#86efac" font-size="11">“People like you”</text>
+  </g>
+</svg>
+</div>
+<div class="two" style="gap:1em;margin-top:.2em">
+  <div class="example" style="margin-top:0"><span class="ex-label">Daraz / eSewa</span>Daraz: “Customers also bought” after a phone case. eSewa: suggest bills/recharge based on past payments.</div>
+  <div class="example" style="margin-top:0"><span class="ex-label">Netflix / YouTube</span>Netflix rows and YouTube Up Next blend collaborative signals with content features.</div>
+</div>
+  <div class="concept">
+    <div class="concept-tools">
+      <button type="button" data-concept-action="open">Show all 6</button>
+      <button type="button" data-concept-action="close">Hide</button>
+    </div>
+    <div class="concept-grid">
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">1</span> What is this?</div><div class="concept-a">Algorithms that find <b>similar items or customers</b> from behavior and interest. They use <b>AI / data analysis</b> to recommend what to show next — products, videos, or shows.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">2</span> What it does?</div><div class="concept-a">Example from notes: buy a <b>T-shirt</b> → next visit suggests more shirts or clothing. Netflix and YouTube suggest what to watch; Daraz suggests “customers also bought.”</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">3</span> Why needed?</div><div class="concept-a">Catalogs are huge. Without guidance, shoppers drown in choice and leave. Recsys make discovery fast and personal, which lifts sales and satisfaction.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">4</span> When needed?</div><div class="concept-a">Whenever a site has many products or pieces of content — marketplaces, streaming, news. Essential for large e-commerce; useful even for mid-size shops.</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">5</span> Without it?</div><div class="concept-a">Users rely on blunt search and categories only. Cross-sell dies, retention emails feel generic, and competitors with smart suggestions feel “magical.”</div></button>
+      <button type="button" class="concept-row" tabindex="0"><div class="concept-q"><span class="cq-n">6</span> How it works?</div><div class="concept-a">Feed the system data: <b>user ratings, search queries, purchase histories</b>. Models find patterns (similar items or similar users) and rank suggestions for the next screen or email.</div></button>
+    </div>
+  </div>
+</section>
+
+<!-- 20 DATA + EXAMPLE -->
+<section class="slide">
+  <div class="kicker">Fuel for recommendations</div>
+  <h2><span class="num">19</span>Data that powers suggestions</h2>
+  <div class="three">
+    <div class="card">
+      <div class="icon">⭐</div>
+      <h3>User ratings</h3>
+      <p>Stars and thumbs teach the system what people loved or hated — classic Netflix-style signal.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🔎</div>
+      <h3>Search queries</h3>
+      <p>What shoppers type (“wireless earbuds”) reveals intent even before a purchase.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🛒</div>
+      <h3>Purchase histories</h3>
+      <p>Past orders predict future needs — T-shirt today, related clothing tomorrow.</p>
+    </div>
+  </div>
+  <div class="example" style="margin-top:1.2em">
+    <span class="ex-label">Story</span>
+    You buy a cricket bat on Daraz. Next visit shows balls, gloves, and grips. Same idea as YouTube autoplay or Netflix “Because you watched…” — behavior in, suggestions out.
+  </div>
+</section>
+
+<!-- 21 ADVANTAGES -->
+<section class="slide">
+  <div class="kicker">Why businesses invest</div>
+  <h2><span class="num">20</span>Advantages of recommendation systems</h2>
+  <div class="two">
+    <ul>
+      <li class="benefit"><b>Increased sales</b><span class="so">Relevant suggestions raise average order value and conversion.</span></li>
+      <li class="benefit"><b>Efficiency / fast search</b><span class="so">Shoppers find interesting items quickly instead of endless scrolling.</span></li>
+    </ul>
+    <ul>
+      <li class="benefit"><b>Customer retention</b><span class="so">Personalized emails and “for you” home screens bring people back.</span></li>
+      <li class="benefit"><b>Increased consumption</b><span class="so">More watches, more reads, more cart adds — Netflix/YouTube style engagement.</span></li>
+    </ul>
+  </div>
+  <div class="callout" style="margin-top:1.1em">For e-commerce: too many products → hard to find interest → recsys become <b>essential</b> to sell, speed discovery, and retain customers. Large sites all use them.</div>
+</section>
+
+<!-- 22 CONTENT-BASED -->
+<section class="slide">
+  <div class="kicker">Type 1</div>
+  <h2><span class="num">21</span>Content-based filtering</h2>
+  <div class="two">
+    <div>
+      <ul class="tight">
+        <li>Uses <b>item features + user profile</b> features</li>
+        <li><b>Past interest predicts future</b> interest</li>
+        <li>Similar items are <b>grouped by features</b> (color, genre, brand, category)</li>
+        <li>Profiles come from <b>history</b> or by <b>asking</b> the user</li>
+      </ul>
+      <div class="example" style="margin-top:1em">
+        <span class="ex-label">Example</span>
+        You watched many cricket videos → YouTube suggests more cricket (same content features), even if your friends watch cooking.
+      </div>
+    </div>
+    <div class="card">
+      <h3>Mental model</h3>
+      <p style="margin-bottom:.8em">“Because <b>this item</b> is like items you liked before.”</p>
+      <div class="chain">
+        <div class="node">Red cotton T-shirt</div>
+        <span class="arrow">→</span>
+        <div class="node good">More red / cotton tees</div>
+      </div>
+      <p style="margin-top:.9em;font-size:clamp(12px,1.3vw,16px);color:var(--muted)">Strength: works with item metadata. Limit: can feel repetitive if it only mirrors the past.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 23 COLLABORATIVE -->
+<section class="slide">
+  <div class="kicker">Type 2 · Most used</div>
+  <h2><span class="num">22</span>Collaborative filtering</h2>
+  <div class="two">
+    <div>
+      <ul class="tight">
+        <li><b>Most used</b> approach; often <b>better</b> in practice</li>
+        <li>Powers experiences like <b>YouTube</b> and <b>Netflix</b></li>
+        <li>Uses <b>user interactions</b> — who watched/bought/liked what</li>
+        <li>“People like you also liked…” instead of only item twin features</li>
+      </ul>
+      <div class="reveal" tabindex="0" style="margin-top:1em">
+        <div class="reveal-q">Content-based vs collaborative? <span class="hint">Click</span></div>
+        <div class="reveal-body"><b>Content-based:</b> match item attributes to your profile. <b>Collaborative:</b> match your behavior to other users’ behavior. Large platforms often blend both.</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Mental model</h3>
+      <p style="margin-bottom:.8em">“Because <b>people like you</b> chose this.”</p>
+      <div class="chain">
+        <div class="node">You + similar shoppers</div>
+        <span class="arrow">→</span>
+        <div class="node good">Shared picks</div>
+      </div>
+      <p style="margin-top:.9em;font-size:clamp(12px,1.3vw,16px);color:var(--muted)">Needs interaction data. Cold-start (new users/items) is the classic challenge.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 24 ECOMMERCE USE -->
+<section class="slide">
+  <div class="kicker">Apply it to shops</div>
+  <h2><span class="num">23</span>Recommendation systems in e-commerce</h2>
+  <div class="three">
+    <div class="card">
+      <h3>Problem</h3>
+      <p><b>Too many products</b> — hard for customers to find what matches their interest.</p>
+    </div>
+    <div class="card">
+      <h3>Role</h3>
+      <p>Recsys are <b>essential</b>: increase sales, help find items fast, retain customers (including via email).</p>
+    </div>
+    <div class="card">
+      <h3>Reality</h3>
+      <p><b>Large sites</b> all use them — Amazon-style “related,” Daraz homepages, streaming storefronts.</p>
+    </div>
+  </div>
+  <div class="tap-grid" style="margin-top:1.1em">
+    <div class="tap" tabindex="0"><div class="tap-front">Homepage rails <span class="hint">Tap</span></div><div class="tap-back">“Recommended for you” rows built from history and similar users.</div></div>
+    <div class="tap" tabindex="0"><div class="tap-front">Product page <span class="hint">Tap</span></div><div class="tap-back">“Similar items” / “Frequently bought together” after a T-shirt view.</div></div>
+    <div class="tap" tabindex="0"><div class="tap-front">Email &amp; push <span class="hint">Tap</span></div><div class="tap-back">Retention: personalized offers so customers return instead of churning.</div></div>
+  </div>
+</section>
+
+<!-- 25 QUIZ RECSYS -->
+<section class="slide">
+  <div class="kicker">Check understanding</div>
+  <h2><span class="num">24</span>Quiz — recommendations</h2>
+  <div class="quiz">
+    <div class="q">Which type is described as most used (often better) and relies on user interactions, as on YouTube/Netflix?</div>
+    <button type="button" data-correct="0">Content-based filtering only</button>
+    <button type="button" data-correct="1">Collaborative filtering</button>
+    <button type="button" data-correct="0">PageRank</button>
+    <button type="button" data-correct="0">Spider indexing</button>
+    <div class="explain"><b>Collaborative filtering</b> uses user interactions and is the most used / often better approach in the notes; YouTube and Netflix are cited examples.</div>
+  </div>
+</section>
+
+<!-- 26 DISCUSSION -->
+<section class="slide">
+  <div class="kicker">Talk to each other</div>
+  <h2><span class="num">25</span>Discussion prompts</h2>
+  <div class="two">
+    <div class="card">
+      <h3>SEO</h3>
+      <p>Pick a local business (café, tuition center, eSewa agent shop). What <b>on-page</b> fixes would you make this week, and what <b>one off-page</b> action could earn a real backlink or Google Business boost?</p>
+    </div>
+    <div class="card">
+      <h3>Recsys</h3>
+      <p>If Daraz only used <b>content-based</b> rules, what weird suggestions might appear? When would <b>collaborative</b> filtering feel more “smart” for festival shopping?</p>
+    </div>
+  </div>
+  <div class="big-q" style="margin-top:1em;font-size:clamp(18px,2.4vw,32px);max-width:40ch">Would you rather rank #3 on Google with weak recommendations, or #15 with a brilliant “for you” homepage?</div>
+</section>
+
+<!-- 27 TAKEAWAYS -->
+<section class="slide">
+  <div class="kicker">Wrap</div>
+  <h2><span class="num">26</span>Key takeaways</h2>
+  <ul class="tight">
+    <li><b>SEO</b> pushes you into the first results; keywords, fresh content, crawlable design.</li>
+    <li>Search engines = <b>Spider → Index → Search utility</b>.</li>
+    <li><b>On-page</b> = what the site is about; <b>Off-page</b> = how popular it is.</li>
+    <li><b>PageRank</b> (Larry Page) scores importance via link number + quality — famous, not alone now.</li>
+    <li>Practice the <b>8 activities</b>: measure, optimize, create, diversify links, images, mobile, speed, track.</li>
+    <li><b>Recsys</b> use ratings, searches, purchases; content-based vs collaborative; essential for big catalogs.</li>
+  </ul>
+</section>
+
+<!-- 28 QUESTIONS -->
+<section class="slide">
+  <div class="kicker">Thank you</div>
+  <h1>Questions?</h1>
+  <p class="lead" style="margin-top:.8em;max-width:48ch">Jump back to any topic — chips open that slide.</p>
+  <div class="icon-row" data-tip-group style="margin-top:1.2em">
+    <button type="button" class="icon-chip" data-goto="3" data-tip="Jump: SEO six-question block"><span class="ic">📈</span> SEO</button>
+    <button type="button" class="icon-chip" data-goto="5" data-tip="Jump: Spider, Index, Utility"><span class="ic">🕷️</span> Engine parts</button>
+    <button type="button" class="icon-chip" data-goto="10" data-tip="Jump: On-page SEO"><span class="ic">📄</span> On-page</button>
+    <button type="button" class="icon-chip" data-goto="12" data-tip="Jump: Off-page SEO"><span class="ic">🔗</span> Off-page</button>
+    <button type="button" class="icon-chip" data-goto="15" data-tip="Jump: PageRank"><span class="ic">🏆</span> PageRank</button>
+    <button type="button" class="icon-chip" data-goto="16" data-tip="Jump: 8 SEO activities"><span class="ic">✅</span> Activities</button>
+    <button type="button" class="icon-chip" data-goto="19" data-tip="Jump: Recommendation systems"><span class="ic">🤖</span> Recsys</button>
+    <button type="button" class="icon-chip" data-goto="26" data-tip="Jump: Key takeaways"><span class="ic">🎯</span> Takeaways</button>
+  </div>
+  <div class="tip-panel" aria-live="polite"></div>
+  <p class="src" style="margin-top:1.8em;max-width:80ch">
+    Course notes: EC Unit-7, Optimizing E-commerce Systems. Examples (Daraz, eSewa, Netflix, YouTube, Google) are illustrative teaching aids.
+  </p>
+</section>
+
+</div>
+
+<div id="bar"></div>
+<div class="nav">
+  <button id="prev" title="Previous (←)">‹</button>
+  <button id="next" title="Next (→)">›</button>
+  <button id="fsBtn" class="wide" title="Fullscreen">⛶ Fullscreen</button>
+  <button id="clearProgress" class="wide" title="Clear saved progress">Clear progress</button>
+</div>
+<div id="progressToast" class="progress-toast">Resumed from last time</div>
+
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0;
+  var bar = document.getElementById('bar');
+
+  slides.forEach(function(s, idx){
+    var f = document.createElement('footer');
+    f.innerHTML = '<span>Optimizing E-commerce · Unit 7</span><span>' + (idx+1) + ' / ' + slides.length + '</span>';
+    s.appendChild(f);
+  });
+
+  function resetQuiz(slide){
+    var q = slide.querySelector('.quiz');
+    if(!q) return;
+    q.classList.remove('answered');
+    Array.prototype.forEach.call(q.querySelectorAll('button'), function(b){
+      b.disabled = false;
+      b.classList.remove('correct','wrong');
+    });
+  }
+
+  function resetInteractives(slide){
+    if(!slide) return;
+    resetQuiz(slide);
+    Array.prototype.forEach.call(slide.querySelectorAll('.reveal.open'), function(el){
+      el.classList.remove('open');
+    });
+    Array.prototype.forEach.call(slide.querySelectorAll('.tap.open'), function(el){
+      el.classList.remove('open');
+    });
+    Array.prototype.forEach.call(slide.querySelectorAll('.concept-row.open'), function(el){
+      el.classList.remove('open');
+    });
+    Array.prototype.forEach.call(slide.querySelectorAll('.icon-chip.active'), function(el){
+      el.classList.remove('active');
+    });
+    Array.prototype.forEach.call(slide.querySelectorAll('.tip-panel'), function(p){
+      p.innerHTML = '';
+      p.classList.remove('has-tip');
+    });
+  }
+
+  var STORAGE_KEY = 'optimizingEcommerceSlide';
+  var COOKIE_NAME = 'optimizing_ecommerce_slide';
+  var COOKIE_DAYS = 400;
+
+  function setCookie(name, value, days){
+    try{
+      var maxAge = days * 24 * 60 * 60;
+      var c = document;
+      c["cookie"] = name + '=' + encodeURIComponent(String(value)) +
+        '; path=/; max-age=' + maxAge + '; SameSite=Lax';
+    }catch(e){}
+  }
+  function getCookie(name){
+    try{
+      var raw = document["cookie"] || '';
+      var parts = raw.split(';');
+      for(var c=0;c<parts.length;c++){
+        var p = parts[c].trim();
+        if(p.indexOf(name + '=') === 0){
+          return decodeURIComponent(p.substring(name.length + 1));
+        }
+      }
+    }catch(e){}
+    return null;
+  }
+  function clearCookie(name){
+    try{ document["cookie"] = name + '=; path=/; max-age=0; SameSite=Lax'; }catch(e){}
+  }
+  function saveProgress(slideIndex){
+    var v = String(slideIndex + 1);
+    try{ localStorage.setItem(STORAGE_KEY, v); }catch(e){}
+    setCookie(COOKIE_NAME, v, COOKIE_DAYS);
+  }
+  function loadProgress(){
+    var v = null;
+    try{ v = localStorage.getItem(STORAGE_KEY); }catch(e){}
+    if(!v) v = getCookie(COOKIE_NAME);
+    var n = parseInt(v, 10);
+    return isNaN(n) ? null : n;
+  }
+  function clearProgress(){
+    try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+    clearCookie(COOKIE_NAME);
+  }
+
+  function prepareMotion(slide){
+    if(!slide) return;
+    Array.prototype.forEach.call(slide.querySelectorAll('.chain'), function(el){
+      el.classList.add('dm-anim');
+    });
+    Array.prototype.forEach.call(slide.querySelectorAll('.two, .three, .stats, .tap-grid, .icon-row'), function(el){
+      el.classList.add('dm-motion');
+    });
+  }
+
+  function replayMotion(slide){
+    if(!slide) return;
+    prepareMotion(slide);
+    Array.prototype.forEach.call(slide.querySelectorAll('.dm-anim, .dm-motion'), function(el){
+      el.classList.remove('playing');
+      void el.offsetWidth;
+      el.classList.add('playing');
+    });
+    Array.prototype.forEach.call(slide.querySelectorAll('.fill'), function(el){
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = '';
+    });
+  }
+
+  function show(n){
+    var prev = i;
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    if(slides[prev] && prev !== i) resetInteractives(slides[prev]);
+    slides.forEach(function(s, idx){ s.classList.toggle('active', idx === i); });
+    bar.style.width = ((i + 1) / slides.length * 100) + '%';
+    location.hash = i + 1;
+    saveProgress(i);
+    if(slides[i]) slides[i].scrollTop = 0;
+    requestAnimationFrame(function(){ replayMotion(slides[i]); });
+  }
+
+  window.__dmShow = show;
+
+  document.addEventListener('keydown', function(e){
+    var t = e.target;
+    var inReveal = t && t.closest && t.closest('.reveal');
+    var inQuiz = t && t.closest && t.closest('.quiz');
+    var inTap = t && t.closest && t.closest('.tap');
+    var inChip = t && t.closest && t.closest('.icon-chip');
+    var inConcept = t && t.closest && t.closest('.concept-row');
+
+    if(inReveal && (e.key === 'Enter' || e.key === ' ')){
+      e.preventDefault();
+      e.stopPropagation();
+      inReveal.classList.toggle('open');
+      return;
+    }
+
+    if(inTap && (e.key === 'Enter' || e.key === ' ')){
+      e.preventDefault();
+      e.stopPropagation();
+      var goto = inTap.getAttribute('data-goto');
+      if(goto){ show(parseInt(goto, 10) - 1); return; }
+      inTap.classList.toggle('open');
+      return;
+    }
+
+    if(inConcept && (e.key === 'Enter' || e.key === ' ')){
+      e.preventDefault();
+      e.stopPropagation();
+      inConcept.classList.toggle('open');
+      return;
+    }
+
+    if(inChip && (e.key === 'Enter' || e.key === ' ')){
+      e.preventDefault();
+      e.stopPropagation();
+      inChip.click();
+      return;
+    }
+
+    if(inQuiz && (e.key === ' ' || e.key === 'Enter')){
+      return;
+    }
+
+    if(e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i+1); }
+    if(e.key === 'ArrowLeft'  || e.key === 'PageUp')                    { e.preventDefault(); show(i-1); }
+    if(e.key === 'Home') show(0);
+    if(e.key === 'End')  show(slides.length - 1);
+    if(e.key === 'f' || e.key === 'F'){
+      if(!document.fullscreenElement){ document.documentElement.requestFullscreen(); }
+      else { document.exitFullscreen(); }
+    }
+  });
+
+  document.getElementById('next').addEventListener('click', function(){ show(i+1); });
+  document.getElementById('prev').addEventListener('click', function(){ show(i-1); });
+
+  document.addEventListener('click', function(e){
+    var rev = e.target.closest && e.target.closest('.reveal');
+    if(rev){
+      e.stopPropagation();
+      rev.classList.toggle('open');
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    var row = e.target.closest && e.target.closest('.concept-row');
+    if(!row) return;
+    if(e.target.closest('.concept-tools')) return;
+    e.stopPropagation();
+    row.classList.toggle('open');
+  });
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest && e.target.closest('[data-concept-action]');
+    if(!btn) return;
+    e.stopPropagation();
+    var box = btn.closest('.concept');
+    if(!box) return;
+    var act = btn.getAttribute('data-concept-action');
+    Array.prototype.forEach.call(box.querySelectorAll('.concept-row'), function(r){
+      if(act === 'open') r.classList.add('open');
+      else r.classList.remove('open');
+    });
+    if(act === 'open'){
+      var slide = btn.closest('.slide');
+      if(slide){
+        slide.scrollTop = 0;
+        var first = box.querySelector('.concept-row.open');
+        if(first && first.scrollIntoView){
+          try{ first.scrollIntoView({block:'nearest', behavior:'smooth'}); }catch(err){ first.scrollIntoView(true); }
+        }
+      }
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest && e.target.closest('.quiz button');
+    if(!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var quiz = btn.closest('.quiz');
+    if(quiz.classList.contains('answered')) return;
+    var correct = btn.getAttribute('data-correct') === '1';
+    Array.prototype.forEach.call(quiz.querySelectorAll('button'), function(b){
+      b.disabled = true;
+      if(b.getAttribute('data-correct') === '1') b.classList.add('correct');
+    });
+    if(!correct) btn.classList.add('wrong');
+    quiz.classList.add('answered');
+  });
+
+  document.addEventListener('click', function(e){
+    var pill = e.target.closest && e.target.closest('[data-goto]');
+    if(!pill) return;
+    if(pill.classList.contains('tap') || pill.classList.contains('icon-chip')) return;
+    e.stopPropagation();
+    var n = parseInt(pill.getAttribute('data-goto'), 10);
+    if(!isNaN(n)) show(n - 1);
+  });
+
+  document.addEventListener('click', function(e){
+    var tap = e.target.closest && e.target.closest('.tap');
+    if(!tap) return;
+    e.stopPropagation();
+    var goto = tap.getAttribute('data-goto');
+    if(goto){
+      var n = parseInt(goto, 10);
+      if(!isNaN(n)) show(n - 1);
+      return;
+    }
+    tap.classList.toggle('open');
+  });
+
+  document.addEventListener('click', function(e){
+    var chip = e.target.closest && e.target.closest('.icon-chip');
+    if(!chip) return;
+    e.stopPropagation();
+    var row = chip.closest('[data-tip-group]') || chip.parentElement;
+    var panel = null;
+    if(row){
+      var sib = row.nextElementSibling;
+      if(sib && sib.classList.contains('tip-panel')) panel = sib;
+      if(!panel && row.parentElement) panel = row.parentElement.querySelector('.tip-panel');
+    }
+    var goto = chip.getAttribute('data-goto');
+    if(goto){
+      var n = parseInt(goto, 10);
+      if(!isNaN(n)){
+        if(panel){
+          panel.innerHTML = chip.getAttribute('data-tip') || '';
+          panel.classList.add('has-tip');
+        }
+        show(n - 1);
+        return;
+      }
+    }
+    var was = chip.classList.contains('active');
+    Array.prototype.forEach.call((row || document).querySelectorAll('.icon-chip'), function(c){
+      c.classList.remove('active');
+    });
+    if(was){
+      if(panel){ panel.innerHTML = ''; panel.classList.remove('has-tip'); }
+      return;
+    }
+    chip.classList.add('active');
+    if(panel){
+      panel.innerHTML = chip.getAttribute('data-tip') || '';
+      panel.classList.add('has-tip');
+    }
+  });
+
+  var x0 = null;
+  document.addEventListener('touchstart', function(e){ x0 = e.changedTouches[0].clientX; });
+  document.addEventListener('touchend', function(e){
+    if(x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if(Math.abs(dx) > 55) show(dx < 0 ? i+1 : i-1);
+    x0 = null;
+  });
+
+  var hashN = parseInt((location.hash || '').replace('#',''), 10);
+  var savedN = loadProgress();
+  var start;
+  var resumed = false;
+  if(!isNaN(hashN) && location.hash){
+    start = hashN;
+  } else if(savedN !== null){
+    start = savedN;
+    resumed = true;
+  } else {
+    start = 1;
+  }
+  show(Math.max(0, start - 1));
+  if(resumed){
+    var toast = document.getElementById('progressToast');
+    if(toast){
+      toast.textContent = 'Resumed at slide ' + start + ' / ' + slides.length + ' (saved progress)';
+      toast.classList.add('show');
+      setTimeout(function(){ toast.classList.remove('show'); }, 3200);
+    }
+  }
+
+  var fsBtn = document.getElementById('fsBtn');
+  if(fsBtn){
+    fsBtn.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      document.documentElement.classList.add('force-motion');
+      if(!document.fullscreenElement){
+        var el = document.documentElement;
+        var req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+        if(req) req.call(el);
+      } else {
+        var ex = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+        if(ex) ex.call(document);
+      }
+    });
+    document.addEventListener('fullscreenchange', function(){
+      fsBtn.textContent = document.fullscreenElement ? '⛶ Exit full' : '⛶ Fullscreen';
+    });
+  }
+
+  var clearBtn = document.getElementById('clearProgress');
+  if(clearBtn){
+    clearBtn.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      clearProgress();
+      var toast = document.getElementById('progressToast');
+      if(toast){
+        toast.textContent = 'Progress cleared — next open starts at slide 1';
+        toast.classList.add('show');
+        setTimeout(function(){ toast.classList.remove('show'); }, 2800);
+      }
+    });
+  }
+
+  document.documentElement.classList.add('force-motion');
+
+})();
+</script>
+
+</body>
+</html>
