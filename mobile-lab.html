@@ -464,6 +464,18 @@ body.ios .CodeMirror{font-family:"SF Mono",Menlo,ui-monospace,monospace}
 .jump{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}.jump a{padding:3px 9px;border-radius:12px;background:#33363b;color:var(--tx);text-decoration:none;font-size:12px}.jump a.ios{background:#1d4f8f}
 .iosdev .screen.black .ios-sbar{color:#fff}
 .ios-sbar .sb-ic svg{fill:currentColor;display:block}
+/* ---- lab-to-lab navigation ---- */
+.labsel .labnav{white-space:nowrap;flex:0 0 auto}
+.labsel .labnav.nx:not(:disabled){border-color:var(--acc);color:var(--tx)}
+.labsel .labnav:disabled{opacity:.35;cursor:default}
+.next-card{background:linear-gradient(135deg,#1f4d2a,#1d3b27);border:1.5px solid #3d9a4a;border-radius:10px;padding:12px 14px;margin-bottom:12px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
+.next-card.fin{background:linear-gradient(135deg,#2b2f55,#22263f);border-color:#7c6cf0}
+.next-card .nc-h{font-weight:700;font-size:15px;margin-bottom:4px}
+.next-card .nc-s{margin-bottom:10px}
+.next-card .nc-u{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:10px;background:rgba(255,255,255,.12);font-size:12px}
+.next-card .nc-b{display:flex;gap:8px;flex-wrap:wrap}
+@media (max-width:900px){.labsel .labnav{padding-left:8px;padding-right:8px}}
+@media (max-width:359px){.labsel .labnav .nl{display:none}}
 
 </style>
 </head>
@@ -10392,9 +10404,9 @@ function buildUI() {
 <header class="topbar">
   <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 64 64" width="22" height="22"><rect rx="14" width="64" height="64" fill="#3ddc84"/><path d="M18 40a14 14 0 0 1 28 0z" fill="#1e1f22"/><circle cx="26" cy="34" r="2" fill="#3ddc84"/><circle cx="38" cy="34" r="2" fill="#3ddc84"/></svg></span><span id="brandName">Nepal Android Lab</span><small id="brandSub">Units 1–8 · Android + iOS</small></div>
   <div class="labsel">
-    <button class="btn ghost" id="bPrev" title="Previous lab" aria-label="Previous lab">‹</button>
+    <button class="btn ghost labnav" id="bPrev" title="Previous lab (Alt+←)" aria-label="Previous lab">← <span class="nl">Prev</span></button>
     <button class="btn pick" id="bLabs" title="Choose a lab (all units)">☰ <b id="labName">Labs</b></button>
-    <button class="btn ghost" id="bNext" title="Next lab" aria-label="Next lab">›</button>
+    <button class="btn labnav nx" id="bNext" title="Next lab (Alt+→)" aria-label="Next lab"><span class="nl">Next</span> →</button>
   </div>
   <span class="tb-sp"></span>
   <span class="engine" id="engine" title="Which engine runs your code">Simulator</span>
@@ -10941,12 +10953,13 @@ function renderTeachCard() {
     <span class="tc-dots" role="tablist">${T.steps.map((x, k) => `<button class="dot ${k === T.i ? 'on' : ''} ${x.mis ? 'mis' : ''}" data-k="${k}" title="Step ${k + 1}: ${esc(x.t)}" aria-label="Step ${k + 1}"></button>`).join('')}</span>
     ${s.demo && APPK(A.lab.kind) ? '<button class="btn" id="tcDemo" title="Type and tap on the phone for you">▶ Show me on the phone</button>' : ''}
     <span class="tb-sp"></span>
-    ${last ? '<button class="btn pri big" id="tcBuild">✏️ Now you build it →</button>' : '<button class="btn pri" id="tcNext" title="Next step (→)">Next →</button>'}
+    ${last ? (neighbor(1) ? `<button class="btn ghost" id="tcNextLab" title="After you have practised: open ${esc(labNum(neighbor(1)) + ' ' + neighbor(1).title)}">Next lab ⏭</button>` : '') + '<button class="btn pri big" id="tcBuild">✏️ Now you build it →</button>' : '<button class="btn pri" id="tcNext" title="Next step (→)">Next →</button>'}
   </div>`;
   const c = $('#teachCard'); c.classList.toggle('mis', !!s.mis);
   $('#tcPrev').onclick = teachPrev;
   if ($('#tcNext')) $('#tcNext').onclick = teachNext;
   if ($('#tcBuild')) $('#tcBuild').onclick = buildIt;
+  if ($('#tcNextLab')) $('#tcNextLab').onclick = () => step(1);
   if ($('#tcDemo')) $('#tcDemo').onclick = () => teachDemo();
   $$('#teachCard .dot').forEach(d => d.onclick = () => teachGo(+d.dataset.k));
   const w = $('.tc-why'); if (w) w.scrollTop = 0;
@@ -10998,15 +11011,17 @@ function loadLab(id, opts) {
   if (!(opts && opts.keepTab)) bottomTab('task');
   const m = opts && opts.mode ? opts.mode : defaultMode(lab);
   if (m === 'teach') setLabMode('teach', { save: false });
-  renderModeBar();
+  renderModeBar(); renderNav();
+  try { if (location.hash !== '#lab=' + lab.id) history.replaceState(history.state, '', '#lab=' + lab.id); } catch (e) { }
 }
 function renderTask() {
   const l = A.lab, st = labState(l.id);
-  $('#pTask').innerHTML = `${st.done ? `<div class="done-banner">✅ Completed${st.completedAt ? ' on ' + new Date(st.completedAt).toLocaleDateString() : ''}. Great work! Try the next lab →</div>` : ''}
+  $('#pTask').innerHTML = `${st.done ? `<div class="done-banner">✅ Completed${st.completedAt ? ' on ' + new Date(st.completedAt).toLocaleDateString() : ''}. Great work!${neighbor(1) ? ` <a href="#" data-nx="go">Next lab: ${esc(labNum(neighbor(1)) + ' ' + neighbor(1).title)} →</a>` : ''}</div>` : ''}
   <h2>${esc(l.title)}<span class="lvl ${l.level}">${LVL[l.level]}</span></h2>
   <p class="story">🇳🇵 ${l.story}</p>
   <div class="steps">${l.task}</div>
   <p class="mut" style="margin-top:10px">${l.kind === 'ios' ? 'Edit <code>Main.storyboard</code> and <code>ViewController.swift</code> → <b>Run ▶</b> to build and run on the iPhone → <b>Check ✓</b> when you think it works. Messages from <code>print()</code> and crashes appear in the Console.' : l.kind === 'swift' ? 'Edit the playground → <b>Run ▶</b> to see the output → <b>Check ✓</b>.' : l.kind === 'android' ? 'Edit the files on the left → <b>Run ▶</b> to try your app on the phone → <b>Check ✓</b> when you think it works. Use the phone\'s ◁ ○ ▢ ⟳ buttons to test the lifecycle.' : 'Edit <code>Main.java</code> → <b>Run ▶</b> to compile and see the output → <b>Check ✓</b>.'} Stuck? Open <a href="#" data-go="hints">Hints</a> or compare with <a href="#" data-go="exp">Expected</a>.</p>`;
+  wireNext($('#pTask'));
   $$('#pTask [data-go]').forEach(a => a.onclick = e => { e.preventDefault(); if (a.dataset.go === 'hints') bottomTab('hints'); else { setMode('exp'); if (narrow()) setView('phone'); } });
 }
 function renderHints() {
@@ -11021,8 +11036,8 @@ function renderChecks() {
   const l = A.lab, r = A.checkRes;
   const body = l.checks.map((c, i) => { const x = r && r[i]; const cls = !x ? 'wait' : x.ok ? 'ok' : 'bad'; return `<div class="chk ${cls}"><span class="ic">${!x ? '○' : x.ok ? '✓' : '✗'}</span><div><div>${esc(c.name)}</div>${x && !x.ok && x.msg ? `<div class="msg">${esc(x.msg).replace(/\n/g, '<br>')}</div>` : ''}</div></div>`; }).join('');
   const pass = r ? r.filter(x => x.ok).length : 0;
-  $('#pChecks').innerHTML = `<div class="summary"><button class="btn pri" id="bCheck2">✓ Check my work</button>${r ? `<b>${pass} / ${r.length} checks passed</b>` : '<span class="mut">Checks run your code on a hidden test phone — they type, click and rotate for you.</span>'}</div>${r && pass === r.length ? '<div class="done-banner">🎉 All checks passed! This lab is marked complete.</div>' : ''}${body}`;
-  $('#bCheck2').onclick = checkLab;
+  $('#pChecks').innerHTML = `<div class="summary"><button class="btn pri" id="bCheck2">✓ Check my work</button>${r ? `<b>${pass} / ${r.length} checks passed</b>` : '<span class="mut">Checks run your code on a hidden test phone — they type, click and rotate for you.</span>'}</div>${r && pass === r.length ? (A.nextHidden ? `<div class="done-banner">🎉 All checks passed! This lab is marked complete.${neighbor(1) ? ' <a href="#" data-nx="go">Next lab →</a>' : ''}</div>` : nextCard()) : ''}${body}`;
+  $('#bCheck2').onclick = checkLab; wireNext($('#pChecks'));
 }
 function checkLab() {
   const l = A.lab, mount = $('#checkMount');
@@ -11031,7 +11046,7 @@ function checkLab() {
   let res;
   try { res = LABS.runChecks(l, Object.assign({}, A.files), mount); } catch (e) { res = l.checks.map(c => ({ name: c.name, ok: false, msg: 'Could not run the checks: ' + e.message })); }
   mount.innerHTML = '';
-  A.checkRes = res;
+  A.checkRes = res; A.nextHidden = false;
   const pass = res.filter(x => x.ok).length, all = pass === res.length;
   const st = labState(l.id); st.checks = (st.checks || 0) + 1; st.best = Math.max(st.best || 0, pass); st.lastScore = `${pass}/${res.length}`;
   const first = all && !st.done;
@@ -11094,7 +11109,55 @@ function renderDrawer() {
 }
 function openDrawer() { renderDrawer(); $('#drawer').classList.add('on'); $('#scrim').classList.add('on'); const on = $('#drawerBody .labitem.on'); if (on) on.scrollIntoView({ block: 'center' }); }
 function closeDrawer() { $('#drawer').classList.remove('on'); $('#scrim').classList.remove('on'); }
-function step(d) { const i = LIST.indexOf(A.lab) + d; if (i >= 0 && i < LIST.length) loadLab(LIST[i].id); }
+/* ---- lab-to-lab navigation: stays inside the track (Android Units 1–7 / iOS Unit 8) ---- */
+const isIOSLab = l => IOS_UNITS(l.unit);
+function trackList(l) { l = l || A.lab; return LIST.filter(x => isIOSLab(x) === isIOSLab(l)); }
+function neighbor(d, l) { l = l || A.lab; if (!l) return null; const t = trackList(l), i = t.indexOf(l) + d; return i >= 0 && i < t.length ? t[i] : null; }
+function labNum(l) { return `${l.unit}.${unitLabs(l.unit).indexOf(l) + 1}`; }
+function unitName(u) { return LABS.UNITS[u] || 'Unit ' + u; }
+function trackName(l) { return isIOSLab(l) ? '📱 iOS (Swift)' : '🤖 Android (Java)'; }
+function goLab(id) { closeDrawer(); loadLab(id); if (narrow()) setView('code'); toastUI('Opened ' + labNum(LABS.byId[id]) + ' ' + LABS.byId[id].title); }
+function step(d) { const n = neighbor(d); if (n) goLab(n.id); else toastUI(d > 0 ? 'This is the last lab in the ' + trackName(A.lab) + ' section' : 'This is the first lab in the ' + trackName(A.lab) + ' section'); }
+function renderNav() {
+  const p = neighbor(-1), n = neighbor(1), bp = $('#bPrev'), bn = $('#bNext'); if (!bp || !bn) return;
+  bp.disabled = !p; bn.disabled = !n;
+  bp.title = p ? `Previous lab: ${labNum(p)} ${p.title} (Alt+←)` : 'This is the first lab in this section';
+  bn.title = n ? `Next lab: ${labNum(n)} ${n.title}${n.unit !== A.lab.unit ? ' — starts ' + unitName(n.unit) : ''} (Alt+→)` : 'This is the last lab in this section';
+}
+function nextCard() {
+  const l = A.lab, n = neighbor(1);
+  if (!n) {
+    const t = trackList(l), done = t.filter(x => S.labs[x.id] && S.labs[x.id].done).length, all = done === t.length;
+    const other = LIST.find(x => isIOSLab(x) !== isIOSLab(l));
+    return `<div class="next-card fin" id="nextCard" role="status"><div class="nc-h">🏁 ${all ? `All labs in the ${trackName(l)} section complete!` : `That was the last lab in the ${trackName(l)} section.`}</div>
+    <div class="nc-s">${all ? `You finished all ${t.length} labs. Print your progress report for your teacher.` : `You have completed <b>${done} of ${t.length}</b> labs in this section. Open ☰ Labs to find the ones still left.`}</div>
+    <div class="nc-b"><button class="btn pri" data-nx="report">🖨 Progress report</button>${all ? '' : '<button class="btn" data-nx="labs">☰ Labs left</button>'}${other ? `<button class="btn" data-nx="other">${isIOSLab(l) ? '🤖 Go to Android labs' : '📱 Try the iOS section'}</button>` : ''}<button class="btn ghost" data-nx="stay">Stay here</button></div></div>`;
+  }
+  const nu = n.unit !== l.unit;
+  return `<div class="next-card" id="nextCard" role="status"><div class="nc-h">🎉 All checks passed! This lab is marked complete.</div>
+  <div class="nc-s">Next: <b>${esc(labNum(n) + ' ' + n.title)}</b>${nu ? `<span class="nc-u">Unit ${l.unit} finished · next unit: ${esc(unitName(n.unit))}</span>` : ''}</div>
+  <div class="nc-b"><button class="btn pri big" data-nx="go" id="bNextLab">Next lab →</button><button class="btn ghost" data-nx="stay">Stay here</button></div></div>`;
+}
+function wireNext(root) {
+  if (!root) return;
+  root.querySelectorAll('[data-nx]').forEach(b => b.onclick = e => {
+    e.preventDefault(); const k = b.dataset.nx;
+    if (k === 'go') step(1);
+    else if (k === 'stay') { A.nextHidden = true; renderChecks(); }
+    else if (k === 'report') printReport();
+    else if (k === 'labs') openDrawer();
+    else if (k === 'other') { const o = LIST.find(x => isIOSLab(x) !== isIOSLab(A.lab) && !(S.labs[x.id] && S.labs[x.id].done)) || LIST.find(x => isIOSLab(x) !== isIOSLab(A.lab)); goLab(o.id); }
+  });
+}
+function navKeys(e) {
+  if (!e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return false;
+  const pg = e.key === 'PageDown' || e.key === 'PageUp', ar = e.key === 'ArrowRight' || e.key === 'ArrowLeft';
+  if (!pg && !ar) return false;
+  // Alt+←/→ only outside the editor and text fields (the editor uses them for line start/end); Alt+PageUp/PageDown work everywhere
+  if (ar && e.target && e.target.closest && e.target.closest('.CodeMirror, input, textarea, select, [contenteditable]')) return false;
+  if ($('#ov').classList.contains('on')) return false;
+  e.preventDefault(); e.stopPropagation(); step(e.key === 'ArrowRight' || e.key === 'PageDown' ? 1 : -1); return true;
+}
 
 /* ---------------- welcome, name, export/import, report ---------------- */
 async function welcome(force) {
@@ -11145,7 +11208,7 @@ function printReport() {
 }
 function toggleFull() { if (!document.fullscreenElement) { const r = document.documentElement.requestFullscreen; if (r) document.documentElement.requestFullscreen().catch(() => toastUI('Fullscreen is not available here')); else toastUI('Fullscreen is not available here'); } else document.exitFullscreen(); }
 function help() {
-  modal(`<h2>How this lab works</h2><p><b>Android labs</b> run in a lab simulator built for teaching: XML layouts, resources, the manifest and a beginner subset of Java (findViewById, click listeners — anonymous classes, lambdas, <code>implements View.OnClickListener</code> and <code>android:onClick</code> — Toast, Log, lifecycle, explicit and implicit Intents with extras, results, fragments, menus, dialogs, ListView/GridView/RecyclerView adapters, SQLite, JSON, Volley (mock server) and Google Maps (mock map)). It is <i>not</i> a full Android — things like Room, Retrofit, coroutines, Compose or runtime permissions show a friendly "not supported in this lab simulator" message.</p><p><b>Java labs</b> (Units 1–2) are console programs with <code>public static void main(String[] args)</code>. They run in the built-in Java teaching interpreter, which works offline and reports javac-style errors such as <code>';' expected</code>, <code>cannot find symbol</code> and <code>incompatible types</code>.</p><p><b>iOS labs</b> (Unit 8, own progress) look like Xcode: Swift playgrounds print to the output panel; app labs have <code>Main.storyboard</code> (Interface Builder) and <code>ViewController.swift</code> with <code>@IBOutlet</code>/<code>@IBAction</code>, running on a simulated iPhone with a debug console. It is a teaching subset of Swift + UIKit with swiftc-style errors and real crash messages (nil outlets, unknown selectors).</p><p><b>Keys:</b> Ctrl/⌘+Enter = Run · Ctrl/⌘+S = save · Esc = phone Back (when the phone has focus).</p><p><b>Phone buttons:</b> ◁ Back · ○ Home · ▢ Recents · ⟳ Rotate — watch Logcat to learn the Activity lifecycle.</p>`, [{ label: 'Got it', v: true, cls: 'pri' }]);
+  modal(`<h2>How this lab works</h2><p><b>Android labs</b> run in a lab simulator built for teaching: XML layouts, resources, the manifest and a beginner subset of Java (findViewById, click listeners — anonymous classes, lambdas, <code>implements View.OnClickListener</code> and <code>android:onClick</code> — Toast, Log, lifecycle, explicit and implicit Intents with extras, results, fragments, menus, dialogs, ListView/GridView/RecyclerView adapters, SQLite, JSON, Volley (mock server) and Google Maps (mock map)). It is <i>not</i> a full Android — things like Room, Retrofit, coroutines, Compose or runtime permissions show a friendly "not supported in this lab simulator" message.</p><p><b>Java labs</b> (Units 1–2) are console programs with <code>public static void main(String[] args)</code>. They run in the built-in Java teaching interpreter, which works offline and reports javac-style errors such as <code>';' expected</code>, <code>cannot find symbol</code> and <code>incompatible types</code>.</p><p><b>iOS labs</b> (Unit 8, own progress) look like Xcode: Swift playgrounds print to the output panel; app labs have <code>Main.storyboard</code> (Interface Builder) and <code>ViewController.swift</code> with <code>@IBOutlet</code>/<code>@IBAction</code>, running on a simulated iPhone with a debug console. It is a teaching subset of Swift + UIKit with swiftc-style errors and real crash messages (nil outlets, unknown selectors).</p><p><b>Keys:</b> Ctrl/⌘+Enter = Run · Ctrl/⌘+S = save · Esc = phone Back (when the phone has focus) · Alt+← / Alt+→ = previous / next lab (outside the editor) · Alt+PageUp / Alt+PageDown = previous / next lab (anywhere).</p><p><b>Moving between labs:</b> use <b>← Prev</b> / <b>Next →</b> next to the lab name, or <b>Next lab →</b> after all checks pass. Android labs (Units 1–7) and iOS labs (Unit 8) are separate sections.</p><p><b>Phone buttons:</b> ◁ Back · ○ Home · ▢ Recents · ⟳ Rotate — watch Logcat to learn the Activity lifecycle.</p>`, [{ label: 'Got it', v: true, cls: 'pri' }]);
 }
 
 /* ---------------- splitters, keys, wiring ---------------- */
@@ -11181,6 +11244,7 @@ function wire() {
   $('#logSys').checked = !!S.settings.sysLogs; $('#logSys').onchange = e => { S.settings.sysLogs = e.target.checked; persist(); renderLogs(); };
   $('#logClear').onclick = () => { A.logs = []; renderLogs(); };
   drag($('#splitV'), 'x'); drag($('#splitH'), 'y');
+  document.addEventListener('keydown', e => { navKeys(e); }, true);
   document.addEventListener('keydown', e => {
     if (teachKeys(e)) return;
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); runApp(); }
@@ -11188,20 +11252,22 @@ function wire() {
     else if (e.key === 'Escape' && $('#drawer').classList.contains('on')) closeDrawer();
   });
   window.addEventListener('resize', () => { fitPhone(); });
+  window.addEventListener('hashchange', () => { const m = /^#lab=([\w-]+)$/.exec(location.hash); if (m && LABS.byId[m[1]] && (!A.lab || A.lab.id !== m[1])) goLab(m[1]); });
   ['fit', 'fitExp'].forEach(id => $('#' + id).addEventListener('click', e => { if (e.target.closest('[data-nav]')) { setTimeout(fitPhone, 20); setTimeout(fitPhone, 350); } }));
   if (window.ResizeObserver) new ResizeObserver(() => fitPhone()).observe($('#stage'));
   window.addEventListener('beforeunload', () => { if (A.lab) { labState(A.lab.id).files = pf(); Store.save(S); } });
 }
 function init() {
   buildUI(); applySizes(); initEditor(); wire(); wireTeach();
-  const first = S.current && LABS.byId[S.current] ? S.current : LIST[0].id;
+  const hm = /^#lab=([\w-]+)$/.exec(location.hash), hashLab = hm && LABS.byId[hm[1]] ? hm[1] : null;
+  const first = hashLab || (S.current && LABS.byId[S.current] ? S.current : LIST[0].id);
   loadLab(first);
   if (A_MIGRATED) setTimeout(() => toastUI('The lab now uses Java. Your progress is kept; your old code was replaced with the new Java starter files.'), 600);
   const q = new URLSearchParams(location.search);
   if (q.get('lab') && LABS.byId[q.get('lab')]) loadLab(q.get('lab'));
   if (!q.has('nowelcome')) welcome(false);
 }
-Object.assign(A, { loadLab, runApp, checkLab, setMode, openFile, setView, bottomTab, resetLab, resetAll, exportProgress, printReport, state: () => S, store: Store, fitPhone, labs: LIST, setLabMode, labMode, teachGo, teachNext, teachPrev, teachDemo, teachStatus, togglePresenter, teach: () => A.T && { i: A.T.i, n: A.T.frames.length, step: A.T.steps[A.T.i] }, edit: (f, v) => { openFile(f); if (A.cm) A.cm.setValue(v); else { A.ta.value = v; onEdit(v); } } });
+Object.assign(A, { loadLab, step, neighbor, trackList, runApp, checkLab, setMode, openFile, setView, bottomTab, resetLab, resetAll, exportProgress, printReport, state: () => S, store: Store, fitPhone, labs: LIST, setLabMode, labMode, teachGo, teachNext, teachPrev, teachDemo, teachStatus, togglePresenter, teach: () => A.T && { i: A.T.i, n: A.T.frames.length, step: A.T.steps[A.T.i] }, edit: (f, v) => { openFile(f); if (A.cm) A.cm.setValue(v); else { A.ta.value = v; onEdit(v); } } });
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 
