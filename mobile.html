@@ -1,3 +1,66 @@
+How should each lab work?
+
+Teach sample first, then students repeat the same app
+Okay. I'll add a step-by-step Teach walkthrough to each lab, and then students rebuild the same app themselves in Practice.
+
+I've started the Teach mode now. Each lab will open with a projector walkthrough that adds the code one small step at a time. Each step highlights the new lines, explains them in plain words, and updates the phone and Logcat as you go. A few steps also show a common mistake and how to fix it. After the last step, a "Now you build it" button switches students to Practice, where they rebuild the same app with Check. The walkthrough won't touch their saved work. I'll update the same link when it's tested.
+
+current lab is very good we just need an upgrade
+
+Got it, that's exactly how I'm doing it. Everything in the current lab stays as it is, and Teach mode is only being added on top, with no other changes.
+
+The Unit 4 deck now has four more predict-and-try figures, alongside the lifecycle one on slide 18: 
+Unit 4 deck
+
+Slide 22, Back stack: on a Daraz cart, students try Back, finish() and opening HomeActivity again, and watch the stack cards change. The 3D stack is still there.
+Slide 23, Manifest: students switch the <activity> entry and the LAUNCHER filter on or off. The app then opens, crashes with ActivityNotFoundException, or shows no icon.
+Slide 24, Implicit intent: students choose web, dial or share, and how many apps are installed. It opens directly, shows a chooser, or crashes, unless they add try/catch.
+Slide 26, Intent extras: a college form sends data to a profile screen. Using the wrong key ("Name" vs "name") or getIntExtra on a String shows null or 0.
+All the code is Java, the slide numbers are the same as before, and I tested every case on desktop and phone. The link expires tomorrow at about 4 PM NPT unless you use the 
+claim link. The Teach mode for the lab is still being built.
+
+
+
+
+android-activity
+.html
+
+447kB
+
+
+Teach mode is now live in all 20 labs, at the same link: 
+Nepal Android Lab. Refresh the page if you still see the old version.
+
+Every lab now has a TEACH | PRACTICE switch at the top, and the rest of the lab is unchanged.
+
+Teach: you go through 4–7 steps with Next/Prev or the arrow keys. Each step opens the right file, makes the new lines glow, and explains them in your order (what it is, what it does, why it's needed, what happens without it). The phone and Logcat then update.
+Show me on the phone: some steps have this button, which types, taps, presses Home or rotates for the class.
+Mistake steps: 19 steps deliberately show a common mistake and its error, such as a missing ;, a forgotten super.onPause(), a Toast without .show(), an activity missing from the manifest, or a wrong extra key. The next step fixes it.
+Presenter: this button makes everything big for the projector.
+Practice: the last step has a "Now you build it" button that switches to Practice. Students build the same app there with Check, as before. Teach never touches their saved code or progress.
+I tested every step of every lab, and they all work. The link expires tomorrow around 2:55 PM NPT unless you use the 
+claim link.
+
+
+
+
+lab
+.html
+
+512kB
+
+
+perfect, now please add lab for all the units, make sure it is java and none of the labs are left. please make sure all the labs are included. Thanks
+
+Will do. I'll check which unit notes I already have, then get the rest from your Drive folder.
+
+I have the notes for Units 2, 3 and 4 here, but not the other units. I'm opening your Drive folder now to capture them, which takes a few minutes.
+
+I'm reading the Drive folder now to find every unit. Once I have the notes, I'll build Java labs for the remaining units with the same Teach and Practice modes. I'll check every topic in each unit against its labs, so nothing is left out.
+
+
+
+No file chosen
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1276,6 +1339,216 @@ footer{position:fixed !important;left:0;right:0;bottom:0;height:5.2vh;padding:0 
 .livexml .add{display:inline}
 footer{justify-content:flex-start !important;gap:2em}
 
+/* ===== Teachable figure (slide 18) ===== */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.tf{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,350px);gap:1.4vw;align-items:start;margin-top:.3em}
+.tf-fig{position:sticky;top:0;background:#0a0c10;border:1px solid var(--line);border-radius:16px;padding:.8em;display:flex;flex-direction:column;gap:.6em;min-width:0;z-index:2}
+.tf-figrow{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.8em;align-items:center}
+.tf-phonewrap{width:296px;height:296px;display:flex;align-items:center;justify-content:center}
+.tf-ph{width:160px;height:290px;background:#05070a;border:3px solid #3d4658;border-radius:26px;position:relative;box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 0 0 2px #1e2230;transition:transform .8s cubic-bezier(.4,.1,.2,1)}
+.tf-phonewrap.land .tf-ph{width:290px;height:160px;animation:tfTurn .8s cubic-bezier(.4,.1,.2,1)}
+@keyframes tfTurn{from{transform:rotate(90deg)}to{transform:none}}
+.tf-phonewrap.land .tf-notch{top:50%;left:5px;transform:translateY(-50%);width:5px;height:48px}
+.tf-phonewrap.land .tf-scr{inset:8px 30px 8px 13px}
+.tf-phonewrap.land .tf-nav{left:auto;right:4px;top:0;bottom:0;flex-direction:column;justify-content:space-around}
+.tf-phonewrap.land .ab{padding:.45em .7em}
+.tf-phonewrap.land .tf-app-body{display:grid;grid-template-columns:1.2fr 1fr;grid-template-areas:'to obj' 'lab obj' 'amt pay';gap:.25em .7em;padding:.5em .7em;align-items:center}
+.tf-phonewrap.land .tf-to{grid-area:to}.tf-phonewrap.land .tf-amt-l{grid-area:lab}.tf-phonewrap.land .tf-amt-row{grid-area:amt}.tf-phonewrap.land .tf-obj{grid-area:obj;align-self:end}.tf-phonewrap.land .tf-app .abtn{grid-area:pay}
+.tf-notch{position:absolute;top:5px;left:50%;transform:translateX(-50%);width:48px;height:5px;border-radius:5px;background:#1e2230;z-index:9}
+.tf-scr{position:absolute;inset:13px 8px 30px;border-radius:12px;background:#f4f6f8;overflow:hidden;color:#1f2937;font-size:11.5px}
+.tf-app{position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .35s}
+.tf-app-body{padding:.7em .7em;display:flex;flex-direction:column;gap:.45em}
+.tf-to{color:#374151;font-size:10.5px}
+.tf-amt-l{font-size:10px;color:#6b7280;font-weight:700}
+.tf-amt-row{display:flex;align-items:center;gap:.3em;font-weight:800;color:#111}
+.tf-amt-row .ein{font-size:15px;font-weight:800}
+.tf-amt-row .ein:disabled{color:#6b7280}
+.tf-obj{font-size:9.5px;color:#6b7280;font-family:ui-monospace,monospace}
+.tf-app .abtn{align-self:stretch;pointer-events:none}
+.tf-dialog{position:absolute;inset:0;background:rgba(15,17,21,.55);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s;z-index:3}
+.tf-dlg-box{background:#fff;border-radius:10px;padding:.8em;margin:0 .6em;font-size:10.5px;box-shadow:0 10px 30px rgba(0,0,0,.4);transform:scale(.85);transition:transform .35s}
+.tf-dlg-btns{display:flex;justify-content:flex-end;gap:1em;margin-top:.6em;color:#15803d;font-weight:800}
+.tf-home{position:absolute;inset:0;background:linear-gradient(160deg,#1e3a8a,#7c3aed);display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:26px 14px;align-content:start;opacity:0;transform:scale(1.12);pointer-events:none;transition:opacity .45s,transform .45s;z-index:4}
+.tf-home .ic{display:flex;flex-direction:column;align-items:center;gap:3px;color:#fff;font-size:9.5px}
+.tf-home .ic i{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:18px;color:#fff;font-weight:900}
+.tf-blank{position:absolute;inset:0;background:#05070a;opacity:0;pointer-events:none;transition:opacity .25s;z-index:5}
+.tf-ph[data-screen="home"] .tf-home{opacity:1;transform:none}
+.tf-ph[data-screen="dialog"] .tf-dialog{opacity:1}
+.tf-ph[data-screen="dialog"] .tf-dlg-box{transform:none}
+.tf-ph[data-screen="blank"] .tf-blank{opacity:1}
+.tf-nav{position:absolute;left:0;right:0;bottom:6px;display:flex;justify-content:space-around;color:#6b7280;font-size:12px}
+.tf-nav b{padding:0 .5em;user-select:none;border-radius:8px}
+.tf-nav b.hint{color:#fbbf24;cursor:pointer;animation:tfHint 1.4s ease-in-out infinite}
+@keyframes tfHint{50%{text-shadow:0 0 10px #fbbf24}}
+.tf-diag svg{display:block;width:100%;height:auto}
+.tf-edge{fill:none;stroke:#3d4658;stroke-width:2.5;transition:stroke .3s}
+.tf-edge.dash{stroke-dasharray:6 5}
+.tf-edge.on{stroke:#fbbf24}
+.tf-elab{fill:#8b94a4;font:700 14px ui-monospace,Menlo,Consolas,monospace;transition:fill .3s}
+.tf-elab.small{font-size:12px;font-weight:600}
+.tf-elab .sub{font-size:12px;font-weight:600;font-family:-apple-system,Segoe UI,Inter,Roboto,sans-serif}
+.tf-elab.dash{font-style:italic;font-weight:600}
+.tf-elab.on{fill:#fde68a}
+.tf-way{fill:#1e2230;stroke:#c084fc;stroke-width:2}
+.tf-node rect{fill:#12151c;stroke:var(--c);stroke-width:2;transition:fill .3s,stroke-width .3s}
+.tf-node text{fill:#cbd2dc;font:800 15px -apple-system,Segoe UI,Inter,Roboto,sans-serif}
+.tf-node.on rect{fill:var(--c);stroke-width:3}
+.tf-node.on text{fill:#0a0c10}
+.tf-token{fill:#fbbf24;stroke:#fff;stroke-width:2.5;filter:drop-shadow(0 0 6px rgba(251,191,36,.8))}
+.tf-readouts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tf-ro{background:#12151c;padding:.45em .7em;min-width:0}
+.tf-ro .k{display:block;font-size:11.5px;color:var(--muted)}
+.tf-ro strong{display:block;font-size:clamp(13px,1.25vw,17px);color:#fff;overflow-wrap:anywhere}
+.tf-log{height:130px}
+.tf-steps{min-width:0}
+.tf-step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:.75em .9em;margin-bottom:.7em}
+.tf-step h3{display:flex;align-items:center;gap:.5em;margin-bottom:.35em;font-size:clamp(15px,1.35vw,19px)}
+.tf-n{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.6em;height:1.6em;border-radius:7px;border:1.5px solid var(--accent);color:var(--accent);font:800 .75em ui-monospace,monospace}
+.tf-start{font-size:clamp(12.5px,1.15vw,15px);color:#dfe4ec;margin-top:.3em;line-height:1.45}
+.tf-scns button{font-size:clamp(11.5px,1.05vw,14px)}
+.tf-pool,.tf-slots{display:flex;flex-wrap:wrap;gap:.4em;min-height:2.9em;padding:.5em;border-radius:12px;border:2px dashed #3d4658;background:#0a0c10;align-items:center;margin-top:.4em}
+.tf-slots{border-color:#14532d}
+.tf-slots:empty::before{content:"Your prediction appears here. Empty means “no callback fires”.";color:#6b7280;font-size:12.5px}
+.tf-slots.locked{border-style:solid}
+.tf-chip{font-family:ui-monospace,monospace;font-size:clamp(11.5px,1.05vw,14px)}
+.tf-chip:disabled{cursor:default;opacity:.75}
+.tf-slots .tf-chip:disabled{opacity:1}
+.tf-chip:focus-visible,.tf button:focus-visible,.tf select:focus-visible{outline:3px solid #fbbf24;outline-offset:2px}
+.tf-primary{border-color:#166534!important;background:#0f1a14!important;color:#86efac!important}
+.tf-feedback{font-size:clamp(12.5px,1.15vw,15px);line-height:1.5;color:#dfe4ec;padding:.6em .75em;border-radius:10px;background:#0a0c10;border-left:3px solid var(--line)}
+.tf-feedback:empty{display:none}
+.tf-feedback.good{border-left-color:#4ade80;background:#0f1a14}
+.tf-feedback.bad{border-left-color:#f87171;background:#1e1414}
+.tf-feedback code{color:#fde68a}
+.tf-tablewrap{overflow-x:auto;margin-top:.6em}
+.tf-table{border-collapse:collapse;width:100%;font-size:clamp(11.5px,1vw,13.5px);color:#dfe4ec}
+.tf-table caption{text-align:left;font-weight:700;color:#fff;margin-bottom:.3em}
+.tf-table th,.tf-table td{text-align:left;padding:.35em .4em;border-bottom:1px solid var(--line);vertical-align:top}
+.tf-table th{color:var(--muted);font-weight:700}
+.tf-empty td{color:#6b7280}
+.tf-frame{font-size:clamp(13px,1.2vw,16px);line-height:2.1;color:#dfe4ec}
+.tf-frame select{background:#1e2230;color:#fff;border:2px solid var(--line);border-radius:8px;padding:.15em .3em;font:inherit;font-size:.92em;max-width:100%}
+.tf .quiz{max-width:none;margin:0}
+.tf .quiz .q{font-size:clamp(14px,1.3vw,18px)}
+.tf-caveat{font-size:clamp(11.5px,1vw,13px);color:var(--muted);line-height:1.5;border-left:3px solid #5b3a0a;padding-left:.7em}
+.tf-caveat b{color:#fbbf24}
+@media (max-width:1100px){.tf{grid-template-columns:1fr}.tf-fig{position:static}}
+@media (max-width:640px){
+  .tf-figrow{grid-template-columns:1fr;justify-items:center}
+  .tf-phonewrap{width:260px;height:260px}
+  .tf-ph{transform:scale(.86)}
+  .tf-phonewrap.land .tf-ph{transform:scale(.86);animation:tfTurnS .8s cubic-bezier(.4,.1,.2,1)}
+  @keyframes tfTurnS{from{transform:scale(.86) rotate(90deg)}to{transform:scale(.86)}}
+  .tf-diag{width:100%}
+  .tf-elab{font-size:18px}.tf-elab .sub,.tf-elab.small{font-size:15px}.tf-node text{font-size:17px}
+  .tf-phonewrap.land{height:200px}
+  .tf-readouts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tf-fig{padding:.55em}
+}
+@media (prefers-reduced-motion:reduce){.tf-phonewrap.land .tf-ph{animation:none!important}.tf-ph,.tf-home,.tf-dialog,.tf-dlg-box,.tf-blank,.tf-app{transition:none}.tf-nav b.hint{animation:none}}
+
+/* ===== Teachable figures 2 (manifest, extras, implicit intent, back stack) ===== */
+.t2{margin-top:.4em}
+.t2-phonewrap{width:176px;display:flex;align-items:center;justify-content:center}
+.t2-ph .tf-scr{font-size:11px}
+.t2-l{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;display:flex;flex-direction:column}
+.t2-l.show{opacity:1}
+.t2-body{padding:.8em .7em;display:flex;flex-direction:column;gap:.55em;align-items:stretch;text-align:center}
+.t2-body .tv{font-weight:800;color:#1f2937;font-size:12px}
+.t2-body .abtn{pointer-events:none;align-self:center;transition:transform .15s,box-shadow .15s}
+.t2-body .abtn.press{transform:scale(.92);box-shadow:0 0 0 4px rgba(251,191,36,.7)}
+.t2-ok{font-size:10px;color:#15803d;font-weight:700}
+.t2-home{background:linear-gradient(160deg,#1e3a8a,#7c3aed);display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:26px 14px;align-content:start;z-index:4}
+.t2-home .ic{display:flex;flex-direction:column;align-items:center;gap:3px;color:#fff;font-size:9.5px}
+.t2-home .ic i{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:15px;color:#fff;font-weight:900}
+.t2-noicon{display:none!important}
+.t2-ph[data-screen="noicon"] .t2-appicon{display:none}
+.t2-ph[data-screen="noicon"] .t2-noicon{display:flex!important;width:38px;height:38px;margin:0 auto 12px;border:2px dashed rgba(255,255,255,.6);border-radius:11px;align-items:center;justify-content:center;text-align:center;font-size:8px;line-height:1.1}
+.t2-studio{inset:auto 6px 8px 6px;background:#2b2d30;color:#fca5a5;border-radius:8px;padding:.55em .6em;font-size:9.5px;z-index:6;gap:.2em}
+.t2-studio b{color:#fff;font-size:9.5px}
+.t2-crash{background:rgba(15,17,21,.6);align-items:center;justify-content:center;z-index:7}
+.t2-crashbox{background:#fff;border-radius:10px;margin:0 .5em;padding:.7em;display:flex;flex-direction:column;gap:.4em;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.t2-crashbox b{color:#dc2626;font-size:11.5px}
+.t2-crashbox span{font-family:ui-monospace,monospace;font-size:8.2px;color:#374151;line-height:1.35;overflow-wrap:anywhere}
+.t2-crashbox em{font-style:normal;color:#2563eb;font-weight:800;align-self:flex-end;font-size:10px}
+.t2-form{text-align:left;gap:.35em}
+.t2-form label{font-size:9.5px;font-weight:700;color:#6b7280}
+.t2-form .ein{font-size:12px;font-weight:700;padding:.2em .1em}
+.t2-form .ein:disabled{color:#6b7280}
+.t2-kv{display:flex;justify-content:space-between;font-size:10.5px;border-bottom:1px solid #e5e7eb;padding-bottom:.2em}
+.t2-kv span{color:#6b7280}
+.t2-form .abtn{margin-top:.3em}
+.t2-prof{display:flex;flex-direction:column;gap:.45em;text-align:left;font-size:11.5px;font-weight:700}
+.t2-pl{padding:.35em .5em;border-radius:6px;background:#e5e7eb;color:#1f2937;overflow-wrap:anywhere}
+.t2-pl.ok{background:#dcfce7;color:#14532d}
+.t2-pl.bad{background:#fee2e2;color:#991b1b}
+.t2-pl.wait{color:#9ca3af}
+.t2-sheet{justify-content:flex-end;background:rgba(15,17,21,.45);z-index:6}
+.t2-sheetbox{background:#fff;border-radius:14px 14px 0 0;padding:.7em .6em .5em;display:flex;flex-direction:column;gap:.5em;transform:translateY(0);animation:t2Up .35s ease}
+.t2-sheetbox b{font-size:11px;color:#111}
+.t2-sheetbox small{font-size:9px;color:#2563eb;font-weight:800;text-align:right}
+@keyframes t2Up{from{transform:translateY(100%)}to{transform:none}}
+.t2-apps{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.t2-apps .ic{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:8.5px;color:#374151;text-align:center;border-radius:8px;padding:3px 1px}
+.t2-apps .ic i{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-style:normal;font-weight:900;font-size:12px}
+.t2-apps .ic.pick{animation:t2Pick 1s ease .6s both}
+@keyframes t2Pick{to{background:#dbeafe}}
+.t2-target{font-size:11px;color:#1f2937;line-height:1.5}
+.t2-toast{justify-content:flex-end;align-items:center;padding-bottom:16px;z-index:6}
+.t2-toast span{background:#323232;color:#fff;border-radius:16px;padding:.45em .8em;font-size:10px}
+.t2-opts{display:flex;flex-wrap:wrap;gap:.4em;margin:.4em 0}
+.t2-opts button{background:#1e2230;border:2px solid var(--line);color:#e8ecf2;border-radius:10px;padding:.5em .8em;font-size:clamp(12px,1.05vw,14px);font-weight:700;cursor:pointer;font-family:inherit;text-align:left;line-height:1.35}
+.t2-opts button:hover:not(:disabled){border-color:var(--accent)}
+.t2-opts button.on{border-color:var(--accent);background:#0f1a14;color:#86efac}
+.t2-opts button:disabled{cursor:default;opacity:.6}
+.t2-opts button.on:disabled{opacity:1}
+.t2-opts button:focus-visible,.t2 input:focus-visible{outline:3px solid #fbbf24;outline-offset:2px}
+.t2-col{flex-direction:column}
+.t2-col button{width:100%}
+.t2-reads,.t2-predgrid{display:grid;gap:.35em;margin:.3em 0}
+.t2-reads label,.t2-predgrid label{display:grid;grid-template-columns:7.2em minmax(0,1fr);align-items:center;gap:.5em;font-size:clamp(12px,1.05vw,14px);color:#dfe4ec}
+.t2-predgrid label{grid-template-columns:minmax(7.2em,auto) minmax(0,1fr)}
+.t2-reads select,.t2-predgrid select{background:#1e2230;color:#fff;border:2px solid var(--line);border-radius:8px;padding:.3em .35em;font:inherit;font-size:.95em;min-width:0;width:100%}
+.t2-reads select{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em}
+.t2-reads select:disabled,.t2-predgrid select:disabled{opacity:.7}
+.t2 .tick{display:flex;gap:.45em;align-items:flex-start;font-size:clamp(12px,1.05vw,14px);margin:.25em 0;line-height:1.4}
+.t2 .tick input{margin-top:.2em;flex:none}
+.t2code{background:#0a0c10;border:1px solid var(--line);border-radius:10px;padding:.6em .4em;overflow:auto;font-size:clamp(10.5px,.95vw,13px);color:#dfe4ec;font-family:ui-monospace,Menlo,Consolas,monospace;line-height:1.45;margin-top:.5em;white-space:pre;max-height:none}
+.t2code .ln{min-height:1.4em}
+.t2code .ln.add{background:rgba(34,197,94,.12);border-left-color:#4ade80}
+.t2code .ln.miss{background:rgba(248,113,113,.12);border-left-color:#f87171}
+.t2code .ln.hl{background:rgba(251,191,36,.12);border-left-color:#fbbf24}
+.t2code-h{font:700 11px -apple-system,Segoe UI,Inter,Roboto,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:0 .4em .35em}
+.t2-colh{fill:#8b94a4;font:800 14px -apple-system,Segoe UI,Inter,Roboto,sans-serif;letter-spacing:.04em}
+.t2-elab{font-size:13px}
+.t2-node text{font-size:13.5px;font-weight:700}
+.t2-node.dim{opacity:.35}
+.t2-node.good rect{fill:#4ade80;stroke:#4ade80;stroke-width:3}
+.t2-node.bad rect{fill:#f87171;stroke:#f87171;stroke-width:3}
+.t2-node.good text,.t2-node.bad text{fill:#0a0c10}
+.tf-edge.bad{stroke:#f87171}
+.t2-card{transition:transform .5s cubic-bezier(.3,.8,.3,1),opacity .45s}
+.t2-card rect{fill:#12151c;stroke:var(--c);stroke-width:2}
+.t2-card text{fill:#e8ecf2;font:800 15px -apple-system,Segoe UI,Inter,Roboto,sans-serif}
+.t2-card text.st{fill:#8b94a4;font-size:12px;font-weight:700}
+.t2-card.top rect{fill:var(--c);stroke:#fde68a;stroke-width:3}
+.t2-card.top text{fill:#0a0c10}
+.t2-cbtxt{font:800 22px ui-monospace,Menlo,Consolas,monospace;fill:#fde68a}
+.t2-cbsub{font:700 14px -apple-system,Segoe UI,Inter,Roboto,sans-serif;fill:#8b94a4}
+@media (max-width:640px){
+  .t2-phonewrap{width:100%;height:auto;padding:.2em 0}
+  .t2-ph{transform:none}
+  .t2-elab{font-size:16px}.t2-node text{font-size:16px}.t2-colh{font-size:16px}
+  .t2-reads label,.t2-predgrid label{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.t2-l,.t2-card,.t2-body .abtn{transition:none}.t2-sheetbox,.t2-apps .ic.pick{animation:none}}
+.t2-codes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:.6em}
+.t2-codes .t2code{margin-top:0;max-height:250px}
+.t2 .tf-fig{max-height:calc(100vh - 60px);overflow:auto}
+.t2 .tf-log{height:110px}
+.t2 .tick>span{min-width:0}
+@media (max-width:1100px){.t2 .tf-fig{max-height:none;overflow:visible}}
+
 </style>
 </head>
 <body>
@@ -1296,7 +1569,7 @@ footer{justify-content:flex-start !important;gap:2em}
     <span class="pill" data-goto="@stage3d">3D lifecycle</span>
     <span class="pill" data-goto="@oncreate">6 callbacks</span>
     <span class="pill" data-goto="@sim">Simulator</span>
-    <span class="pill" data-goto="@predict">Predict game</span>
+    <span class="pill" data-goto="@predict">Predict &amp; try lifecycle</span>
     <span class="pill" data-goto="@multi">Multiple activities</span>
     <span class="pill" data-goto="@backstack">Back stack 3D</span>
     <span class="pill" data-goto="@manifest">Manifest</span>
@@ -1315,7 +1588,7 @@ footer{justify-content:flex-start !important;gap:2em}
   <p class="teach-plain">Click an hour block to jump straight there. Each concept follows the same ladder: <b>What is it? → What does it do? → Why needed? → When needed? → Without it? → How it works?</b> → picture → code.</p>
   <div class="tline spot">
     <div class="tl-h" data-goto="@activity"><div class="hr">H1</div><h3>Lifecycle ideas</h3><p>What an Activity is, the 3 states, why lifecycle matters, the six callbacks, Fig 4-1, 3D lifecycle stage.</p><div class="fillbar"></div></div>
-    <div class="tl-h" data-goto="@oncreate"><div class="hr">H2</div><h3>Callbacks in action</h3><p>onCreate … onDestroy + onRestart, the eSewa simulator, Logcat demo, predict-the-callback game.</p><div class="fillbar"></div></div>
+    <div class="tl-h" data-goto="@oncreate"><div class="hr">H2</div><h3>Callbacks in action</h3><p>onCreate … onDestroy + onRestart, the eSewa simulator, Logcat demo, predict-and-try lifecycle figure.</p><div class="fillbar"></div></div>
     <div class="tl-h" data-goto="@multi"><div class="hr">H3</div><h3>Many screens</h3><p>Multiple activities, back stack, Manifest declaration, Intents, passing data with extras.</p><div class="fillbar"></div></div>
     <div class="tl-h" data-goto="@result"><div class="hr">H4</div><h3>Data both ways</h3><p>Result from child activity, getting/setting layout data (student form), addition app, exercises.</p><div class="fillbar"></div></div>
   </div>
@@ -1655,18 +1928,104 @@ footer{justify-content:flex-start !important;gap:2em}
 </section>
 
 <section class="slide" id="predict">
-  <div class="kicker">Game · Predict the callbacks</div>
-  <h2><span class="num">17</span>What does Android call, in what order?</h2>
-  <div class="stage-box spot">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:1em;flex-wrap:wrap"><div class="small">Scenario <b id="predN">1</b> / <span id="predT">6</span></div><div class="score" id="predScore">Score 0</div></div>
-    <div class="pred-scn" id="predScn"></div>
-    <div class="small">Callback pool (drag, or tap to add; tap a placed chip to remove):</div>
-    <div class="pool" id="predPool"></div>
-    <div class="slots" id="predSlots"></div>
-    <div class="btnrow"><button id="predCheck">✅ Check</button><button id="predReveal">👀 Reveal with animation</button><button id="predReset">↺ Clear</button><button id="predNext">Next ▶</button></div>
-    <div class="pred-ans" id="predAns"></div>
+  <div class="kicker">Teachable figure · Predict → Try → Observe → Explain</div>
+  <h2><span class="num">17</span>Does leaving the screen destroy the eSewa activity?</h2>
+  <p class="teach-plain">The callbacks Android calls depend on <b>what the user does</b>. Leaving the screen does <b>not</b> automatically mean <code>onDestroy()</code>. Pick a situation, predict the callbacks, then try it on the eSewa payment screen and check whether your typed amount survives.</p>
+  <div class="tf spot" id="tf" aria-describedby="tfSummary">
+    <div class="tf-fig">
+      <div class="tf-figrow">
+        <div class="tf-phonewrap" id="tfPhoneWrap">
+          <div class="tf-ph" id="tfPh" data-screen="app">
+            <div class="tf-notch"></div>
+            <div class="tf-scr">
+              <div class="tf-app" id="tfApp">
+                <div class="ab es">eSewa · Pay Merchant</div>
+                <div class="tf-app-body">
+                  <div class="tf-to">To: Bhatbhateni Supermarket</div>
+                  <label class="tf-amt-l" for="tfAmt">Amount (Rs)</label>
+                  <div class="tf-amt-row"><span>Rs</span><input id="tfAmt" class="ein" inputmode="numeric" autocomplete="off" value="500" placeholder="Type an amount" aria-label="Amount typed on the eSewa screen in rupees"></div>
+                  <div class="tf-obj" id="tfObj">Activity object #1</div>
+                  <button type="button" class="abtn g" tabindex="-1">Pay</button>
+                </div>
+              </div>
+              <div class="tf-dialog" id="tfDialog" aria-hidden="true"><div class="tf-dlg-box"><b>Allow eSewa to access this device’s location?</b><div class="tf-dlg-btns"><span>Deny</span><span>Allow</span></div></div></div>
+              <div class="tf-home" id="tfHome" aria-hidden="true"><div class="ic"><i style="background:#60bb46">e</i>eSewa</div><div class="ic"><i style="background:#5c2d91">K</i>Khalti</div><div class="ic"><i style="background:#f57224">D</i>Daraz</div><div class="ic"><i style="background:#e11d48">P</i>Pathao</div></div>
+              <div class="tf-blank" id="tfBlank" aria-hidden="true"></div>
+            </div>
+            <div class="tf-nav" aria-hidden="true"><b data-nav="back">◁</b><b data-nav="home">○</b><b data-nav="recents">▢</b></div>
+          </div>
+        </div>
+        <div class="tf-diag">
+          <svg id="tfSvg" viewBox="0 0 712 330" role="img" aria-labelledby="tfSvgT">
+            <title id="tfSvgT">Activity lifecycle state diagram. A dot moves along an arrow each time a callback fires.</title>
+          </svg>
+        </div>
+      </div>
+      <div class="tf-readouts" aria-label="What the figure shows now">
+        <div class="tf-ro"><span class="k">Activity state</span><strong id="roState">Resumed</strong></div>
+        <div class="tf-ro"><span class="k">Activity object</span><strong id="roObj">#1 (same)</strong></div>
+        <div class="tf-ro"><span class="k">Typed amount</span><strong id="roAmt">Rs 500</strong></div>
+        <div class="tf-ro"><span class="k">Did onDestroy() fire?</span><strong id="roDes">No</strong></div>
+      </div>
+      <div class="logc tf-log" id="tfLog" aria-label="Logcat output"></div>
+      <p class="sr-only" id="tfSummary" aria-live="polite"></p>
+    </div>
+
+    <div class="tf-steps">
+      <div class="tf-step">
+        <h3><span class="tf-n">1</span>Pick what the user does</h3>
+        <div class="btnrow tf-scns" id="tfScns" role="group" aria-label="Scenarios"></div>
+        <p class="tf-start" id="tfStart"></p>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">2</span>Predict the callbacks, in order</h3>
+        <p class="small">Tap the callbacks below in the order you think Android calls them. Tap a placed callback to remove it. If you think nothing fires, leave the answer row empty.</p>
+        <div class="tf-pool" id="tfPool" role="group" aria-label="Callbacks you can choose"></div>
+        <div class="tf-slots" id="tfSlots" role="group" aria-label="Your predicted order"></div>
+        <div class="btnrow"><button type="button" id="tfLock">🔒 Lock in my prediction</button><button type="button" id="tfUnlock" disabled>✏️ Change my prediction</button></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">3</span>Try it on the phone</h3>
+        <div class="btnrow"><button type="button" id="tfRun" class="tf-primary" disabled>Lock in a prediction first</button><button type="button" id="tfFollow" hidden>Tap “Allow” to close the dialog</button></div>
+        <label class="tick"><input type="checkbox" id="tfStepMode"> Step through one callback at a time</label>
+        <label class="tick"><input type="checkbox" id="tfSave"> Save the amount in onSaveInstanceState() and restore it in onCreate() <span class="cv-tag">beyond notes</span></label>
+        <div class="btnrow"><button type="button" id="tfReset">↺ Reset the whole figure</button></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">4</span>Observe what happened</h3>
+        <div class="tf-feedback" id="tfFeedback">Run a scenario to compare your prediction with what Android really did.</div>
+        <div class="tf-tablewrap"><table class="tf-table"><caption>Your trials</caption>
+          <thead><tr><th scope="col">What the user did</th><th scope="col">Your prediction</th><th scope="col">Ended in</th><th scope="col">onDestroy()?</th><th scope="col">Typed amount</th></tr></thead>
+          <tbody id="tfTrials"><tr class="tf-empty"><td colspan="5">No trials yet. Try <b>Home</b> and then <b>Rotate</b> to compare them.</td></tr></tbody></table></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">5</span>Explain it in one sentence</h3>
+        <p class="tf-frame">When the user
+          <select id="exAct" aria-label="What the user did"><option value="">choose…</option><option value="home">pressed Home</option><option value="recents">came back from Recents</option><option value="back">pressed Back</option><option value="rotate">rotated the phone</option><option value="dialog">saw a permission dialog</option><option value="kill">had the app killed in the background and came back</option></select>,
+          <code>onDestroy()</code>
+          <select id="exDes" aria-label="Did onDestroy fire"><option value="">choose…</option><option value="yes">did fire</option><option value="no">did not fire</option></select>,
+          because the activity object was
+          <select id="exObj" aria-label="What happened to the activity object"><option value="">choose…</option><option value="kept">kept in memory</option><option value="replaced">destroyed and replaced by a new one</option><option value="finished">finished and removed</option><option value="killed">killed with the app’s process, then re-created</option></select>,
+          so the typed amount was
+          <select id="exAmt" aria-label="What happened to the typed amount"><option value="">choose…</option><option value="kept">still there</option><option value="lost">lost</option><option value="restored">restored from the saved Bundle</option></select>.
+        </p>
+        <div class="btnrow"><button type="button" id="exCheck">Check my sentence</button></div>
+        <div class="tf-feedback" id="exFb" aria-live="polite"></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">6</span>New case: predict without the figure</h3>
+        <div class="quiz">
+          <div class="q">You have typed Rs 200 in the <b>Khalti</b> app, and a phone call comes in. The phone shows the full-screen incoming-call screen. Which callbacks does Khalti get?</div>
+          <button type="button">Only onPause(), because Khalti is still open</button>
+          <button type="button" data-correct="1">onPause() and then onStop()</button>
+          <button type="button">onPause(), onStop() and then onDestroy()</button>
+          <button type="button">No callbacks at all</button>
+          <div class="explain">The full-screen call hides Khalti completely, so Khalti is paused and then stopped, but not destroyed. After you hang up, Khalti gets onRestart(), onStart() and onResume(), and the Rs 200 is still there. If your phone shows the call only as a small banner at the top, Khalti may get no callback at all.</div>
+        </div>
+      </div>
+      <p class="tf-caveat"><b>Note:</b> This figure is a teaching model, so real devices may vary. On Android 10 and newer, multi-window mode follows different rules: several apps can be visible and resumed at the same time. A dialog only pauses eSewa when it belongs to another activity, such as the system permission prompt. An <code>AlertDialog</code> that eSewa shows itself does not pause it. Here the amount is kept in a variable inside the activity. An <code>EditText</code> that has an <code>android:id</code> saves its own text on rotation.</p>
+    </div>
   </div>
-  <div class="callout">Classroom tip: start a 30s timer from <b>🎓 Class mode</b>, let pairs decide, cold-call one pair to drag the chips on the projector.</div>
 </section>
 
 <section class="slide" id="quiz1">
@@ -1759,28 +2118,183 @@ footer{justify-content:flex-start !important;gap:2em}
       <div class="logc" id="bsLog" style="height:220px"></div>
     </div>
   </div>
+  <div class="sec-h"><span class="st">Teachable figure</span> Back, finish() and startActivity(): who leaves the stack?</div>
+  <p class="teach-plain">The back stack changes in only two ways: <code>startActivity()</code> <b>pushes a new activity on top</b>, and <b>Back</b> or <code>finish()</code> <b>removes only the top one</b>. Many students think that starting HomeActivity again takes you back to the old Home screen, or that <code>finish()</code> closes the whole app. Daraz starts with Home → Product → Cart. Pick an action, predict the screen and the stack size, then try it.</p>
+  <div class="tf t2 spot" id="t2b">
+    <div class="tf-fig">
+      <div class="tf-figrow">
+        <div class="t2-phonewrap">
+          <div class="tf-ph t2-ph" data-screen="app" data-out="phone">
+            <div class="tf-notch"></div>
+            <div class="tf-scr">
+              <div class="t2-l t2-app" data-l="app"><div class="ab dz" data-out="bBar">Daraz · Cart</div><div class="t2-body"><div class="tv" data-out="bTv">CartActivity #1</div><div class="t2-ok" data-out="bSub" style="color:#6b7280">1 item: Earbuds, Rs 1,499</div><button type="button" class="abtn" tabindex="-1" data-out="bBtn" style="background:#f57224;color:#fff">Checkout</button></div></div>
+              <div class="t2-l t2-home" data-l="phone"><div class="ic"><i style="background:#f57224">D</i>Daraz</div><div class="ic"><i style="background:#60bb46">e</i>eSewa</div><div class="ic"><i style="background:#5c2d91">K</i>Khalti</div><div class="ic"><i style="background:#e11d48">P</i>Pathao</div></div>
+            </div>
+            <div class="tf-nav" aria-hidden="true"><b data-out="bBack">◁</b><b>○</b><b>▢</b></div>
+          </div>
+        </div>
+        <div class="tf-diag"><svg id="t2bSvg" viewBox="0 0 712 330" role="img" aria-label="The Daraz back stack drawn as cards. The top card is the screen you see. New cards slide in on top, and removed cards slide out."></svg></div>
+      </div>
+      <div class="tf-readouts">
+        <div class="tf-ro"><span class="k">On screen</span><strong data-out="roTop">CartActivity #1</strong></div>
+        <div class="tf-ro"><span class="k">Activities in the stack</span><strong data-out="roSize">3</strong></div>
+        <div class="tf-ro"><span class="k">HomeActivity objects</span><strong data-out="roHome">1</strong></div>
+        <div class="tf-ro"><span class="k">Last change</span><strong data-out="roLast">None yet</strong></div>
+      </div>
+      <div class="t2-codes"><div class="code t2code" data-out="java"></div></div>
+      <div class="logc tf-log" data-out="log" aria-label="Logcat output"></div>
+      <p class="sr-only" data-out="sum" aria-live="polite"></p>
+    </div>
+    <div class="tf-steps">
+      <div class="tf-step">
+        <h3><span class="tf-n">1</span>Pick what happens on the Cart screen</h3>
+        <div class="t2-opts t2-col" data-cfg="scn" role="group" aria-label="Action">
+          <button type="button" data-v="back" aria-pressed="true" class="on">◁ The user presses Back</button>
+          <button type="button" data-v="finish" aria-pressed="false">Cart calls finish()</button>
+          <button type="button" data-v="home" aria-pressed="false">Cart calls startActivity() for HomeActivity</button>
+          <button type="button" data-v="pay" aria-pressed="false">Cart starts PaymentActivity and calls finish(), then the user presses Back</button>
+          <button type="button" data-v="back3" aria-pressed="false">◁◁◁ The user presses Back three times</button>
+        </div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">2</span>Predict the result</h3>
+        <div class="t2-predgrid">
+          <label><span>Screen you see:</span><select data-pred="top" aria-label="Predicted screen"><option value="">choose…</option><option value="Home">HomeActivity</option><option value="Product">ProductActivity</option><option value="Cart">CartActivity</option><option value="Payment">PaymentActivity</option><option value="phone">The phone’s home screen (Daraz closed)</option></select></label>
+          <label><span>Activities in the stack:</span><select data-pred="size" aria-label="Predicted stack size"><option value="">choose…</option><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></label>
+        </div>
+        <div class="btnrow"><button type="button" data-act="lock">🔒 Lock in my prediction</button><button type="button" data-act="unlock" disabled>✏️ Change my prediction</button></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">3</span>Try it on the phone</h3>
+        <div class="btnrow"><button type="button" data-act="run" class="tf-primary" disabled>Lock in a prediction first</button><button type="button" data-act="reset">↺ Reset the whole figure</button></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">4</span>Observe what happened</h3>
+        <div class="tf-feedback" data-out="fb">Run an action to compare your prediction with the real back stack.</div>
+        <div class="tf-tablewrap"><table class="tf-table"><caption>Your trials</caption>
+          <thead><tr><th scope="col">Action</th><th scope="col">Your prediction</th><th scope="col">On screen</th><th scope="col">Stack</th></tr></thead>
+          <tbody data-out="trials"><tr class="tf-empty"><td colspan="4">No trials yet. Compare <b>Back</b> with <b>startActivity() for HomeActivity</b>.</td></tr></tbody></table></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">5</span>Explain it in one sentence</h3>
+        <p class="tf-frame"><code>startActivity()</code>
+          <select data-ex="push" aria-label="What startActivity does"><option value="">choose…</option><option value="old">goes back to the copy already in the stack</option><option value="new">puts a new activity on top of the stack</option></select>,
+          and Back or <code>finish()</code>
+          <select data-ex="pop" aria-label="What Back and finish do"><option value="">choose…</option><option value="all">closes the whole app</option><option value="top">removes only the activity on top</option></select>.
+          After my last action the phone showed
+          <select data-ex="top" aria-label="Screen after the last action"><option value="">choose…</option><option value="Home">HomeActivity</option><option value="Product">ProductActivity</option><option value="Cart">CartActivity</option><option value="Payment">PaymentActivity</option><option value="phone">the phone’s home screen</option></select>
+          with
+          <select data-ex="size" aria-label="Stack size after the last action"><option value="">choose…</option><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+          activities in the stack.
+        </p>
+        <div class="btnrow"><button type="button" data-act="excheck">Check my sentence</button></div>
+        <div class="tf-feedback" data-out="exfb" aria-live="polite"></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">6</span>New case: predict without the figure</h3>
+        <div class="quiz">
+          <div class="q">In a Khalti-style app, LoginActivity runs <code>startActivity(new Intent(LoginActivity.this, DashboardActivity.class));</code> and then <code>finish();</code>. On the Dashboard, the user presses <b>Back</b>. What do they see?</div>
+          <button type="button">LoginActivity again</button>
+          <button type="button" data-correct="1">The phone’s home screen, because the app’s stack is empty</button>
+          <button type="button">A new DashboardActivity</button>
+          <button type="button">The app crashes</button>
+          <div class="explain">Login called finish(), so it was removed from the stack and only Dashboard is left. Back removes Dashboard, the stack is empty, and the user is back on the phone’s home screen. This is how apps stop Back from returning to the login screen.</div>
+        </div>
+      </div>
+      <p class="tf-caveat"><b>Note:</b> This is a teaching model of the default behaviour. Launch modes such as <code>singleTop</code> and <code>singleTask</code>, and flags such as <code>Intent.FLAG_ACTIVITY_CLEAR_TOP</code>, change it. On Android 12 and newer, pressing Back on the app’s first (launcher) activity usually moves the app to the background instead of destroying it, so <code>onDestroy()</code> may not fire for that last activity.</p>
+    </div>
+  </div>
+
 </section>
 
 <section class="slide" id="manifest">
   <div class="kicker">Manifest · Concept</div>
   <h2><span class="num">22</span>Declaring Activities in Manifest</h2>
 <div class="concept"><div class="concept-tools"><button type="button" data-concept-action="open">Show all 6</button><button type="button" data-concept-action="close">Hide</button></div><div class="concept-grid"><div class="concept-row" role="button" tabindex="0"><div class="concept-q"><span class="cq-n">1</span> What is it?</div><div class="concept-a"><p><b>AndroidManifest.xml</b> is the app’s <b>official registration form</b> that Android reads before running anything. <b>Declaring an activity</b> means adding an <code>&lt;activity android:name=".SecondActivity"/&gt;</code> entry inside <code>&lt;application&gt;</code>. The notes: we now declare <b>both</b> FirstActivity and SecondActivity.</p><span class="eg">Like your college admission register: if your name isn’t in the register, the exam office won’t let you sit — even if you are standing at the door.</span></div></div><div class="concept-row" role="button" tabindex="0"><div class="concept-q"><span class="cq-n">2</span> What does it do?</div><div class="concept-a"><p>It tells Android which activities exist in the package, and — through an <code>&lt;intent-filter&gt;</code> with <code>action.MAIN</code> + <code>category.LAUNCHER</code> — which one is <b>launched first</b> when the user taps the app icon.</p></div></div><div class="concept-row" role="button" tabindex="0"><div class="concept-q"><span class="cq-n">3</span> Why needed?</div><div class="concept-a"><p>Android only starts components it knows about, for security and so the launcher knows what to show. The Manifest is that list.</p></div></div><div class="concept-row" role="button" tabindex="0"><div class="concept-q"><span class="cq-n">4</span> When needed?</div><div class="concept-a"><p><b>Every time you add a new Activity class.</b> (Android Studio’s “New → Activity” wizard adds it for you; if you create the Java file by hand, you must add it yourself.)</p></div></div><div class="concept-row" role="button" tabindex="0"><div class="concept-q"><span class="cq-n">5</span> What happens without it?</div><div class="concept-a"><p>Calling <code>startActivity()</code> for an undeclared activity crashes with <b>ActivityNotFoundException: “have you declared this activity in your AndroidManifest.xml?”</b>. Without a LAUNCHER intent-filter, the app has <b>no icon</b> to open.</p></div></div><div class="concept-row" role="button" tabindex="0"><div class="concept-q"><span class="cq-n">6</span> How it works?</div><div class="concept-a"><p>At install time Android reads the Manifest. When the icon is tapped, it finds the activity with <code>MAIN/LAUNCHER</code> — in the notes that is <b>FirstActivity</b>, <i>“so FirstActivity will be launched first”</i>. Later, when an Intent asks for SecondActivity, Android checks the list and starts it.</p></div></div></div></div>
-  <div class="sec-h"><span class="st">Picture → Code</span> manifest playground</div>
-  <div class="grid3 spot" style="grid-template-columns:auto 1.7fr 1fr">
-    <div class="ph man-ph" id="manPh"><div class="notch"></div><div class="scr">
-      <div class="homescr" id="manHome"><div class="ic" id="manIcon"><i style="background:#3f51b5">My</i>My App</div></div>
-      <div class="layer hide" id="manA"><div class="ab">My Application</div><div class="ascr-body" style="padding-top:3em"><div class="tv">This is First Activity</div><button class="abtn" id="manBtn">Click Me</button></div></div>
-      <div class="layer hide" id="manB"><div class="ab">My Application</div><div class="ascr-body" style="padding-top:3em"><div class="tv">This is Second Activity</div></div></div>
-      <div class="crash" id="manCrash"><b style="color:#dc2626">My App has stopped</b><br><span style="font-family:monospace;font-size:9px">ActivityNotFoundException: Unable to find explicit activity class {…SecondActivity}; have you declared this activity in your AndroidManifest.xml?</span><br><br><span style="color:#2563eb;font-weight:700;cursor:pointer" id="manCrashOk">CLOSE APP</span></div>
-    </div><div class="navbar"><b id="manBack">◁</b><b id="manHomeBtn">○</b><b>▢</b></div></div>
-    <div class="livexml" id="manXml"></div>
-    <div>
-      <label class="tick"><input type="checkbox" id="manDecl2" checked> Declare <code>.SecondActivity</code></label>
-      <div class="small" style="margin:.5em 0 .2em">Who gets the MAIN/LAUNCHER intent-filter?</div>
-      <div class="btnrow" id="manLaunch"><button data-l="First" class="on">FirstActivity</button><button data-l="Second">SecondActivity</button></div>
-      <div class="info-panel" id="manInfo">Tap the <b>My App</b> icon on the phone, then tap <b>Click Me</b>. Now untick “Declare SecondActivity” and try again.</div>
+    <div class="sec-h"><span class="st">Teachable figure</span> Does a Java file alone make an activity openable?</div>
+  <p class="teach-plain">Many students think that if <code>MainActivity2.java</code> exists, the app can open it. Android only starts activities that are <b>listed in AndroidManifest.xml</b>, and it opens the first screen from the activity that has the <b>MAIN / LAUNCHER</b> intent-filter. Change the Manifest, predict what happens, then run the app.</p>
+  <div class="tf t2 spot" id="t2m">
+    <div class="tf-fig">
+      <div class="tf-figrow">
+        <div class="t2-phonewrap">
+          <div class="tf-ph t2-ph" data-screen="home" data-out="phone">
+            <div class="tf-notch"></div>
+            <div class="tf-scr">
+              <div class="t2-l t2-home" data-l="home noicon"><div class="ic t2-appicon"><i style="background:#3f51b5">My</i>My App</div><div class="ic t2-noicon">no icon</div><div class="ic"><i style="background:#60bb46">e</i>eSewa</div><div class="ic"><i style="background:#f57224">D</i>Daraz</div></div>
+              <div class="t2-l t2-app" data-l="main"><div class="ab">MainActivity</div><div class="t2-body"><div class="tv">This is MainActivity</div><button type="button" class="abtn" tabindex="-1" data-out="mbtn">Open MainActivity2</button></div></div>
+              <div class="t2-l t2-app" data-l="second"><div class="ab" style="background:#15803d">MainActivity2</div><div class="t2-body"><div class="tv">This is MainActivity2</div><div class="t2-ok">✅ Opened by startActivity(i)</div></div></div>
+              <div class="t2-l t2-crash" data-l="crash"><div class="t2-crashbox"><b>My App has stopped</b><span>android.content.ActivityNotFoundException: Unable to find explicit activity class {com.example.myapp/com.example.myapp.MainActivity2}; have you declared this activity in your AndroidManifest.xml?</span><em>Close app</em></div></div>
+              <div class="t2-l t2-studio" data-l="noicon"><b>Android Studio</b><span>Error running ‘app’: Default Activity not found</span></div>
+            </div>
+            <div class="tf-nav" aria-hidden="true"><b>◁</b><b>○</b><b>▢</b></div>
+          </div>
+        </div>
+        <div class="tf-diag"><svg id="t2mSvg" viewBox="0 0 712 330" role="img" aria-label="Flow: Android reads the Manifest, finds the launcher activity, then checks whether MainActivity2 is declared before starting it."></svg></div>
+      </div>
+      <div class="tf-readouts">
+        <div class="tf-ro"><span class="k">MainActivity2.java exists?</span><strong>Yes</strong></div>
+        <div class="tf-ro"><span class="k">Declared in the Manifest?</span><strong data-out="roDecl">Yes</strong></div>
+        <div class="tf-ro"><span class="k">LAUNCHER intent-filter?</span><strong data-out="roLaunch">Yes</strong></div>
+        <div class="tf-ro"><span class="k">What happened</span><strong data-out="roRes">Not run yet</strong></div>
+      </div>
+      <div class="t2-codes"><div class="code t2code" data-out="xml"></div><div class="code t2code" data-out="java"></div></div>
+      <div class="logc tf-log" data-out="log" aria-label="Logcat output"></div>
+      <p class="sr-only" data-out="sum" aria-live="polite"></p>
+    </div>
+    <div class="tf-steps">
+      <div class="tf-step">
+        <h3><span class="tf-n">1</span>Set up the Manifest</h3>
+        <p class="small">Both Java files exist in the project. Only the Manifest changes.</p>
+        <label class="tick"><input type="checkbox" data-cfg="decl" checked><span>Declare <code>&lt;activity android:name=".MainActivity2"/&gt;</code></span></label>
+        <label class="tick"><input type="checkbox" data-cfg="launcher" checked><span>Give MainActivity the <code>MAIN</code> / <code>LAUNCHER</code> intent-filter</span></label>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">2</span>Predict: you run the app and tap the button</h3>
+        <div class="t2-opts t2-col" data-pred="out" role="group" aria-label="Your prediction">
+          <button type="button" data-v="opens" aria-pressed="false">MainActivity2 opens</button>
+          <button type="button" data-v="crash" aria-pressed="false">The app crashes with ActivityNotFoundException</button>
+          <button type="button" data-v="noicon" aria-pressed="false">The app has no icon, and Android Studio says “Default Activity not found”</button>
+        </div>
+        <div class="btnrow"><button type="button" data-act="lock">🔒 Lock in my prediction</button><button type="button" data-act="unlock" disabled>✏️ Change my prediction</button></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">3</span>Try it: run the app</h3>
+        <div class="btnrow"><button type="button" data-act="run" class="tf-primary" disabled>Lock in a prediction first</button><button type="button" data-act="reset">↺ Reset the whole figure</button></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">4</span>Observe what happened</h3>
+        <div class="tf-feedback" data-out="fb">Run the app to compare your prediction with what Android really did.</div>
+        <div class="tf-tablewrap"><table class="tf-table"><caption>Your trials</caption>
+          <thead><tr><th scope="col">Declared?</th><th scope="col">LAUNCHER?</th><th scope="col">Your prediction</th><th scope="col">What happened</th></tr></thead>
+          <tbody data-out="trials"><tr class="tf-empty"><td colspan="4">No trials yet. Run it once as it is, then untick “Declare” and run it again.</td></tr></tbody></table></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">5</span>Explain it in one sentence</h3>
+        <p class="tf-frame">In my last run, MainActivity2
+          <select data-ex="res" aria-label="What happened to MainActivity2"><option value="">choose…</option><option value="opens">opened</option><option value="crash">crashed the app</option><option value="noicon">was never reached</option></select>,
+          because Android starts only the activities that are
+          <select data-ex="rule" aria-label="Which activities Android starts"><option value="">choose…</option><option value="java">saved as .java files</option><option value="manifest">listed in AndroidManifest.xml</option></select>,
+          and it picks the first screen from the activity that has the
+          <select data-ex="first" aria-label="How Android picks the first screen"><option value="">choose…</option><option value="name">shortest class name</option><option value="launcher">MAIN / LAUNCHER intent-filter</option><option value="setcontent">setContentView() call</option></select>.
+        </p>
+        <div class="btnrow"><button type="button" data-act="excheck">Check my sentence</button></div>
+        <div class="tf-feedback" data-out="exfb" aria-live="polite"></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">6</span>New case: predict without the figure</h3>
+        <div class="quiz">
+          <div class="q">You add <code>ResultActivity.java</code> by hand with <b>New → Java Class</b> (not New → Activity). MainActivity runs <code>startActivity(new Intent(MainActivity.this, ResultActivity.class));</code>. What happens when you tap the button?</div>
+          <button type="button">ResultActivity opens, because the class exists</button>
+          <button type="button" data-correct="1">The app crashes with ActivityNotFoundException</button>
+          <button type="button">The project does not compile</button>
+          <button type="button">The app icon disappears</button>
+          <div class="explain">The code compiles, because ResultActivity is a real Java class. But New → Java Class does not touch the Manifest, so ResultActivity is not declared. When startActivity() runs, Android cannot find it in the Manifest and throws ActivityNotFoundException. The fix is to add <code>&lt;activity android:name=".ResultActivity"/&gt;</code>.</div>
+        </div>
+      </div>
+      <p class="tf-caveat"><b>Note:</b> This is a teaching model. Android Studio’s <b>New → Activity</b> wizard adds the <code>&lt;activity&gt;</code> entry for you. On Android 12 (API 31) and newer, an activity that has an <code>&lt;intent-filter&gt;</code> must also say <code>android:exported="true"</code>, or the app will not install. Without any LAUNCHER activity the app can still be installed, but it has no icon and Android Studio cannot pick a screen to open.</p>
     </div>
   </div>
+
 </section>
 
 <section class="slide" id="intent">
@@ -1805,6 +2319,103 @@ footer{justify-content:flex-start !important;gap:2em}
       <div class="stepcap" id="ifCap">Step 0: FirstActivity is running. User taps the button…</div>
     </div>
   </div>
+  <div class="sec-h"><span class="st">Teachable figure</span> Explicit vs implicit: does an implicit intent always open one app? <span class="cv-tag">beyond notes</span></div>
+  <p class="teach-plain">The notes use an <b>explicit</b> intent: it names the exact class, <code>SecondActivity.class</code>. An <b>implicit</b> intent names only an <b>action</b> and some <b>data</b>, like “view this web page”. Android then looks for installed apps whose intent-filter matches. Many students think an implicit intent always opens one specific app. Pick the action and how many apps can handle it, predict, then run it.</p>
+  <div class="tf t2 spot" id="t2i">
+    <div class="tf-fig">
+      <div class="tf-figrow">
+        <div class="t2-phonewrap">
+          <div class="tf-ph t2-ph" data-screen="app" data-out="phone">
+            <div class="tf-notch"></div>
+            <div class="tf-scr">
+              <div class="t2-l t2-app" data-l="app toast chooser"><div class="ab" style="background:#0e7490">Notice Board</div><div class="t2-body"><div class="tv" style="font-size:11px">BCA exam starts on Sunday</div><button type="button" class="abtn" tabindex="-1" data-out="ibtn">Open</button></div></div>
+              <div class="t2-l t2-sheet" data-l="chooser"><div class="t2-sheetbox"><b data-out="chTitle">Open with</b><div class="t2-apps" data-out="chApps"></div><small>Just once · Always</small></div></div>
+              <div class="t2-l t2-app" data-l="target"><div class="ab" data-out="tgBar">Chrome</div><div class="t2-body"><div class="t2-target" data-out="tgBody"></div></div></div>
+              <div class="t2-l t2-crash" data-l="crash"><div class="t2-crashbox"><b>Notice Board has stopped</b><span data-out="crMsg">android.content.ActivityNotFoundException: No Activity found to handle Intent</span><em>Close app</em></div></div>
+              <div class="t2-l t2-toast" data-l="toast"><span>No app can handle this</span></div>
+            </div>
+            <div class="tf-nav" aria-hidden="true"><b>◁</b><b>○</b><b>▢</b></div>
+          </div>
+        </div>
+        <div class="tf-diag"><svg id="t2iSvg" viewBox="0 0 712 330" role="img" aria-label="Flow: your app sends an Intent, Android checks every installed app's intent-filter, and the result depends on how many apps match: none, one, or several."></svg></div>
+      </div>
+      <div class="tf-readouts">
+        <div class="tf-ro"><span class="k">Action</span><strong data-out="roAct">ACTION_VIEW</strong></div>
+        <div class="tf-ro"><span class="k">Data</span><strong data-out="roData">https://tu.edu.np</strong></div>
+        <div class="tf-ro"><span class="k">Apps that match</span><strong data-out="roN">3</strong></div>
+        <div class="tf-ro"><span class="k">What happened</span><strong data-out="roRes">Not run yet</strong></div>
+      </div>
+      <div class="t2-codes"><div class="code t2code" data-out="java"></div></div>
+      <div class="logc tf-log" data-out="log" aria-label="Logcat output"></div>
+      <p class="sr-only" data-out="sum" aria-live="polite"></p>
+    </div>
+    <div class="tf-steps">
+      <div class="tf-step">
+        <h3><span class="tf-n">1</span>Choose the Intent and the phone</h3>
+        <p class="small">What should the Notice Board app ask for?</p>
+        <div class="t2-opts" data-cfg="act" role="group" aria-label="Intent action">
+          <button type="button" data-v="view" aria-pressed="true" class="on">🌐 View a web page</button>
+          <button type="button" data-v="dial" aria-pressed="false">📞 Dial a number</button>
+          <button type="button" data-v="send" aria-pressed="false">✉️ Share text</button>
+        </div>
+        <p class="small">How many installed apps can handle it?</p>
+        <div class="t2-opts" data-cfg="n" role="group" aria-label="Number of matching apps">
+          <button type="button" data-v="0" aria-pressed="false">0 apps</button>
+          <button type="button" data-v="1" aria-pressed="false">1 app</button>
+          <button type="button" data-v="3" aria-pressed="true" class="on">3 apps</button>
+        </div>
+        <label class="tick"><input type="checkbox" data-cfg="guard"><span>Wrap <code>startActivity(i)</code> in <code>try</code> / <code>catch (ActivityNotFoundException e)</code></span></label>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">2</span>Predict: the user taps the button</h3>
+        <div class="t2-opts t2-col" data-pred="out" role="group" aria-label="Your prediction">
+          <button type="button" data-v="direct" aria-pressed="false">One app opens directly</button>
+          <button type="button" data-v="chooser" aria-pressed="false">Android shows a chooser, and the user picks an app</button>
+          <button type="button" data-v="crash" aria-pressed="false">The app crashes with ActivityNotFoundException</button>
+          <button type="button" data-v="toast" aria-pressed="false">A Toast says “No app can handle this”, and the app keeps running</button>
+        </div>
+        <div class="btnrow"><button type="button" data-act="lock">🔒 Lock in my prediction</button><button type="button" data-act="unlock" disabled>✏️ Change my prediction</button></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">3</span>Try it: tap the button</h3>
+        <div class="btnrow"><button type="button" data-act="run" class="tf-primary" disabled>Lock in a prediction first</button><button type="button" data-act="reset">↺ Reset the whole figure</button></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">4</span>Observe what happened</h3>
+        <div class="tf-feedback" data-out="fb">Run it to compare your prediction with what Android really did.</div>
+        <div class="tf-tablewrap"><table class="tf-table"><caption>Your trials</caption>
+          <thead><tr><th scope="col">Intent</th><th scope="col">Apps that match</th><th scope="col">Your prediction</th><th scope="col">What happened</th></tr></thead>
+          <tbody data-out="trials"><tr class="tf-empty"><td colspan="4">No trials yet. Try 3 apps, then 1 app, then 0 apps.</td></tr></tbody></table></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">5</span>Explain it in one sentence</h3>
+        <p class="tf-frame">An implicit intent names
+          <select data-ex="names" aria-label="What an implicit intent names"><option value="">choose…</option><option value="class">one exact app class</option><option value="action">only an action and data</option></select>,
+          so Android
+          <select data-ex="how" aria-label="What Android does"><option value="">choose…</option><option value="always">always opens the same app</option><option value="filter">looks for apps whose intent-filter matches</option></select>.
+          In my last run
+          <select data-ex="n" aria-label="How many apps matched"><option value="">choose…</option><option value="0">no app</option><option value="1">exactly one app</option><option value="3">several apps</option></select>
+          matched, so
+          <select data-ex="res" aria-label="What happened"><option value="">choose…</option><option value="direct">that app opened directly</option><option value="chooser">Android showed a chooser</option><option value="crash">my app crashed</option><option value="toast">my catch block showed a Toast</option></select>.
+        </p>
+        <div class="btnrow"><button type="button" data-act="excheck">Check my sentence</button></div>
+        <div class="tf-feedback" data-out="exfb" aria-live="polite"></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">6</span>New case: predict without the figure</h3>
+        <div class="quiz">
+          <div class="q">A Wi-Fi-only tablet has <b>no phone dialer app</b>. Your app runs <code>startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:9800000000")));</code> with no try / catch. What happens?</div>
+          <button type="button">The tablet’s browser opens instead</button>
+          <button type="button">A chooser appears with no apps in it</button>
+          <button type="button" data-correct="1">The app crashes with ActivityNotFoundException</button>
+          <button type="button">Nothing happens, and the app keeps running</button>
+          <div class="explain">No installed app has an intent-filter for ACTION_DIAL with tel: data, so Android has nothing to start and startActivity() throws ActivityNotFoundException. Wrap it in try / catch, and show a Toast, to keep the app running.</div>
+        </div>
+      </div>
+      <p class="tf-caveat"><b>Note:</b> This is a teaching model. If the user once tapped “Always” for an app, Android opens that app directly instead of showing the chooser. To always show a chooser, use <code>startActivity(Intent.createChooser(i, "Share via"));</code>. On Android 11 and newer, <code>i.resolveActivity(getPackageManager())</code> can return <code>null</code> unless the Manifest has a <code>&lt;queries&gt;</code> element, so try / catch is the simpler guard. <code>ACTION_DIAL</code> only opens the dialer with the number filled in. It does not place the call.</p>
+    </div>
+  </div>
+
 </section>
 
 <section class="slide" id="intentcode">
@@ -1834,22 +2445,102 @@ footer{justify-content:flex-start !important;gap:2em}
   <h2><span class="num">25</span>Passing Data Between Activities</h2>
   <p class="lead" style="font-size:clamp(14px,1.5vw,20px)">“Between activities data can be passed and received by using <b>Intent extras</b>.”</p>
 <div class="concept"><div class="concept-tools"><button type="button" data-concept-action="open">Show all 6</button><button type="button" data-concept-action="close">Hide</button></div><div class="concept-grid"><div class="concept-row" role="button" tabindex="0"><div class="concept-q"><span class="cq-n">1</span> What is it?</div><div class="concept-a"><p><b>Extras</b> are <i>“arbitrary data that the calling activity can include with an intent”</i>. Each extra is a <b>key-value pair</b>: a String <b>key</b> (name tag) and a <b>value</b> (number, text, boolean …).</p><span class="eg">Like writing on the parcel: <code>"name" → "Ram"</code>, <code>"address" → "KTM"</code>.</span></div></div><div class="concept-row" role="button" tabindex="0"><div class="concept-q"><span class="cq-n">2</span> What does it do?</div><div class="concept-a"><p>It carries information <b>from one screen to the next</b>. The OS forwards the intent to the recipient activity, which can then <b>access the extras and retrieve the data</b>.</p><span class="eg">Daraz: ProductActivity sends <code>"productId" → 1029</code> to CartActivity so the cart knows what you chose.</span></div></div><div class="concept-row" role="button" tabindex="0"><div class="concept-q"><span class="cq-n">3</span> Why needed?</div><div class="concept-a"><p>Each activity is a separate object with its own variables; SecondActivity cannot read FirstActivity’s variables directly. Extras are the official, simple way to hand data across.</p></div></div><div class="concept-row" role="button" tabindex="0"><div class="concept-q"><span class="cq-n">4</span> When needed?</div><div class="concept-a"><p>Whenever the next screen needs something from the current one: student id/name/address to a profile screen (notes example), selected seat to a bus-ticket payment screen, the amount to an eSewa confirmation screen.</p></div></div><div class="concept-row" role="button" tabindex="0"><div class="concept-q"><span class="cq-n">5</span> What happens without it?</div><div class="concept-a"><p>The next screen opens <b>empty</b> — it doesn’t know which student, product or amount. Developers then misuse global static variables, which break when Android kills and re-creates the app.</p></div></div><div class="concept-row" role="button" tabindex="0"><div class="concept-q"><span class="cq-n">6</span> How it works?</div><div class="concept-a"><p>Sender: <code>i.putExtra(key, value)</code> — e.g. <code>public Intent putExtra(String name, boolean value)</code>. putExtra comes in many flavors but <b>always has two arguments</b>: first a String key, second a value whose type varies. Receiver: <code>getIntent()</code> then <code>getIntExtra(key, default)</code> / <code>getStringExtra(key)</code>. Keys must match <b>exactly</b> (case-sensitive).</p></div></div></div></div>
-  <div class="sec-h"><span class="st">Picture</span> pack the envelope, send it, read it</div>
-  <div class="grid3 spot" style="grid-template-columns:1fr auto auto;align-items:start">
-    <div>
-      <div class="kv">
-        <span><code>"id"</code></span><input id="exId" value="001">
-        <span><code>"name"</code></span><input id="exName" value="Ram">
-        <span><code>"address"</code></span><input id="exAddr" value="KTM">
+    <div class="sec-h"><span class="st">Teachable figure</span> Can ProfileActivity read any variable from FormActivity?</div>
+  <p class="teach-plain">Many students think the second activity can read any variable from the first. It cannot: FormActivity and ProfileActivity are separate objects. ProfileActivity can read only the <b>extras</b> that were put into the Intent, and only with the <b>same key and the same type</b>. Choose what the college form sends and what the profile screen reads, predict each line, then send it.</p>
+  <div class="tf t2 spot" id="t2x">
+    <div class="tf-fig">
+      <div class="tf-figrow">
+        <div class="t2-phonewrap">
+          <div class="tf-ph t2-ph" data-screen="form" data-out="phone">
+            <div class="tf-notch"></div>
+            <div class="tf-scr">
+              <div class="t2-l t2-app" data-l="form"><div class="ab">College Form</div><div class="t2-body t2-form">
+                <label for="t2xName">Name</label><input id="t2xName" class="ein" value="Sita Sharma" maxlength="22" autocomplete="off" aria-label="Student name typed in FormActivity">
+                <div class="t2-kv"><span>Roll no.</span><b>23</b></div><div class="t2-kv"><span>Faculty</span><b>BCA</b></div><div class="t2-kv"><span>City</span><b>Pokhara</b></div>
+                <button type="button" class="abtn" tabindex="-1" data-out="sbtn">Show profile</button></div></div>
+              <div class="t2-l t2-app" data-l="profile"><div class="ab" style="background:#15803d">Student Profile</div><div class="t2-body"><div class="t2-prof" data-out="prof"></div></div></div>
+            </div>
+            <div class="tf-nav" aria-hidden="true"><b>◁</b><b>○</b><b>▢</b></div>
+          </div>
+        </div>
+        <div class="tf-diag"><svg id="t2xSvg" viewBox="0 0 712 330" role="img" aria-label="Three columns: what FormActivity puts into the Intent, the extras inside the Intent, and what ProfileActivity reads. A dot carries each value across when the key and type match."></svg></div>
       </div>
-      <label class="tick"><input type="checkbox" id="exSkipId"> Forget <code>putExtra("id", …)</code></label>
-      <label class="tick"><input type="checkbox" id="exTypo"> Typo in receiver: <code>getStringExtra("Name")</code></label>
-      <div class="btnrow"><button id="exSend">✉️ startActivity(i)</button></div>
-      <div class="info-panel" id="exInfo">Edit values (try a Nepali name &amp; city), then send.</div>
+      <div class="tf-readouts">
+        <div class="tf-ro"><span class="k">Extras sent</span><strong data-out="roSent">3</strong></div>
+        <div class="tf-ro"><span class="k">Lines that got the value</span><strong data-out="roOk">–</strong></div>
+        <div class="tf-ro"><span class="k">Lines that got null</span><strong data-out="roNull">–</strong></div>
+        <div class="tf-ro"><span class="k">Lines that got 0</span><strong data-out="roZero">–</strong></div>
+      </div>
+      <div class="t2-codes"><div class="code t2code" data-out="java"></div><div class="code t2code" data-out="java2"></div></div>
+      <div class="logc tf-log" data-out="log" aria-label="Logcat output"></div>
+      <p class="sr-only" data-out="sum" aria-live="polite"></p>
     </div>
-    <div class="ph" id="exA" style="width:170px;height:300px"><div class="notch"></div><div class="scr"><div class="ab">FirstActivity</div><div class="ascr-body"><div class="small" style="color:#374151">Intent extras:</div><div id="exPack" style="font-family:monospace;font-size:10px;color:#7c2d12"></div></div></div><div class="navbar"><b>◁</b><b>○</b><b>▢</b></div></div>
-    <div class="ph" id="exB" style="width:170px;height:300px"><div class="notch"></div><div class="scr"><div class="ab">SecondActivity</div><div class="ascr-body" style="padding-top:2.5em"><div id="exOut" style="white-space:pre;color:#4b5563;font-size:12px;padding-left:1.4em"></div></div></div><div class="navbar"><b>◁</b><b>○</b><b>▢</b></div></div>
+    <div class="tf-steps">
+      <div class="tf-step">
+        <h3><span class="tf-n">1</span>Choose what is sent and what is read</h3>
+        <p class="small"><b>FormActivity sends</b> (putExtra):</p>
+        <label class="tick"><input type="checkbox" data-cfg="pName" checked><span><code>i.putExtra("name", name);</code></span></label>
+        <label class="tick"><input type="checkbox" data-cfg="pRoll" checked><span><code>i.putExtra("roll", 23);</code></span></label>
+        <label class="tick"><input type="checkbox" data-cfg="pFac" checked><span><code>i.putExtra("faculty", "BCA");</code></span></label>
+        <label class="tick"><input type="checkbox" data-cfg="pCity"><span><code>i.putExtra("city", city);</code> (city is only a variable in FormActivity)</span></label>
+        <p class="small" style="margin-top:.4em"><b>ProfileActivity reads</b>:</p>
+        <div class="t2-reads">
+          <label><span>Name line</span><select data-cfg="rName" aria-label="How ProfileActivity reads the name"><option value="name">getStringExtra("name")</option><option value="Name">getStringExtra("Name")</option></select></label>
+          <label><span>Roll line</span><select data-cfg="rRoll" aria-label="How ProfileActivity reads the roll number"><option value="roll">getIntExtra("roll", 0)</option><option value="rollNo">getIntExtra("rollNo", 0)</option></select></label>
+          <label><span>Faculty line</span><select data-cfg="rFac" aria-label="How ProfileActivity reads the faculty"><option value="str">getStringExtra("faculty")</option><option value="int">getIntExtra("faculty", 0)</option></select></label>
+          <label><span>City line</span><select data-cfg="rCity" aria-label="How ProfileActivity reads the city"><option value="city">getStringExtra("city")</option></select></label>
+        </div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">2</span>Predict each line on the profile screen</h3>
+        <div class="t2-predgrid">
+          <label><span>Name:</span><select data-pred="name" aria-label="Predicted name line"><option value="">choose…</option><option value="val" data-k="name">Sita Sharma</option><option value="null">null</option><option value="0">0</option></select></label>
+          <label><span>Roll:</span><select data-pred="roll" aria-label="Predicted roll line"><option value="">choose…</option><option value="val">23</option><option value="null">null</option><option value="0">0</option></select></label>
+          <label><span>Faculty:</span><select data-pred="fac" aria-label="Predicted faculty line"><option value="">choose…</option><option value="val">BCA</option><option value="null">null</option><option value="0">0</option></select></label>
+          <label><span>City:</span><select data-pred="city" aria-label="Predicted city line"><option value="">choose…</option><option value="val">Pokhara</option><option value="null">null</option><option value="0">0</option></select></label>
+        </div>
+        <div class="btnrow"><button type="button" data-act="lock">🔒 Lock in my prediction</button><button type="button" data-act="unlock" disabled>✏️ Change my prediction</button></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">3</span>Try it: send the Intent</h3>
+        <div class="btnrow"><button type="button" data-act="run" class="tf-primary" disabled>Lock in a prediction first</button><button type="button" data-act="reset">↺ Reset the whole figure</button></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">4</span>Observe what happened</h3>
+        <div class="tf-feedback" data-out="fb">Send the Intent to compare your prediction with what ProfileActivity really shows.</div>
+        <div class="tf-tablewrap"><table class="tf-table"><caption>Your trials</caption>
+          <thead><tr><th scope="col">Setup</th><th scope="col">Your prediction</th><th scope="col">Profile showed</th></tr></thead>
+          <tbody data-out="trials"><tr class="tf-empty"><td colspan="3">No trials yet. Start with the default setup, then try <code>"Name"</code> and <code>getIntExtra("faculty", 0)</code>.</td></tr></tbody></table></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">5</span>Explain it in one sentence</h3>
+        <p class="tf-frame">ProfileActivity can read only the values that FormActivity
+          <select data-ex="src" aria-label="Where the values come from"><option value="">choose…</option><option value="vars">stored in its own variables</option><option value="extras">put into the Intent with putExtra()</option></select>,
+          and only with
+          <select data-ex="key" aria-label="Which key and type"><option value="">choose…</option><option value="exact">the exact same key and type</option><option value="similar">a key that looks similar</option></select>.
+          A missing String extra gives
+          <select data-ex="str" aria-label="What a missing String gives"><option value="">choose…</option><option value="null">null</option><option value="0">0</option><option value="empty">an empty String</option></select>,
+          and a missing or wrong-type int extra gives
+          <select data-ex="int" aria-label="What a missing int gives"><option value="">choose…</option><option value="def">the default value I passed</option><option value="null">null</option><option value="crash">a crash</option></select>.
+        </p>
+        <div class="btnrow"><button type="button" data-act="excheck">Check my sentence</button></div>
+        <div class="tf-feedback" data-out="exfb" aria-live="polite"></div>
+      </div>
+      <div class="tf-step">
+        <h3><span class="tf-n">6</span>New case: predict without the figure</h3>
+        <div class="quiz">
+          <div class="q">A bus-ticket app sends <code>i.putExtra("seat", "A5");</code>. The payment screen reads <code>int seat = getIntent().getIntExtra("seat", -1);</code>. What is <code>seat</code>?</div>
+          <button type="button">"A5"</button>
+          <button type="button">5</button>
+          <button type="button" data-correct="1">-1</button>
+          <button type="button">The app crashes</button>
+          <div class="explain">The key "seat" matches, but the value is a String and getIntExtra asks for an int. Android logs a warning and returns the default value you passed, which is -1. To read it, use <code>getStringExtra("seat")</code>.</div>
+        </div>
+      </div>
+      <p class="tf-caveat"><b>Note:</b> This is a teaching model. Keys are case-sensitive. When the type is wrong, Android writes a warning in Logcat (<code>W/Bundle … ClassCastException</code>) and returns the default value instead of crashing. A <code>null</code> String is shown as the word “null” by <code>setText("Name: " + name)</code>, but calling a method on it, like <code>name.length()</code>, crashes with NullPointerException.</p>
+    </div>
   </div>
+
 </section>
 
 <section class="slide" id="extrascode">
@@ -3239,85 +3930,6 @@ var MSG = {onCreate:'Activity Created', onStart:'Activity Started', onResume:'Ac
   btns();
 })();
 
-/* ===== Predict game ===== */
-(function(){
-  var SCN = [
-    ['📱 Rina opens the <b>Daraz</b> app for the first time today.', ['onCreate','onStart','onResume']],
-    ['💬 While browsing, a small <b>“Rate us”</b> dialog pops up on top (Daraz still partly visible) and she closes it.', ['onPause','onResume']],
-    ['🏠 She presses <b>Home</b> to read a message, then comes back to Daraz from recent apps.', ['onPause','onStop','onRestart','onStart','onResume']],
-    ['🔄 She <b>rotates</b> the phone to landscape to see the product photo bigger.', ['onPause','onStop','onDestroy','onCreate','onStart','onResume']],
-    ['◁ Shopping done — she presses <b>Back</b> to exit the app.', ['onPause','onStop','onDestroy']],
-    ['💀 Daraz was in the background (stopped); Android <b>killed</b> it for memory. Later she taps the Daraz icon.', ['onCreate','onStart','onResume']]
-  ];
-  var ALL = ['onCreate','onStart','onResume','onPause','onStop','onRestart','onDestroy'];
-  var k = 0, score = 0, scored = {};
-  var pool = $('#predPool'), slots = $('#predSlots');
-  function chip(cb){ var c = document.createElement('div'); c.className = 'chipcb'; c.textContent = cb + '()'; c.setAttribute('data-cb', cb); c.style.setProperty('--c', U4.CBCOL[cb]); return c; }
-  function load(){
-    $('#predN').textContent = k + 1; $('#predT').textContent = SCN.length;
-    $('#predScn').innerHTML = SCN[k][0];
-    pool.innerHTML = ''; slots.innerHTML = ''; $('#predAns').innerHTML = '';
-    ALL.slice().sort(function(){ return Math.random() - .5; }).forEach(function(cb){ pool.appendChild(chip(cb)); });
-  }
-  function renumber(){
-    $$('.chipcb', slots).forEach(function(c, i){ c.classList.remove('ok','bad'); c.innerHTML = '<span class="ord">' + (i+1) + '</span>' + c.getAttribute('data-cb') + '()'; });
-    $$('.chipcb', pool).forEach(function(c){ c.classList.remove('ok','bad'); c.textContent = c.getAttribute('data-cb') + '()'; });
-  }
-  /* pointer drag */
-  var drag = null;
-  function onDown(e){
-    var c = e.target.closest('.chipcb'); if(!c || !c.closest('#predict')) return;
-    e.preventDefault();
-    drag = {el:c, x:e.clientX, y:e.clientY, moved:false, ghost:null};
-    document.addEventListener('pointermove', onMove); document.addEventListener('pointerup', onUp);
-  }
-  function onMove(e){
-    if(!drag) return;
-    if(!drag.moved && Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 6){
-      drag.moved = true;
-      var g = drag.el.cloneNode(true); g.style.position = 'fixed'; g.style.pointerEvents = 'none'; g.style.zIndex = 99; g.style.margin = 0; document.body.appendChild(g);
-      drag.ghost = g; drag.el.classList.add('dragging');
-    }
-    if(drag.ghost){ drag.ghost.style.left = (e.clientX - 40) + 'px'; drag.ghost.style.top = (e.clientY - 18) + 'px'; }
-  }
-  function onUp(e){
-    document.removeEventListener('pointermove', onMove); document.removeEventListener('pointerup', onUp);
-    if(!drag) return;
-    var c = drag.el;
-    if(!drag.moved){ /* tap */
-      if(c.parentNode === pool) slots.appendChild(c); else pool.appendChild(c);
-    } else {
-      drag.ghost.remove(); c.classList.remove('dragging');
-      var over = document.elementFromPoint(e.clientX, e.clientY);
-      var tgt = over && over.closest('#predSlots, #predPool');
-      if(tgt === slots){
-        var before = null;
-        $$('.chipcb', slots).some(function(o){ if(o === c) return false; var r = o.getBoundingClientRect(); if(e.clientY < r.top + r.height && e.clientX < r.left + r.width/2 && e.clientY > r.top - 10){ before = o; return true; } if(e.clientY < r.top){ before = o; return true; } return false; });
-        slots.insertBefore(c, before);
-      } else if(tgt === pool){ pool.appendChild(c); }
-    }
-    drag = null; renumber();
-  }
-  document.addEventListener('pointerdown', onDown);
-  $('#predCheck').addEventListener('click', function(){
-    var got = $$('.chipcb', slots).map(function(c){ return c.getAttribute('data-cb'); }), want = SCN[k][1];
-    $$('.chipcb', slots).forEach(function(c, i){ c.classList.add(want[i] === got[i] ? 'ok' : 'bad'); });
-    var right = got.length === want.length && got.every(function(g, i){ return g === want[i]; });
-    if(right){ if(!scored[k]){ score++; scored[k] = 1; } $('#predScore').textContent = 'Score ' + score; U4.confettiAt(slots); U4.showStreak('✅ Perfect order!'); }
-    else U4.showStreak(got.length < want.length ? 'Missing callbacks — keep going' : 'Not quite — check the red chips');
-  });
-  $('#predReveal').addEventListener('click', function(){
-    var box = $('#predAns'); box.innerHTML = '<span class="in small">Answer:</span>';
-    SCN[k][1].forEach(function(cb, i){
-      var s = document.createElement('span'); s.className = 'chipcb'; s.style.setProperty('--c', U4.CBCOL[cb]); s.innerHTML = '<span class="ord">' + (i+1) + '</span>' + cb + '()';
-      box.appendChild(s); setTimeout(function(){ s.classList.add('in'); }, 150 + i * 320);
-    });
-  });
-  $('#predReset').addEventListener('click', load);
-  $('#predNext').addEventListener('click', function(){ k = (k + 1) % SCN.length; load(); });
-  load();
-})();
-
 /* ===== Fig 4-2 duo ===== */
 (function(){
   var onSecond = false;
@@ -3413,44 +4025,1101 @@ var MSG = {onCreate:'Activity Created', onStart:'Activity Started', onResume:'Ac
   lay();
 })();
 
-/* ===== Manifest playground ===== */
-(function(){
-  var launcher = 'First', screen = 'home', stackB = false;
-  function xml(){
-    var d2 = $('#manDecl2').checked || launcher === 'Second';
-    var filt = '            <span class="add">&lt;intent-filter&gt;\n                &lt;action android:name="android.intent.action.MAIN" /&gt;\n                &lt;category android:name="android.intent.category.LAUNCHER"/&gt;\n            &lt;/intent-filter&gt;</span>\n';
-    var a1 = launcher === 'First' ? '        &lt;activity android:name=".FirstActivity"&gt;\n' + filt + '        &lt;/activity&gt;\n' : '        &lt;activity android:name=".FirstActivity"/&gt;\n';
-    var a2 = launcher === 'Second' ? '        &lt;activity android:name=".SecondActivity"&gt;\n' + filt + '        &lt;/activity&gt;\n' : (d2 ? '        <span class="add">&lt;activity android:name=".SecondActivity"/&gt;</span>\n' : '        <span class="miss">&lt;activity android:name=".SecondActivity"/&gt;</span>  <span style="color:#f87171">← missing!</span>\n');
-    $('#manXml').innerHTML = '&lt;?xml version="1.0" encoding="utf-8"?&gt;\n&lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"\n    package="com.example.raazu.myapplication"&gt;\n\n    &lt;application\n        android:allowBackup="true"\n        android:icon="@mipmap/ic_launcher"\n        android:label="@string/app_name"\n        android:roundIcon="@mipmap/ic_launcher_round"\n        android:supportsRtl="true"\n        android:theme="@style/AppTheme"&gt;\n\n' + a1 + '\n' + a2 + '\n    &lt;/application&gt;\n\n&lt;/manifest&gt;';
-    $('#manDecl2').disabled = launcher === 'Second';
-  }
-  function scr(s){
-    screen = s;
-    $('#manHome').classList.toggle('hide', s !== 'home');
-    $('#manA').classList.toggle('hide', s !== 'A');
-    $('#manB').classList.toggle('hide', s !== 'B');
-  }
-  $('#manIcon').addEventListener('click', function(){
-    scr(launcher === 'First' ? 'A' : 'B'); stackB = false;
-    $('#manInfo').innerHTML = '<b>' + launcher + 'Activity</b> launched first because it has the <b>MAIN / LAUNCHER</b> intent-filter.';
-  });
-  $('#manBtn').addEventListener('click', function(){
-    if($('#manDecl2').checked){ scr('B'); stackB = true; $('#manInfo').innerHTML = '✅ SecondActivity is declared → ActivityManager found it and started it.'; }
-    else { $('#manCrash').classList.add('show'); $('#manInfo').innerHTML = '💥 <b>Crash!</b> SecondActivity exists in Java but is <b>not declared</b> in the Manifest.'; }
-  });
-  $('#manCrashOk').addEventListener('click', function(){ $('#manCrash').classList.remove('show'); scr('home'); });
-  $('#manBack').addEventListener('click', function(){ if(screen === 'B' && stackB){ scr('A'); stackB = false; } else scr('home'); });
-  $('#manHomeBtn').addEventListener('click', function(){ scr('home'); });
-  $('#manDecl2').addEventListener('change', xml);
-  $('#manLaunch').addEventListener('click', function(e){
-    var b = e.target.closest('button'); if(!b) return; launcher = b.getAttribute('data-l');
-    $$('#manLaunch button').forEach(function(x){ x.classList.toggle('on', x === b); });
-    if(launcher === 'Second') $('#manDecl2').checked = true;
-    xml(); scr('home');
-    $('#manInfo').innerHTML = 'Intent-filter moved to <b>' + launcher + 'Activity</b>. Tap the icon again.';
-  });
-  xml();
 })();
+
+/* ===== Teachable figure: lifecycle predict → try → observe → explain ===== */
+(function(){
+  var $ = U4.$, $$ = U4.$$;
+  var root = $('#tf'); if(!root) return;
+  var NS = 'http://www.w3.org/2000/svg';
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- truth model (pure data + functions) ---------- */
+  var NODES = {
+    none:{x:66,y:165,label:'Not running'}, Created:{x:215,y:60,label:'Created'}, Started:{x:390,y:60,label:'Started'},
+    Resumed:{x:565,y:60,label:'Resumed'}, Paused:{x:565,y:265,label:'Paused'}, Stopped:{x:390,y:265,label:'Stopped'},
+    Destroyed:{x:215,y:265,label:'Destroyed'}
+  };
+  var EDGES = {
+    nc:{d:'M66 143 Q66 60 158 60', lab:['onCreate()'], lx:104, ly:112, anchor:'start'},
+    cs:{d:'M272 60 L333 60', lab:['onStart()'], lx:302, ly:30},
+    sres:{d:'M447 60 L508 60', lab:['onResume()'], lx:477, ly:30},
+    rp:{d:'M587 83 L587 242', lab:['onPause()'], lx:594, ly:150, anchor:'start'},
+    pr:{d:'M543 242 L543 83', lab:['onResume()','(dialog closed)'], lx:536, ly:118, anchor:'end'},
+    ps:{d:'M508 265 L447 265', lab:['onStop()'], lx:477, ly:236},
+    sr1:{d:'M390 242 L390 160', lab:['onRestart()'], lx:398, ly:212, anchor:'start'},
+    sr2:{d:'M390 160 L390 83', lab:null},
+    sd:{d:'M333 265 L272 265', lab:['onDestroy()'], lx:302, ly:236},
+    dc:{d:'M215 242 L215 83', lab:['onCreate()','on a new object'], lx:223, ly:150, anchor:'start'},
+    sn:{d:'M390 288 Q390 318 230 318 Q66 318 66 187', lab:['process killed, no callback'], lx:262, ly:306, dash:true}
+  };
+  var ORDER = ['onCreate','onStart','onResume','onPause','onStop','onRestart','onDestroy'];
+  /* step: {cb, edge, to, phone, sys} — cb:null means a system event with no callback */
+  var SCN = {
+    first:{btn:'🚀 First open', label:'Opened eSewa for the first time', run:'▶ Tap the eSewa icon',
+      start:'none', startText:'Starting point: eSewa is not running. Its icon is on the home screen.',
+      steps:[{cb:'onCreate',edge:'nc',to:'Created',phone:'app',newObj:true},{cb:'onStart',edge:'cs',to:'Started'},{cb:'onResume',edge:'sres',to:'Resumed'}]},
+    home:{btn:'🏠 Home', label:'Pressed Home', run:'▶ Press Home on the phone', nav:'home',
+      start:'Resumed', startText:'Starting point: the eSewa payment screen is open (Resumed) and you have typed an amount. You can change the amount on the phone.',
+      steps:[{cb:'onPause',edge:'rp',to:'Paused',phone:'home'},{cb:'onStop',edge:'ps',to:'Stopped',save:true}]},
+    recents:{btn:'📲 Back from Recents', label:'Came back from Recents', run:'▶ Open eSewa from Recents', nav:'recents',
+      start:'Stopped', startText:'Starting point: you pressed Home earlier, so eSewa is Stopped in the background with your amount still in memory.',
+      steps:[{cb:'onRestart',edge:'sr1',to:'restart',phone:'app'},{cb:'onStart',edge:'sr2',to:'Started'},{cb:'onResume',edge:'sres',to:'Resumed'}]},
+    back:{btn:'◁ Back', label:'Pressed Back', run:'▶ Press Back on the phone', nav:'back',
+      start:'Resumed', startText:'Starting point: the eSewa payment screen is open (Resumed) and you have typed an amount.',
+      steps:[{cb:'onPause',edge:'rp',to:'Paused',phone:'home'},{cb:'onStop',edge:'ps',to:'Stopped'},{cb:'onDestroy',edge:'sd',to:'Destroyed'}]},
+    rotate:{btn:'🔄 Rotate', label:'Rotated the phone', run:'▶ Rotate the phone',
+      start:'Resumed', startText:'Starting point: the eSewa payment screen is open (Resumed) in portrait, and you have typed an amount.',
+      steps:[{cb:'onPause',edge:'rp',to:'Paused'},{cb:'onStop',edge:'ps',to:'Stopped',save:true},{cb:'onDestroy',edge:'sd',to:'Destroyed',phone:'blank'},
+             {cb:'onCreate',edge:'dc',to:'Created',phone:'app',rotate:true,newObj:true},{cb:'onStart',edge:'cs',to:'Started'},{cb:'onResume',edge:'sres',to:'Resumed'}]},
+    dialog:{btn:'💬 Dialog on top', label:'A permission dialog appeared', run:'▶ Show the permission dialog',
+      start:'Resumed', startText:'Starting point: the eSewa payment screen is open (Resumed). Next, Android’s permission dialog will appear on top, and eSewa will stay partly visible behind it.',
+      steps:[{cb:'onPause',edge:'rp',to:'Paused',phone:'dialog'}]},
+    kill:{btn:'💀 Killed, then Recents', label:'Killed in the background, then came back', run:'▶ Kill eSewa in the background, then reopen it',
+      start:'Stopped', startText:'Starting point: eSewa is Stopped in the background after you pressed Home. Next, Android kills its process to free memory, and later you reopen it from Recents. Predict every callback until eSewa is back on screen.',
+      steps:[{cb:null,edge:'sn',to:'none',sys:'Process com.f1soft.esewa was killed by Android to free memory.'},
+             {cb:'onCreate',edge:'nc',to:'Created',phone:'app',newObj:true},{cb:'onStart',edge:'cs',to:'Started'},{cb:'onResume',edge:'sres',to:'Resumed'}]}
+  };
+  var SCN_ORDER = ['home','recents','back','rotate','dialog','kill','first'];
+  function expected(id){ return SCN[id].steps.filter(function(s){ return s.cb; }).map(function(s){ return s.cb; }); }
+  /* outcome of a full run: pure function of scenario + save toggle */
+  function outcome(id, save){
+    var o = {destroyed:false, object:'kept', amount:'kept'};
+    if(id === 'back'){ o.destroyed = true; o.object = 'finished'; o.amount = 'lost'; }
+    else if(id === 'rotate'){ o.destroyed = true; o.object = 'replaced'; o.amount = save ? 'restored' : 'lost'; }
+    else if(id === 'kill'){ o.object = 'killed'; o.amount = save ? 'restored' : 'lost'; }
+    else if(id === 'first'){ o.object = 'new'; o.amount = 'fresh'; }
+    o.end = SCN[id].steps[SCN[id].steps.length - 1].to;
+    return o;
+  }
+  U4.tfModel = {SCN:SCN, expected:expected, outcome:outcome};
+
+  /* ---------- view state ---------- */
+  var st = {scn:'home', pred:[], locked:false, running:false, stepIdx:0, done:false, state:'Resumed', obj:1, amount:'500', saved:null,
+            destroyed:false, landscape:false, screen:'app', trials:[], timer:null, raf:null, lastDone:null};
+
+  /* ---------- build SVG diagram ---------- */
+  var svg = $('#tfSvg');
+  function el(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for(var k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; }
+  var defs = el('defs', {});
+  var mk = el('marker', {id:'tfArrow', viewBox:'0 0 10 10', refX:'8', refY:'5', markerWidth:'7', markerHeight:'7', orient:'auto-start-reverse'}, defs);
+  el('path', {d:'M0 0 L10 5 L0 10 z', fill:'#4b5563'}, mk);
+  var mk2 = el('marker', {id:'tfArrowOn', viewBox:'0 0 10 10', refX:'8', refY:'5', markerWidth:'7', markerHeight:'7', orient:'auto-start-reverse'}, defs);
+  el('path', {d:'M0 0 L10 5 L0 10 z', fill:'#fbbf24'}, mk2);
+  var edgeEls = {}, nodeEls = {};
+  Object.keys(EDGES).forEach(function(k){
+    var E = EDGES[k];
+    var p = el('path', {d:E.d, 'class':'tf-edge' + (E.dash ? ' dash' : ''), 'marker-end': k === 'sr1' ? '' : 'url(#tfArrow)'});
+    edgeEls[k] = p;
+    if(E.lab){ var t = el('text', {x:E.lx, y:E.ly, 'class':'tf-elab' + (E.dash ? ' dash' : ''), 'text-anchor':E.anchor || 'middle'});
+      E.lab.forEach(function(line, i){ var ts = el('tspan', {x:E.lx, dy: i ? '1.2em' : '0'}, t); ts.textContent = line; if(i) ts.setAttribute('class', 'sub'); });
+      edgeEls[k + '_t'] = t; }
+  });
+  el('circle', {cx:390, cy:160, r:5, 'class':'tf-way'});
+  var wt = el('text', {x:399, y:164, 'class':'tf-elab small', 'text-anchor':'start'}); wt.textContent = 'restarting';
+  Object.keys(NODES).forEach(function(k){
+    var N = NODES[k], g = el('g', {'class':'tf-node', 'data-node':k, transform:'translate(' + N.x + ' ' + N.y + ')'});
+    el('rect', {x:-56, y:-22, width:112, height:44, rx:22, style:'--c:' + (U4.SCOL[k] || '#9aa4b2')}, g);
+    var t = el('text', {x:0, y:5, 'text-anchor':'middle'}, g); t.textContent = N.label;
+    nodeEls[k] = g;
+  });
+  var token = el('circle', {r:8, 'class':'tf-token', cx:NODES.Resumed.x, cy:NODES.Resumed.y});
+  function placeToken(node){
+    var p = node === 'restart' ? {x:390, y:160} : {x:NODES[node].x + 46, y:NODES[node].y - 20};
+    token.setAttribute('cx', p.x); token.setAttribute('cy', p.y);
+  }
+  function highlightNode(node){
+    Object.keys(nodeEls).forEach(function(k){ nodeEls[k].classList.toggle('on', k === node); });
+  }
+  function clearEdges(){ Object.keys(edgeEls).forEach(function(k){ edgeEls[k].classList.remove('on','done'); if(!/_t$/.test(k)) edgeEls[k].setAttribute('marker-end', k === 'sr1' ? '' : 'url(#tfArrow)'); }); }
+  function moveToken(edge, color, ms, cb){
+    var p = edgeEls[edge], len = p.getTotalLength(), t0 = null;
+    p.classList.add('on'); if(edgeEls[edge + '_t']) edgeEls[edge + '_t'].classList.add('on');
+    if(edge !== 'sr1') p.setAttribute('marker-end', 'url(#tfArrowOn)');
+    token.style.fill = color || '#fbbf24';
+    if(reduced || !ms){ var e = p.getPointAtLength(len); token.setAttribute('cx', e.x); token.setAttribute('cy', e.y); cb(); return; }
+    function fr(ts){
+      if(t0 === null) t0 = ts;
+      var k = Math.min(1, (ts - t0) / ms), ease = k < .5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2) / 2;
+      var pt = p.getPointAtLength(len * ease); token.setAttribute('cx', pt.x); token.setAttribute('cy', pt.y);
+      if(k < 1) st.raf = requestAnimationFrame(fr); else { st.raf = null; cb(); }
+    }
+    st.raf = requestAnimationFrame(fr);
+  }
+
+  /* ---------- phone ---------- */
+  var ph = $('#tfPh'), amt = $('#tfAmt');
+  function setScreen(s){
+    st.screen = s; ph.setAttribute('data-screen', s);
+    amt.disabled = !(s === 'app' && st.state === 'Resumed');
+  }
+  function setLandscape(on){ st.landscape = on; $('#tfPhoneWrap').classList.toggle('land', on); }
+  amt.addEventListener('input', function(){ st.amount = amt.value.replace(/[^0-9]/g, '').slice(0, 7); if(amt.value !== st.amount) amt.value = st.amount; readouts(); });
+
+  /* ---------- readouts ---------- */
+  var LABEL = {none:'Not running', restart:'Restarting', Created:'Created', Started:'Started', Resumed:'Resumed', Paused:'Paused', Stopped:'Stopped', Destroyed:'Destroyed'};
+  function amtText(){ return st.amount ? 'Rs ' + st.amount : 'Empty'; }
+  function readouts(){
+    $('#roState').textContent = LABEL[st.state] || st.state;
+    $('#roState').style.color = U4.SCOL[st.state] || '';
+    var objTxt = st.obj === 0 ? 'None' : ('#' + st.obj + (st.state === 'Destroyed' ? ' (destroyed)' : ''));
+    $('#roObj').textContent = objTxt;
+    $('#roAmt').textContent = (st.state === 'Destroyed' || st.state === 'none') ? 'Gone with the object' : amtText() + ((st.screen === 'app' || st.screen === 'dialog') ? '' : ' (in memory)');
+    $('#roDes').textContent = st.destroyed ? 'Yes' : 'No';
+    $('#roDes').style.color = st.destroyed ? '#f87171' : '#4ade80';
+    $('#tfObj').textContent = 'Activity object #' + st.obj;
+  }
+  function announce(msg){ $('#tfSummary').textContent = msg; }
+
+  /* ---------- logcat ---------- */
+  var log = $('#tfLog');
+  var MSG = {onCreate:'Activity Created', onStart:'Activity Started', onResume:'Activity Resumed', onPause:'Activity Paused', onStop:'Activity Stopped', onRestart:'Activity Restarted', onDestroy:'Activity Destroyed'};
+  function logCb(cb){ U4.logLine(log, '<span class="note">' + U4.stamp() + ' D/Lifecycle Test:</span> ' + U4.cbHtml(cb, MSG[cb])); }
+  function logNote(t, cls){ U4.logLine(log, '<span class="' + (cls || 'ev') + '">' + t + '</span>'); }
+
+  /* ---------- scenario setup ---------- */
+  var scnBox = $('#tfScns');
+  SCN_ORDER.forEach(function(id){
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = SCN[id].btn; b.setAttribute('data-tfscn', id); b.setAttribute('aria-pressed', 'false');
+    scnBox.appendChild(b);
+  });
+  function cancelRun(){ if(st.timer){ clearTimeout(st.timer); st.timer = null; } if(st.raf){ cancelAnimationFrame(st.raf); st.raf = null; } st.running = false; }
+  function setupStart(keepPred){
+    cancelRun();
+    var S = SCN[st.scn];
+    st.stepIdx = 0; st.done = false; st.destroyed = false; setLandscape(false); clearEdges();
+    $('#tfFollow').hidden = true;
+    if(S.start === 'none'){ st.state = 'none'; st.obj = 0; st.objCount = 0; st.amount = ''; amt.value = ''; setScreen('home'); }
+    else {
+      st.obj = 1; st.objCount = 1;
+      if(!st.amount) st.amount = '500';
+      amt.value = st.amount;
+      st.state = S.start;
+      setScreen(S.start === 'Stopped' ? 'home' : 'app');
+    }
+    st.saved = (S.start === 'Stopped' && $('#tfSave').checked) ? st.amount : null; /* Home earlier already saved state when the box is ticked */
+    placeToken(st.state); highlightNode(st.state); token.style.fill = U4.SCOL[st.state] || '#9aa4b2';
+    $$('[data-tfscn]', scnBox).forEach(function(b){ var on = b.getAttribute('data-tfscn') === st.scn; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+    $('#tfStart').textContent = S.startText;
+    $$('.tf-nav b', ph).forEach(function(n){ n.classList.toggle('hint', n.getAttribute('data-nav') === S.nav); });
+    if(!keepPred){ st.pred = []; st.locked = false; renderChips(); }
+    log.innerHTML = '';
+    logNote('Scenario: ' + S.label + '. The current state is ' + (LABEL[st.state]) + '.', 'note');
+    readouts(); runBtn();
+    announce('Scenario chosen: ' + S.label + '. ' + S.startText);
+  }
+
+  /* ---------- prediction chips ---------- */
+  var pool = $('#tfPool'), slots = $('#tfSlots');
+  function chipBtn(cb, i){
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'chipcb tf-chip'; b.style.setProperty('--c', U4.CBCOL[cb]);
+    b.setAttribute('data-cb', cb);
+    b.innerHTML = (i !== undefined ? '<span class="ord">' + (i + 1) + '</span>' : '') + cb + '()';
+    b.setAttribute('aria-label', i !== undefined ? 'Position ' + (i + 1) + ': ' + cb + '. Press to remove.' : 'Add ' + cb + ' to my prediction');
+    return b;
+  }
+  function renderChips(marks){
+    pool.innerHTML = ''; slots.innerHTML = '';
+    ORDER.forEach(function(cb){ var b = chipBtn(cb); b.disabled = st.locked; b.setAttribute('data-act', 'add'); pool.appendChild(b); });
+    st.pred.forEach(function(cb, i){ var b = chipBtn(cb, i); b.disabled = st.locked; b.setAttribute('data-act', 'rm'); b.setAttribute('data-i', i); if(marks) b.classList.add(marks[i] ? 'ok' : 'bad'); slots.appendChild(b); });
+    slots.classList.toggle('locked', st.locked);
+    $('#tfLock').disabled = st.locked; $('#tfUnlock').disabled = !st.locked || st.running;
+  }
+  pool.addEventListener('click', function(e){ var b = e.target.closest('button[data-act="add"]'); if(!b || st.locked) return; if(st.pred.length >= 8) return; st.pred.push(b.getAttribute('data-cb')); renderChips(); });
+  slots.addEventListener('click', function(e){ var b = e.target.closest('button[data-act="rm"]'); if(!b || st.locked) return; st.pred.splice(+b.getAttribute('data-i'), 1); renderChips(); var nb = slots.querySelector('button') || pool.querySelector('button'); if(nb) nb.focus(); });
+  $('#tfLock').addEventListener('click', function(){
+    st.locked = true; renderChips(); runBtn();
+    announce('Prediction locked: ' + (st.pred.length ? st.pred.join(', ') : 'no callbacks') + '. Now try it on the phone.');
+    $('#tfRun').focus();
+  });
+  $('#tfUnlock').addEventListener('click', function(){ if(st.running) return; st.locked = false; setupStart(true); renderChips(); });
+
+  /* ---------- run (try) ---------- */
+  var runEl = $('#tfRun');
+  function runBtn(){
+    var S = SCN[st.scn], total = S.steps.length;
+    runEl.disabled = !st.locked || (st.running && !$('#tfStepMode').checked);
+    if(!st.locked) runEl.textContent = 'Lock in a prediction first';
+    else if(st.done) runEl.textContent = '↻ Set up and run this scenario again';
+    else if(st.stepIdx > 0 && $('#tfStepMode').checked) runEl.textContent = 'Next callback ▶ (' + (st.stepIdx + 1) + ' of ' + total + ')';
+    else runEl.textContent = S.run;
+    $('#tfUnlock').disabled = !st.locked || st.running;
+  }
+  function doStep(cb){
+    var S = SCN[st.scn], s = S.steps[st.stepIdx];
+    st.running = true; runBtn();
+    if(s.sys){ logNote(s.sys, 'ev'); }
+    if(s.phone === 'blank') setScreen('blank');
+    var color = s.cb ? U4.CBCOL[s.cb] : '#f472b6';
+    moveToken(s.edge, color, 650, function(){
+      st.state = s.to;
+      highlightNode(s.to === 'restart' ? null : s.to);
+      if(s.cb) logCb(s.cb);
+      if(s.cb === 'onDestroy'){ st.destroyed = true; }
+      if(s.to === 'none'){ st.obj = 0; }
+      if(s.newObj){ st.objCount = (st.objCount || 0) + 1; st.obj = st.objCount; }
+      if(s.rotate) setLandscape(!st.landscape);
+      if(s.save && $('#tfSave').checked){ st.saved = st.amount; logNote('onSaveInstanceState() saved amount = ' + (st.amount || 'empty') + ' (not a lifecycle callback; Android 9 and newer call it after onStop)', 'note'); }
+      if(s.cb === 'onCreate'){
+        if(st.scn === 'first'){ st.amount = ''; }
+        else if($('#tfSave').checked && st.saved !== null){ st.amount = st.saved; logNote('onCreate() found a saved Bundle and restored amount = ' + (st.amount || 'empty'), 'note'); }
+        else { st.amount = ''; logNote('onCreate() got no saved Bundle, so the new object starts with an empty amount.', 'note'); }
+        amt.value = st.amount;
+      }
+      if(s.cb === 'onDestroy' && st.scn === 'back'){ st.amount = ''; }
+      if(s.phone && s.phone !== 'blank') setScreen(s.phone); else setScreen(st.screen);
+      readouts();
+      st.stepIdx++;
+      if(st.stepIdx >= S.steps.length){ finish(); }
+      else if($('#tfStepMode').checked){ st.running = false; runBtn(); announce((s.cb || 'System event') + ' happened. The activity is now ' + LABEL[st.state] + '.'); }
+      else { st.timer = setTimeout(function(){ st.timer = null; doStep(); }, reduced ? 500 : 320); }
+    });
+  }
+  runEl.addEventListener('click', function(){
+    if(!st.locked) return;
+    if(st.done){ setupStart(true); }
+    if(st.running) return;
+    if(st.stepIdx === 0) logNote('You: ' + SCN[st.scn].label + '.', 'ev');
+    doStep();
+  });
+  $('#tfStepMode').addEventListener('change', runBtn);
+  $$('.tf-nav b', ph).forEach(function(n){ n.addEventListener('click', function(){ if(n.classList.contains('hint') && !runEl.disabled && !st.done) runEl.click(); }); });
+
+  /* ---------- observe ---------- */
+  var FEED = {
+    home:{onDestroy:'You predicted onDestroy(), but pressing Home only stops the activity. The eSewa object stays in memory, so your amount is still there.'},
+    recents:{onCreate:'You predicted onCreate(), but the same activity object was kept while it was stopped, so onCreate() does not run again.', missingRestart:'Coming back from the Stopped state calls onRestart() first, and then onStart() and onResume().'},
+    back:{missingDestroy:'Back finishes the activity, so this time onDestroy() really does fire.'},
+    rotate:{missingDestroy:'Rotating is not just a resize. Android destroys this activity and creates a new one for the new screen shape, so onDestroy() and then onCreate() fire.'},
+    dialog:{onStop:'The eSewa screen is still partly visible behind the dialog, so it is only Paused. onStop() needs the screen to be completely hidden.'},
+    kill:{onDestroy:'When Android kills the process to free memory, onDestroy() is not called, so no callback fires at the moment of the kill.', onRestart:'onRestart() needs the old object, but the kill removed it. Android has to build a new object with onCreate().'},
+    first:{}
+  };
+  function finish(){
+    st.running = false; st.done = true;
+    var want = expected(st.scn), got = st.pred, o = outcome(st.scn, $('#tfSave').checked);
+    var right = got.length === want.length && got.every(function(g, i){ return g === want[i]; });
+    var marks = got.map(function(g, i){ return want[i] === g; });
+    renderChips(marks);
+    var F = FEED[st.scn], tips = [];
+    if(!right){
+      if(F.onDestroy && got.indexOf('onDestroy') >= 0) tips.push(F.onDestroy);
+      if(F.onStop && got.indexOf('onStop') >= 0) tips.push(F.onStop);
+      if(F.onCreate && got.indexOf('onCreate') >= 0) tips.push(F.onCreate);
+      if(F.onRestart && got.indexOf('onRestart') >= 0) tips.push(F.onRestart);
+      if(F.missingRestart && got.indexOf('onRestart') < 0) tips.push(F.missingRestart);
+      if(F.missingDestroy && got.indexOf('onDestroy') < 0) tips.push(F.missingDestroy);
+      if(!tips.length) tips.push(got.length === want.length ? 'You chose the right number of callbacks, but the order is different. Compare the red chips with the real order.' : 'You predicted ' + got.length + ' callback' + (got.length === 1 ? '' : 's') + ', but Android called ' + want.length + '.');
+    }
+    var amtLine = {kept:'Your typed amount is still there, because the same activity object was kept.',
+      lost: st.scn === 'back' ? 'The amount is gone, because Back finished the activity and removed the object.' : 'The amount is lost. The old object was destroyed, and the new object started empty.',
+      restored:'The amount came back, because it was saved in onSaveInstanceState() and restored in onCreate().',
+      fresh:'This is a brand-new object, so the amount box starts empty.'}[o.amount];
+    var fb = $('#tfFeedback');
+    fb.className = 'tf-feedback ' + (right ? 'good' : 'bad');
+    fb.innerHTML = (right ? '<b>✅ Your prediction was right.</b> ' : '<b>❌ Your prediction did not match.</b> ' + tips.join(' ') + ' ') +
+      '<br>Real order: ' + (want.map(function(c){ return '<code>' + c + '()</code>'; }).join(' → ') || 'no callbacks') + '. ' +
+      'onDestroy() ' + (o.destroyed ? '<b>did fire</b>' : '<b>did not fire</b>') + '. ' + amtLine +
+      (st.scn === 'rotate' && !$('#tfSave').checked ? ' Now tick “Save the amount…” and run Rotate again to compare.' : '');
+    if(right){ U4.confettiAt($('#tfSlots')); U4.showStreak('✅ Prediction matched Android'); }
+    if(st.scn === 'dialog') $('#tfFollow').hidden = false;
+    /* trials table */
+    st.trials.push({scn:st.scn, ok:right, end:LABEL[o.end], des:o.destroyed, amt:o.amount, save:$('#tfSave').checked});
+    st.lastDone = {scn:st.scn, save:$('#tfSave').checked};
+    renderTrials(); runBtn();
+    announce((right ? 'Prediction correct. ' : 'Prediction did not match. ') + 'Real order: ' + (want.join(', ') || 'none') + '. onDestroy ' + (o.destroyed ? 'fired.' : 'did not fire.') + ' ' + amtLine);
+  }
+  var AMT = {kept:'✅ Kept', lost:'❌ Lost', restored:'♻️ Restored', fresh:'Starts empty'};
+  function renderTrials(){
+    var tb = $('#tfTrials');
+    if(!st.trials.length){ tb.innerHTML = '<tr class="tf-empty"><td colspan="5">No trials yet. Try <b>Home</b> and then <b>Rotate</b> to compare them.</td></tr>'; return; }
+    tb.innerHTML = st.trials.slice(-8).map(function(t){
+      return '<tr><td>' + SCN[t.scn].label + (t.save ? ' <span class="small">(state saved)</span>' : '') + '</td><td>' + (t.ok ? '✅ Right' : '❌ Wrong') + '</td><td>' + t.end + '</td><td>' + (t.des ? 'Yes' : 'No') + '</td><td>' + AMT[t.amt] + '</td></tr>';
+    }).join('');
+  }
+  $('#tfFollow').addEventListener('click', function(){
+    if(st.running || st.state !== 'Paused') return;
+    st.running = true; $('#tfFollow').hidden = true;
+    moveToken('pr', U4.CBCOL.onResume, 650, function(){
+      st.running = false; st.state = 'Resumed'; highlightNode('Resumed'); logCb('onResume'); setScreen('app'); readouts();
+      logNote('The dialog closed, so eSewa is in focus again. Only onResume() was needed.', 'note');
+      announce('The dialog closed. onResume fired and eSewa is Resumed again with the same amount.');
+    });
+  });
+  $('#tfSave').addEventListener('change', function(){ if(!st.running && !st.stepIdx) setupStart(true); });
+
+  /* ---------- explain ---------- */
+  $('#exCheck').addEventListener('click', function(){
+    var a = $('#exAct').value, d = $('#exDes').value, ob = $('#exObj').value, am = $('#exAmt').value, fb = $('#exFb');
+    if(!a || !d || !ob || !am){ fb.className = 'tf-feedback bad'; fb.textContent = 'Fill in all four blanks first.'; return; }
+    var trial = null; for(var i = st.trials.length - 1; i >= 0; i--) if(st.trials[i].scn === a){ trial = st.trials[i]; break; }
+    if(!trial){ fb.className = 'tf-feedback bad'; fb.textContent = 'Try that situation on the phone first, so your sentence is based on what you observed.'; return; }
+    var o = outcome(a, trial.save), wrong = [];
+    if((d === 'yes') !== o.destroyed) wrong.push(o.destroyed ? 'onDestroy() did fire in your trial.' : 'onDestroy() did not fire in your trial.');
+    if(ob !== o.object) wrong.push({kept:'The object was kept in memory.', replaced:'The object was destroyed and replaced by a new one.', finished:'The object was finished and removed.', killed:'The object was killed with the process and then re-created.'}[o.object]);
+    if(am !== o.amount) wrong.push({kept:'The amount was still there.', lost:'The amount was lost.', restored:'The amount was restored from the saved Bundle.'}[o.amount]);
+    if(!wrong.length){ fb.className = 'tf-feedback good'; fb.innerHTML = '<b>✅ Great explanation.</b> It matches your trial: the callbacks depend on what the user did, and the amount only survives when the object survives or the state is saved.'; U4.confettiAt(fb); }
+    else { fb.className = 'tf-feedback bad'; fb.innerHTML = '<b>Not yet.</b> ' + wrong.join(' ') + ' Look at the readouts and the Logcat again.'; }
+  });
+
+  /* ---------- scenario buttons, reset, leave ---------- */
+  scnBox.addEventListener('click', function(e){ var b = e.target.closest('[data-tfscn]'); if(!b) return; st.scn = b.getAttribute('data-tfscn'); st.amount = st.amount || '500'; setupStart(false); $('#tfFeedback').className = 'tf-feedback'; $('#tfFeedback').textContent = 'Lock in your prediction, then try it on the phone.'; });
+  function resetAll(){
+    cancelRun();
+    st.scn = 'home'; st.trials = []; st.obj = 1; st.amount = '500'; st.state = 'Resumed'; st.lastDone = null;
+    $('#tfSave').checked = false; $('#tfStepMode').checked = false;
+    ['exAct','exDes','exObj','exAmt'].forEach(function(id){ $('#' + id).value = ''; });
+    $('#exFb').className = 'tf-feedback'; $('#exFb').textContent = '';
+    $('#tfFeedback').className = 'tf-feedback'; $('#tfFeedback').textContent = 'Run a scenario to compare your prediction with what Android really did.';
+    renderTrials(); setupStart(false);
+  }
+  $('#tfReset').addEventListener('click', resetAll);
+  U4.onLeave('predict', function(){ if(st.running || (st.stepIdx && !st.done)){ cancelRun(); setupStart(true); } });
+  U4.tfState = st;
+  resetAll();
+})();
+
+/* ===== Teachable figures 2: shared engine (manifest, extras, implicit intent, back stack) ===== */
+var TF2 = U4.tf2 = U4.tf2 || {};
+(function(){
+  var $ = U4.$, $$ = U4.$$;
+  var NS = 'http://www.w3.org/2000/svg';
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  TF2.reduced = reduced;
+  function sel(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for(var k in attrs) e.setAttribute(k, attrs[k]); if(parent) parent.appendChild(e); return e; }
+  TF2.sel = sel;
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  TF2.esc = esc;
+
+  /* tiny Java / XML highlighter for live code panels; lines: [{t:'code', cls:'add|miss|hl|off'}] */
+  var JKW = /\b(public|protected|private|class|extends|void|new|super|this|int|if|else|return|import|final|static|boolean|String|try|catch)\b/;
+  function hlJava(line){
+    var re = /(\/\/.*$)|("(?:[^"\\]|\\.)*")|(@\w+)|\b(public|protected|private|class|extends|void|new|super|this|int|if|else|return|import|final|static|boolean|String|try|catch)\b|(\b\d+\b)/g;
+    var out = '', pos = 0, m;
+    while((m = re.exec(line))){
+      out += esc(line.slice(pos, m.index));
+      var c = m[1] ? 'c' : m[2] ? 's' : m[3] ? 'a' : m[4] ? 'k' : 'n';
+      out += '<span class="' + c + '">' + esc(m[0]) + '</span>'; pos = re.lastIndex;
+    }
+    return out + esc(line.slice(pos));
+  }
+  function hlXml(line){
+    var re = /(<!--.*?-->)|(<\/?[\w.:?-]+|\/?>)|([\w:]+)(?==)|("[^"]*")/g, out = '', pos = 0, m;
+    while((m = re.exec(line))){
+      out += esc(line.slice(pos, m.index));
+      var c = m[1] ? 'c' : m[2] ? 't' : m[3] ? 'at' : 's';
+      out += '<span class="' + c + '">' + esc(m[0]) + '</span>'; pos = re.lastIndex;
+    }
+    return out + esc(line.slice(pos));
+  }
+  TF2.code = function(el, title, lines, xml){
+    var h = title ? '<div class="t2code-h">' + title + '</div>' : '';
+    h += lines.map(function(L){
+      if(typeof L === 'string') L = {t:L};
+      var body = (xml ? hlXml : hlJava)(L.t) || ' ';
+      return '<span class="ln' + (L.cls ? ' ' + L.cls : '') + '">' + body + (L.note ? '<em class="t2note">' + L.note + '</em>' : '') + '</span>';
+    }).join('');
+    el.innerHTML = h;
+  };
+
+  /* ---------- SVG flow diagram with a moving token ---------- */
+  TF2.Diagram = function(svg, nodes, edges, opts){
+    opts = opts || {};
+    var defs = sel('defs', {}, svg), id = svg.id;
+    var m1 = sel('marker', {id:id + 'A', viewBox:'0 0 10 10', refX:'8', refY:'5', markerWidth:'7', markerHeight:'7', orient:'auto-start-reverse'}, defs);
+    sel('path', {d:'M0 0 L10 5 L0 10 z', fill:'#4b5563'}, m1);
+    var m2 = sel('marker', {id:id + 'B', viewBox:'0 0 10 10', refX:'8', refY:'5', markerWidth:'7', markerHeight:'7', orient:'auto-start-reverse'}, defs);
+    sel('path', {d:'M0 0 L10 5 L0 10 z', fill:'#fbbf24'}, m2);
+    var gE = sel('g', {}, svg), gN = sel('g', {}, svg);
+    var E = {}, T = {}, N = {}, raf = null;
+    (opts.titles || []).forEach(function(t){ var x = sel('text', {x:t.x, y:t.y, 'class':'t2-colh', 'text-anchor':t.anchor || 'middle'}, svg); x.textContent = t.t; });
+    Object.keys(edges).forEach(function(k){
+      var e = edges[k];
+      E[k] = sel('path', {d:e.d, 'class':'tf-edge' + (e.dash ? ' dash' : ''), 'marker-end':'url(#' + id + 'A)'}, gE);
+      if(e.lab){ var t = sel('text', {x:e.lx, y:e.ly, 'class':'tf-elab t2-elab', 'text-anchor':e.anchor || 'middle'}, gE);
+        e.lab.forEach(function(line, i){ var ts = sel('tspan', {x:e.lx, dy: i ? '1.2em' : '0'}, t); ts.textContent = line; });
+        T[k] = t; }
+    });
+    function setLabel(k, lines){
+      var n = nodes[k], g = N[k], t = g.querySelector('text'); t.innerHTML = '';
+      var h = n.h || 46, lh = 15, y0 = -((lines.length - 1) * lh) / 2 + 5;
+      lines.forEach(function(line, i){ var ts = sel('tspan', {x:0, y:y0 + i * lh}, t); ts.textContent = line; });
+    }
+    Object.keys(nodes).forEach(function(k){
+      var n = nodes[k], w = n.w || 150, h = n.h || 46;
+      var g = sel('g', {'class':'tf-node t2-node' + (n.cls ? ' ' + n.cls : ''), 'data-node':k, transform:'translate(' + n.x + ' ' + n.y + ')', style:'--c:' + (n.c || '#9aa4b2')}, gN);
+      sel('rect', {x:-w/2, y:-h/2, width:w, height:h, rx:n.rx != null ? n.rx : 12}, g);
+      sel('text', {x:0, y:5, 'text-anchor':'middle'}, g);
+      N[k] = g; setLabel(k, n.label);
+    });
+    var token = sel('circle', {r:8, 'class':'tf-token', cx:-50, cy:-50}, svg);
+    var api = {
+      nodes:N, edges:E,
+      label:setLabel,
+      reset:function(){
+        if(raf) cancelAnimationFrame(raf); raf = null;
+        Object.keys(E).forEach(function(k){ E[k].classList.remove('on','bad'); E[k].setAttribute('marker-end', 'url(#' + id + 'A)'); if(T[k]) T[k].classList.remove('on'); });
+        Object.keys(N).forEach(function(k){ N[k].classList.remove('on','bad','good','dim'); });
+        token.setAttribute('cx', -50); token.setAttribute('cy', -50);
+      },
+      node:function(k, cls){ if(N[k]){ N[k].classList.remove('dim'); N[k].classList.add(cls || 'on'); } },
+      dim:function(k, on){ if(N[k]) N[k].classList.toggle('dim', on !== false); },
+      at:function(k){ var n = nodes[k]; token.setAttribute('cx', n.x + (n.w || 150)/2 - 8); token.setAttribute('cy', n.y - (n.h || 46)/2 + 6); },
+      move:function(k, ms, color, cb){
+        var p = E[k], len = p.getTotalLength(), t0 = null;
+        p.classList.add(color === 'bad' ? 'bad' : 'on'); p.setAttribute('marker-end', 'url(#' + id + 'B)'); if(T[k]) T[k].classList.add('on');
+        token.style.fill = color === 'bad' ? '#f87171' : '#fbbf24';
+        if(reduced || !ms){ var e = p.getPointAtLength(len); token.setAttribute('cx', e.x); token.setAttribute('cy', e.y); cb(); return; }
+        function fr(ts){
+          if(t0 === null) t0 = ts;
+          var q = Math.min(1, (ts - t0) / ms), ease = q < .5 ? 2*q*q : 1 - Math.pow(-2*q + 2, 2) / 2;
+          var pt = p.getPointAtLength(len * ease); token.setAttribute('cx', pt.x); token.setAttribute('cy', pt.y);
+          if(q < 1) raf = requestAnimationFrame(fr); else { raf = null; cb(); }
+        }
+        raf = requestAnimationFrame(fr);
+      },
+      stop:function(){ if(raf) cancelAnimationFrame(raf); raf = null; }
+    };
+    return api;
+  };
+
+  /* ---------- generic predict → try → observe → explain figure ---------- */
+  function val(el){
+    if(el.classList.contains('t2-opts')){ var b = el.querySelector('button[aria-pressed="true"]'); return b ? b.getAttribute('data-v') : ''; }
+    if(el.type === 'checkbox') return el.checked;
+    return el.value;
+  }
+  function setVal(el, v){
+    if(el.classList.contains('t2-opts')){ $$('button', el).forEach(function(b){ var on = b.getAttribute('data-v') === v; b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.classList.toggle('on', on); }); return; }
+    if(el.type === 'checkbox') el.checked = !!v; else el.value = v;
+  }
+  function setDis(el, d){ if(el.classList.contains('t2-opts')) $$('button', el).forEach(function(b){ b.disabled = d; }); else el.disabled = d; }
+  TF2.val = val; TF2.setVal = setVal;
+
+  TF2.make = function(o){
+    var root = $('#' + o.id); if(!root) return null;
+    var q = function(s){ return $(s, root); };
+    var cfgEls = $$('[data-cfg]', root), predEls = $$('[data-pred]', root), exEls = $$('[data-ex]', root);
+    var defaults = cfgEls.map(val);
+    var lockB = q('[data-act="lock"]'), unB = q('[data-act="unlock"]'), runB = q('[data-act="run"]'), resetB = q('[data-act="reset"]');
+    var fb = q('[data-out="fb"]'), tb = q('[data-out="trials"]'), logEl = q('[data-out="log"]'), sum = q('[data-out="sum"]');
+    var exB = q('[data-act="excheck"]'), exFb = q('[data-out="exfb"]');
+    var fb0 = fb.innerHTML, tb0 = tb.innerHTML;
+    var st = {locked:false, running:false, timer:null, last:null, trials:0, ran:false};
+    var D = o.diagram ? o.diagram(root) : null;
+    o.D = D;
+
+    function cfg(){ var c = {}; cfgEls.forEach(function(e){ c[e.getAttribute('data-cfg')] = val(e); }); return c; }
+    function pred(){ var p = {}; predEls.forEach(function(e){ p[e.getAttribute('data-pred')] = val(e); }); return p; }
+    function predReady(){ var p = pred(); return Object.keys(p).every(function(k){ return p[k] !== ''; }); }
+    function setFb(html, cls){ fb.className = 'tf-feedback' + (cls ? ' ' + cls : ''); fb.innerHTML = html; }
+    function ui(){
+      predEls.forEach(function(e){ setDis(e, st.locked || st.running); });
+      cfgEls.forEach(function(e){ setDis(e, st.running || (o.cfgDisabled ? o.cfgDisabled(e, cfg()) : false)); });
+      lockB.disabled = st.locked || st.running; unB.disabled = !st.locked || st.running;
+      runB.disabled = !st.locked || st.running;
+      runB.textContent = st.running ? 'Running…' : (st.locked ? (st.ran ? '↻ Run it again' : o.runLabel(cfg())) : 'Lock in a prediction first');
+      root.classList.toggle('t2-locked', st.locked);
+    }
+    function idle(){ if(D) D.reset(); o.idle(cfg()); }
+    function onCfg(e){
+      if(st.running) return;
+      if(o.normalize) o.normalize(cfg(), e);
+      o.onCfg(cfg());
+      idle();
+      if(st.locked){ st.locked = false; setFb('You changed the setup, so your old prediction no longer applies. Make a new prediction and lock it in.', ''); }
+      st.ran = false; ui();
+    }
+    root.addEventListener('click', function(e){
+      var b = e.target.closest && e.target.closest('.t2-opts button');
+      if(!b || b.disabled || !root.contains(b)) return;
+      var g = b.closest('.t2-opts'); setVal(g, b.getAttribute('data-v'));
+      if(g.hasAttribute('data-cfg')) onCfg(g); else ui();
+    });
+    cfgEls.forEach(function(e){ if(!e.classList.contains('t2-opts')){ e.addEventListener('change', function(){ onCfg(e); }); } });
+    lockB.addEventListener('click', function(){
+      if(!predReady()){ setFb('Choose an answer for every part of the prediction first, then lock it in.', 'bad'); return; }
+      st.locked = true; st.ran = false; setFb('Prediction locked. Now press the green button in step 3 to try it.', ''); ui();
+    });
+    unB.addEventListener('click', function(){ st.locked = false; st.ran = false; setFb(fb0, ''); ui(); });
+
+    function cancel(){
+      if(st.timer) clearTimeout(st.timer); st.timer = null; if(D) D.stop();
+      if(st.running){ st.running = false; idle(); }
+      ui();
+    }
+    function run(){
+      if(!st.locked || st.running) return;
+      var c = cfg(), p = pred(), res = o.model(c), steps = o.steps(c, res), i = 0;
+      st.running = true; idle(); ui();
+      if(logEl){ logEl.innerHTML = ''; U4.logLine(logEl, '<span class="note">' + o.runNote(c) + '</span>'); }
+      setFb('Watch the phone, the diagram and Logcat…', '');
+      function next(){
+        if(!st.running) return;
+        if(i >= steps.length){ finish(c, p, res); return; }
+        var s = steps[i++];
+        var after = function(){
+          if(!st.running) return;
+          if(s.node && D) D.node(s.node, s.cls);
+          if(s.log && logEl) U4.logLine(logEl, s.log);
+          if(s.fn) s.fn();
+          st.timer = setTimeout(next, reduced ? 60 : (s.wait != null ? s.wait : 420));
+        };
+        if(s.edge && D) D.move(s.edge, s.ms || 650, s.color, after);
+        else st.timer = setTimeout(after, reduced ? 0 : (s.pre || 0));
+      }
+      next();
+    }
+    function finish(c, p, res){
+      st.running = false; st.ran = true; st.last = {cfg:c, pred:p, res:res};
+      var j = o.judge(p, res, c);
+      setFb(j.html, j.ok ? 'good' : 'bad');
+      if(j.ok) U4.confettiAt(fb);
+      if(!st.trials) tb.innerHTML = '';
+      st.trials++;
+      var tr = document.createElement('tr');
+      tr.innerHTML = o.trial(c, p, res, j.ok).map(function(x){ return '<td>' + x + '</td>'; }).join('');
+      tb.appendChild(tr);
+      if(sum) sum.textContent = o.summary(c, res);
+      ui();
+    }
+    runB.addEventListener('click', run);
+    function resetAll(){
+      cancel();
+      cfgEls.forEach(function(e, k){ setVal(e, defaults[k]); });
+      predEls.forEach(function(e){ setVal(e, ''); });
+      exEls.forEach(function(e){ e.value = ''; });
+      st.locked = false; st.ran = false; st.last = null; st.trials = 0;
+      setFb(fb0, ''); tb.innerHTML = tb0; if(exFb){ exFb.innerHTML = ''; exFb.className = 'tf-feedback'; }
+      if(logEl) logEl.innerHTML = ''; if(sum) sum.textContent = '';
+      if(o.reset) o.reset();
+      o.onCfg(cfg()); idle(); ui();
+    }
+    resetB.addEventListener('click', resetAll);
+    if(exB) exB.addEventListener('click', function(){
+      var v = {}; exEls.forEach(function(e){ v[e.getAttribute('data-ex')] = e.value; });
+      var r;
+      if(Object.keys(v).some(function(k){ return !v[k]; })) r = {ok:false, html:'Choose a word for every gap in the sentence first.'};
+      else if(o.explainNeedsRun && !st.last) r = {ok:false, html:'Run at least one trial in step 3 first, so your sentence can describe what really happened.'};
+      else r = o.explain(v, st.last);
+      exFb.className = 'tf-feedback ' + (r.ok ? 'good' : 'bad'); exFb.innerHTML = r.html;
+      if(r.ok) U4.confettiAt(exB);
+    });
+    U4.onLeave(o.slide, cancel);
+    o.onCfg(cfg()); idle(); ui();
+    var api = {model:o.model, state:st, cfg:cfg, pred:pred, reset:resetAll};
+    TF2[o.key] = api;
+    return api;
+  };
+})();
+
+/* ===== TF2 figure: Manifest declaration ===== */
+(function(){
+  var $ = U4.$, $$ = U4.$$, root = $('#t2m'); if(!root) return;
+  var q = function(s){ return $(s, root); };
+  var ph = q('[data-out="phone"]');
+  function screen(s){ ph.setAttribute('data-screen', s); $$('.t2-l', ph).forEach(function(l){ l.classList.toggle('show', (' ' + l.getAttribute('data-l') + ' ').indexOf(' ' + s + ' ') >= 0); }); }
+  var LBL = {opens:'MainActivity2 opened', crash:'Crash: ActivityNotFoundException', noicon:'No app icon: “Default Activity not found”'};
+  var SHORT = {opens:'MainActivity2 opens', crash:'Crash', noicon:'No icon'};
+  /* pure model */
+  function model(c){
+    if(!c.launcher) return {out:'noicon'};
+    return {out: c.decl ? 'opens' : 'crash'};
+  }
+  var NODES = {
+    tap:{x:72, y:55, w:128, label:['Run / tap icon'], c:'#9aa4b2'},
+    man:{x:237, y:55, w:150, label:['Android reads','AndroidManifest.xml'], c:'#60a5fa'},
+    lau:{x:410, y:55, w:150, label:['Any MAIN +','LAUNCHER activity?'], c:'#c084fc'},
+    main:{x:598, y:55, w:140, label:['MainActivity','opens'], c:'#4ade80'},
+    noic:{x:410, y:178, w:170, label:['No icon: “Default','Activity not found”'], c:'#f87171'},
+    dec:{x:598, y:178, w:170, label:['Is .MainActivity2','in the Manifest?'], c:'#c084fc'},
+    ok:{x:598, y:292, w:150, label:['MainActivity2','opens'], c:'#4ade80'},
+    crash:{x:360, y:292, w:210, label:['Crash:','ActivityNotFoundException'], c:'#f87171'}
+  };
+  var EDGES = {
+    a:{d:'M136 55 L160 55'},
+    b:{d:'M312 55 L333 55'},
+    yes1:{d:'M485 55 L526 55', lab:['yes'], lx:505, ly:44},
+    no1:{d:'M410 78 L410 153', lab:['no'], lx:418, ly:120, anchor:'start'},
+    btn:{d:'M598 78 L598 153', lab:['tap the button:','startActivity(i)'], lx:590, ly:108, anchor:'end'},
+    yes2:{d:'M598 201 L598 267', lab:['yes'], lx:606, ly:238, anchor:'start'},
+    no2:{d:'M513 190 C 470 190 465 230 465 268', lab:['no'], lx:478, ly:228, anchor:'start'}
+  };
+  var LOGM = '<span class="note">';
+  TF2.make({
+    id:'t2m', key:'manifest', slide:'manifest',
+    model:model,
+    diagram:function(){ return TF2.Diagram(q('svg'), NODES, EDGES); },
+    runLabel:function(){ return '▶ Run the app, then tap the button'; },
+    runNote:function(c){ return 'Installing My App. Declared: ' + (c.decl ? '.MainActivity2' : 'MainActivity only') + '. LAUNCHER filter: ' + (c.launcher ? 'on MainActivity' : 'none') + '.'; },
+    onCfg:function(c){
+      var X = [
+        '<manifest xmlns:android="http://schemas.android.com/apk/res/android"',
+        '    package="com.example.myapp">',
+        '    <application android:label="My App">'
+      ].map(function(t){ return {t:t}; });
+      if(c.launcher){
+        X.push({t:'        <activity android:name=".MainActivity">'});
+        X.push({t:'            <intent-filter>', cls:'add'});
+        X.push({t:'                <action android:name="android.intent.action.MAIN" />', cls:'add'});
+        X.push({t:'                <category android:name="android.intent.category.LAUNCHER" />', cls:'add'});
+        X.push({t:'            </intent-filter>', cls:'add'});
+        X.push({t:'        </activity>'});
+      } else {
+        X.push({t:'        <activity android:name=".MainActivity">'});
+        X.push({t:'            <!-- no MAIN / LAUNCHER intent-filter -->', cls:'miss'});
+        X.push({t:'        </activity>'});
+      }
+      X.push(c.decl ? {t:'        <activity android:name=".MainActivity2"/>', cls:'add'} : {t:'        <!-- .MainActivity2 is not declared -->', cls:'miss'});
+      X.push({t:'    </application>'}); X.push({t:'</manifest>'});
+      TF2.code(q('[data-out="xml"]'), 'AndroidManifest.xml', X, true);
+      TF2.code(q('[data-out="java"]'), 'MainActivity.java (inside onCreate)', [
+        'Button btn = findViewById(R.id.button1);',
+        'btn.setOnClickListener(new View.OnClickListener() {',
+        '    @Override',
+        '    public void onClick(View view) {',
+        {t:'        Intent i = new Intent(MainActivity.this, MainActivity2.class);', cls:'hl'},
+        {t:'        startActivity(i);', cls:'hl'},
+        '    }',
+        '});'
+      ]);
+      q('[data-out="roDecl"]').textContent = c.decl ? 'Yes' : 'No';
+      q('[data-out="roDecl"]').style.color = c.decl ? '#4ade80' : '#f87171';
+      q('[data-out="roLaunch"]').textContent = c.launcher ? 'Yes, on MainActivity' : 'No';
+      q('[data-out="roLaunch"]').style.color = c.launcher ? '#4ade80' : '#f87171';
+    },
+    idle:function(){ screen('home'); q('[data-out="mbtn"]').classList.remove('press'); var r = q('[data-out="roRes"]'); r.textContent = 'Not run yet'; r.style.color = ''; if(this.D) this.D.at('tap'); },
+    steps:function(c, res){
+      var S = [
+        {edge:'a', node:'man', log:'<span class="ev">I/PackageManager:</span> Installed com.example.myapp. Reading AndroidManifest.xml…'},
+        {edge:'b', node:'lau', log: c.launcher ? '<span class="ev">I/PackageManager:</span> Launcher activity: .MainActivity (MAIN / LAUNCHER)' : '<span class="ev">W/PackageManager:</span> No activity has the MAIN / LAUNCHER intent-filter'}
+      ];
+      if(res.out === 'noicon'){
+        S.push({edge:'no1', color:'bad', node:'noic', cls:'bad', fn:function(){ screen('noicon'); }, log:'<span style="color:#f87171">Android Studio: Error running ‘app’: Default Activity not found</span>'});
+        S.push({log:LOGM + 'The home screen shows no My App icon, so the user cannot open any screen. The button code never runs.</span>', wait:200});
+      } else {
+        S.push({edge:'yes1', node:'main', fn:function(){ screen('main'); }, log:'<span class="ev">I/ActivityTaskManager:</span> START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.example.myapp/.MainActivity}'});
+        S.push({edge:'btn', node:'dec', fn:function(){ q('[data-out="mbtn"]').classList.add('press'); }, log:LOGM + 'You tapped “Open MainActivity2”, so startActivity(i) runs. Android looks for .MainActivity2 in the Manifest.</span>'});
+        if(res.out === 'opens') S.push({edge:'yes2', node:'ok', cls:'good', fn:function(){ screen('second'); }, log:'<span class="ev">I/ActivityTaskManager:</span> START u0 {cmp=com.example.myapp/.MainActivity2}'});
+        else S.push({edge:'no2', color:'bad', node:'crash', cls:'bad', fn:function(){ screen('crash'); }, log:'<span style="color:#f87171">E/AndroidRuntime: FATAL EXCEPTION: main<br>android.content.ActivityNotFoundException: Unable to find explicit activity class {com.example.myapp/com.example.myapp.MainActivity2}; have you declared this activity in your AndroidManifest.xml?</span>'});
+      }
+      S.push({wait:0, fn:function(){ var r = q('[data-out="roRes"]'); r.textContent = LBL[res.out]; r.style.color = res.out === 'opens' ? '#4ade80' : '#f87171'; }});
+      return S;
+    },
+    judge:function(p, res, c){
+      var ok = p.out === res.out, h;
+      if(ok) h = '<b>✅ Your prediction matched.</b> ';
+      else h = '<b>❌ Your prediction did not match.</b> You predicted “' + SHORT[p.out] + '”, but the result was “' + SHORT[res.out] + '”. ';
+      if(res.out === 'crash') h += 'MainActivity2.java exists and compiles, but that is not enough. Android checks AndroidManifest.xml, finds no <code>.MainActivity2</code> entry, and <code>startActivity(i)</code> throws <b>ActivityNotFoundException</b>.';
+      else if(res.out === 'noicon') h += 'No activity has the <code>MAIN</code> / <code>LAUNCHER</code> intent-filter, so Android does not know which screen to open first. The app gets no icon, and the button code never runs' + (c.decl ? ', even though MainActivity2 is declared.' : '.');
+      else h += 'MainActivity has the LAUNCHER filter, so it opens first. <code>.MainActivity2</code> is declared, so ActivityManager finds it and starts it.';
+      return {ok:ok, html:h};
+    },
+    trial:function(c, p, res, ok){ return [c.decl ? 'Yes' : 'No', c.launcher ? 'Yes' : 'No', (ok ? '✅ ' : '❌ ') + SHORT[p.out], SHORT[res.out]]; },
+    summary:function(c, res){ return 'Result: ' + LBL[res.out] + '.'; },
+    explainNeedsRun:true,
+    explain:function(v, last){
+      var bad = [];
+      if(v.res !== last.res.out) bad.push('In your last run the result was “' + LBL[last.res.out] + '”. Pick the word that matches it.');
+      if(v.rule !== 'manifest') bad.push('A .java file only creates the class. Android starts an activity only if it is <b>listed in AndroidManifest.xml</b>.');
+      if(v.first !== 'launcher') bad.push('The first screen is chosen by the <b>MAIN / LAUNCHER intent-filter</b>, not by the class name or setContentView().');
+      return bad.length ? {ok:false, html:'<b>Not quite.</b> ' + bad.join(' ')} : {ok:true, html:'<b>✅ Well explained.</b> The Manifest is Android’s list of activities. A Java class that is not on the list cannot be started, and the activity with MAIN / LAUNCHER is the one the app icon opens.'};
+    }
+  });
+})();
+
+/* ===== TF2 figure: Intent extras (college form → profile) ===== */
+(function(){
+  var $ = U4.$, $$ = U4.$$, root = $('#t2x'); if(!root) return;
+  var q = function(s){ return $(s, root); };
+  var ph = q('[data-out="phone"]'), nameIn = $('#t2xName');
+  function screen(s){ ph.setAttribute('data-screen', s); $$('.t2-l', ph).forEach(function(l){ l.classList.toggle('show', (' ' + l.getAttribute('data-l') + ' ').indexOf(' ' + s + ' ') >= 0); }); }
+  var ROWS = ['name','roll','fac','city'], LINE = {name:'Name', roll:'Roll', fac:'Faculty', city:'City'};
+  function nm(){ return (nameIn.value || '').trim() || '(empty)'; }
+  /* pure model: what each line receives */
+  function model(c){
+    var r = {};
+    r.name = c.pName && c.rName === 'name' ? {k:'val', why:'match'} : {k:'null', why: !c.pName ? 'notsent' : 'case'};
+    r.roll = c.pRoll && c.rRoll === 'roll' ? {k:'val', why:'match'} : {k:'0', why: !c.pRoll ? 'notsent' : 'key'};
+    if(c.rFac === 'int') r.fac = {k:'0', why: c.pFac ? 'type' : 'notsent'};
+    else r.fac = c.pFac ? {k:'val', why:'match'} : {k:'null', why:'notsent'};
+    r.city = c.pCity ? {k:'val', why:'match'} : {k:'null', why:'var'};
+    return r;
+  }
+  function shown(k, row){ if(row.k !== 'val') return row.k; return {name:nm(), roll:'23', fac:'BCA', city:'Pokhara'}[k]; }
+  var Y = {name:95, roll:160, fac:225, city:290};
+  var NODES = {}, EDGES = {};
+  ROWS.forEach(function(k){
+    NODES['s_' + k] = {x:105, y:Y[k], w:190, h:44, label:['x'], c:'#60a5fa'};
+    NODES['b_' + k] = {x:356, y:Y[k], w:150, h:44, label:['x'], c:'#fbbf24'};
+    NODES['r_' + k] = {x:603, y:Y[k], w:200, h:44, label:['x'], c:'#4ade80'};
+    EDGES['sb_' + k] = {d:'M200 ' + Y[k] + ' L279 ' + Y[k]};
+    EDGES['br_' + k] = {d:'M431 ' + Y[k] + ' L501 ' + Y[k]};
+  });
+  var D;
+  function putLbl(k, c){ return {name:['putExtra("name",', '"' + nm().slice(0,14) + '")'], roll:['putExtra("roll", 23)'], fac:['putExtra("faculty",','"BCA")'], city:['putExtra("city", city)']}[k]; }
+  function readLbl(k, c){
+    if(k === 'name') return ['getStringExtra("' + c.rName + '")'];
+    if(k === 'roll') return ['getIntExtra("' + c.rRoll + '", 0)'];
+    if(k === 'fac') return c.rFac === 'int' ? ['getIntExtra("faculty", 0)'] : ['getStringExtra("faculty")'];
+    return ['getStringExtra("city")'];
+  }
+  var BKEY = {name:'"name" : String', roll:'"roll" : int', fac:'"faculty" : String', city:'"city" : String'};
+  var SENT = {name:'pName', roll:'pRoll', fac:'pFac', city:'pCity'};
+  function labels(c){
+    ROWS.forEach(function(k){
+      var sent = c[SENT[k]];
+      D.label('s_' + k, sent ? putLbl(k, c) : (k === 'city' ? ['String city = "Pokhara";', '(not sent)'] : ['(not sent)']));
+      D.label('b_' + k, sent ? [BKEY[k]] : ['(empty)']);
+      D.label('r_' + k, readLbl(k, c));
+      D.dim('s_' + k, !sent); D.dim('b_' + k, !sent);
+    });
+  }
+  function profileHtml(res, upTo){
+    return ROWS.map(function(k, i){ if(i >= upTo) return '<div class="t2-pl wait">' + LINE[k] + ': …</div>';
+      var v = shown(k, res[k]); return '<div class="t2-pl ' + (res[k].k === 'val' ? 'ok' : 'bad') + '">' + LINE[k] + ': ' + TF2.esc(v) + '</div>'; }).join('');
+  }
+  function counts(res){ var o = {val:0, 'null':0, '0':0}; ROWS.forEach(function(k){ o[res[k].k]++; }); return o; }
+  function why(k, row, c){
+    if(row.why === 'match') return '';
+    if(row.why === 'var') return '<b>City:</b> <code>city</code> is only a variable inside FormActivity. ProfileActivity is a different object and cannot see it. Nothing called "city" is in the Intent, so <code>getStringExtra("city")</code> returned <b>null</b>.';
+    if(row.why === 'case') return '<b>Name:</b> <code>"Name"</code> with a capital N is a different key from <code>"name"</code>. Keys must match exactly, so <code>getStringExtra</code> returned <b>null</b>.';
+    if(row.why === 'key') return '<b>Roll:</b> there is no extra called <code>"rollNo"</code>, so <code>getIntExtra</code> returned its default value <b>0</b>.';
+    if(row.why === 'type') return '<b>Faculty:</b> <code>"faculty"</code> holds a String, but <code>getIntExtra</code> asks for an int. Android logs a warning and returns the default value <b>0</b>. It does not crash.';
+    if(row.why === 'notsent') return '<b>' + LINE[k] + ':</b> this extra was not sent, so the read found nothing and returned ' + (row.k === 'null' ? '<b>null</b> (getStringExtra has no default).' : 'the default value <b>0</b>.');
+    return '';
+  }
+  TF2.make({
+    id:'t2x', key:'extras', slide:'extras', model:model,
+    diagram:function(){ D = TF2.Diagram(q('svg'), NODES, EDGES, {titles:[{x:105, y:40, t:'FormActivity puts'}, {x:356, y:40, t:'Intent extras'}, {x:603, y:40, t:'ProfileActivity reads'}]}); return D; },
+    runLabel:function(){ return '▶ Tap “Show profile”'; },
+    runNote:function(){ return 'FormActivity builds the Intent and calls startActivity(i).'; },
+    onCfg:function(c){
+      var J = [{t:'// FormActivity.java (inside onClick)'}, {t:'String name = edName.getText().toString();'}, {t:'String city = "Pokhara";  // only a variable here'},
+        {t:'Intent i = new Intent(FormActivity.this, ProfileActivity.class);'}];
+      [['pName','i.putExtra("name", name);'],['pRoll','i.putExtra("roll", 23);'],['pFac','i.putExtra("faculty", "BCA");'],['pCity','i.putExtra("city", city);']].forEach(function(p){
+        J.push(c[p[0]] ? {t:p[1], cls:'add'} : {t:'// ' + p[1] + '   (not sent)', cls:'miss'}); });
+      J.push({t:'startActivity(i);'});
+      TF2.code(q('[data-out="java"]'), 'FormActivity.java (inside onClick)', J.slice(1));
+      J = [{t:'Intent i = getIntent();'}];
+      J.push({t:'String name = i.getStringExtra("' + c.rName + '");', cls: c.rName === 'name' ? '' : 'miss'});
+      J.push({t:'int roll = i.getIntExtra("' + c.rRoll + '", 0);', cls: c.rRoll === 'roll' ? '' : 'miss'});
+      J.push(c.rFac === 'int' ? {t:'int faculty = i.getIntExtra("faculty", 0);', cls:'miss'} : {t:'String faculty = i.getStringExtra("faculty");'});
+      J.push({t:'String city = i.getStringExtra("city");'});
+      J.push({t:'txt.setText("Name: " + name + "\\nRoll: " + roll'}, {t:'        + "\\nFaculty: " + faculty + "\\nCity: " + city);'});
+      TF2.code(q('[data-out="java2"]'), 'ProfileActivity.java (inside onCreate)', J);
+      if(D) labels(c);
+      var o = $('option[data-k="name"]', root); if(o) o.textContent = nm();
+      var n = ['pName','pRoll','pFac','pCity'].filter(function(k){ return c[k]; }).length;
+      q('[data-out="roSent"]').textContent = n;
+    },
+    idle:function(c){
+      screen('form'); q('[data-out="sbtn"]').classList.remove('press'); nameIn.disabled = false;
+      ['roOk','roNull','roZero'].forEach(function(k){ q('[data-out="' + k + '"]').textContent = '–'; });
+      if(D){ labels(c); D.at('s_name'); }
+    },
+    steps:function(c, res){
+      var S = [{fn:function(){ nameIn.disabled = true; q('[data-out="sbtn"]').classList.add('press'); }, log:'<span class="ev">FormActivity:</span> startActivity(i) with ' + ['pName','pRoll','pFac','pCity'].filter(function(k){ return c[k]; }).length + ' extra(s)', wait:300}];
+      ROWS.forEach(function(k){ if(c[SENT[k]]) S.push({edge:'sb_' + k, ms:380, node:'b_' + k, wait:120}); });
+      S.push({fn:function(){ screen('profile'); q('[data-out="prof"]').innerHTML = profileHtml(res, 0); }, log:'<span class="ev">I/ActivityTaskManager:</span> START u0 {cmp=com.example.college/.ProfileActivity (has extras)}', wait:350});
+      ROWS.forEach(function(k, i){
+        var row = res[k], ok = row.k === 'val';
+        var st = {node:'r_' + k, cls: ok ? 'good' : 'bad', wait:260};
+        if(ok) st.edge = 'br_' + k; else if(c[SENT[k]]) { st.edge = 'br_' + k; st.color = 'bad'; }
+        st.ms = 380;
+        st.fn = function(){ q('[data-out="prof"]').innerHTML = profileHtml(res, i + 1); };
+        var v = shown(k, row);
+        st.log = (row.why === 'type') ? '<span style="color:#fbbf24">W/Bundle: Key faculty expected Integer but value was a java.lang.String. The default value 0 was returned.</span>'
+          : '<span class="note">' + readLbl(k, c)[0] + ' → ' + TF2.esc(v) + '</span>';
+        S.push(st);
+      });
+      S.push({wait:0, fn:function(){ var n = counts(res); q('[data-out="roOk"]').textContent = n.val; q('[data-out="roNull"]').textContent = n['null']; q('[data-out="roZero"]').textContent = n['0']; }});
+      return S;
+    },
+    judge:function(p, res, c){
+      var wrong = ROWS.filter(function(k){ return p[k] !== res[k].k; });
+      var ok = !wrong.length, h = ok ? '<b>✅ All four lines matched your prediction.</b> ' : '<b>❌ ' + wrong.length + ' line' + (wrong.length > 1 ? 's' : '') + ' did not match.</b> ';
+      var notes = ROWS.map(function(k){ return why(k, res[k], c); }).filter(Boolean);
+      wrong.forEach(function(k){
+        if(p[k] === '0' && res[k].k === 'null') notes.push('<b>' + LINE[k] + ':</b> getStringExtra has no default value, so a missing String gives <b>null</b>, not 0.');
+        if(p[k] === 'null' && res[k].k === '0') notes.push('<b>' + LINE[k] + ':</b> an int can never be null. getIntExtra returns the default value you passed, which is <b>0</b> here.');
+      });
+      if(!notes.length) notes.push('Every key and type matched, so every value arrived. Now break one on purpose: try <code>"Name"</code> or tick off a putExtra line.');
+      return {ok:ok, html:h + notes.join('<br>')};
+    },
+    trial:function(c, p, res, ok){
+      var set = [];
+      if(!c.pName) set.push('no name'); if(!c.pRoll) set.push('no roll'); if(!c.pFac) set.push('no faculty'); if(c.pCity) set.push('city sent');
+      if(c.rName !== 'name') set.push('"Name"'); if(c.rRoll !== 'roll') set.push('"rollNo"'); if(c.rFac === 'int') set.push('getIntExtra faculty');
+      var disp = function(k, kind){ return kind === 'val' ? shown(k, {k:'val'}) : kind; };
+      return [set.length ? set.join(', ') : 'default', (ok ? '✅ ' : '❌ ') + ROWS.map(function(k){ return TF2.esc(disp(k, p[k])); }).join(' · '), ROWS.map(function(k){ return TF2.esc(shown(k, res[k])); }).join(' · ')];
+    },
+    summary:function(c, res){ return 'Profile shows ' + ROWS.map(function(k){ return LINE[k] + ' ' + shown(k, res[k]); }).join(', ') + '.'; },
+    explain:function(v){
+      var bad = [];
+      if(v.src !== 'extras') bad.push('ProfileActivity cannot see FormActivity’s variables. Only values <b>put into the Intent with putExtra()</b> travel.');
+      if(v.key !== 'exact') bad.push('The key and type must be <b>exactly the same</b>. "Name" is not "name".');
+      if(v.str !== 'null') bad.push('A missing String extra gives <b>null</b>.');
+      if(v.int !== 'def') bad.push('A missing or wrong-type int extra gives <b>the default value you passed</b>, with no crash.');
+      return bad.length ? {ok:false, html:'<b>Not quite.</b> ' + bad.join(' ')} : {ok:true, html:'<b>✅ Well explained.</b> Extras are the only bridge between the two activities, and each value is found by its exact key and type.'};
+    }
+  });
+  nameIn.addEventListener('input', function(){ var o = $('option[data-k="name"]', root); if(o) o.textContent = nm(); if(D && $('[data-cfg="pName"]', root).checked) D.label('s_name', putLbl('name')); });
+})();
+
+/* ===== TF2 figure: implicit intents and the chooser ===== */
+(function(){
+  var $ = U4.$, $$ = U4.$$, root = $('#t2i'); if(!root) return;
+  var q = function(s){ return $(s, root); };
+  var ph = q('[data-out="phone"]');
+  function screen(s){ ph.setAttribute('data-screen', s); $$('.t2-l', ph).forEach(function(l){ l.classList.toggle('show', (' ' + l.getAttribute('data-l') + ' ').indexOf(' ' + s + ' ') >= 0); }); }
+  var ACT = {
+    view:{a:'ACTION_VIEW', full:'android.intent.action.VIEW', data:'https://tu.edu.np', btn:'Open website', title:'Open with', dat:'dat=https://tu.edu.np/...',
+      apps:[['Chrome','#1a73e8','C'],['Firefox','#e66000','F'],['Samsung Internet','#6b4fbb','S']], body:'<b>tu.edu.np</b><br>Tribhuvan University<br><small>Exam routine published</small>'},
+    dial:{a:'ACTION_DIAL', full:'android.intent.action.DIAL', data:'tel:9800000000', btn:'Call office', title:'Complete action using', dat:'dat=tel:xxxxxxxxxx',
+      apps:[['Phone','#16a34a','☎'],['Truecaller','#0087ff','T'],['Skype','#00aff0','S']], body:'<span style="font-size:15px;font-weight:800">9800000000</span><br><small>Number filled in. The call is not placed yet.</small>'},
+    send:{a:'ACTION_SEND', full:'android.intent.action.SEND', data:'text/plain: “BCA exam starts on Sunday”', btn:'Share notice', title:'Share with', dat:'typ=text/plain (has extras)',
+      apps:[['WhatsApp','#25d366','W'],['Viber','#7360f2','V'],['Gmail','#ea4335','M']], body:'New message:<br><i>“BCA exam starts on Sunday”</i>'}
+  };
+  var LBL = {direct:'Opened one app directly', chooser:'Showed a chooser', crash:'Crash: ActivityNotFoundException', toast:'Toast, app kept running'};
+  var SHORT = {direct:'Opens directly', chooser:'Chooser', crash:'Crash', toast:'Toast'};
+  /* pure model */
+  function model(c){
+    var n = +c.n, out = n === 0 ? (c.guard ? 'toast' : 'crash') : n === 1 ? 'direct' : 'chooser';
+    return {out:out, n:n, apps:ACT[c.act].apps.slice(0, n)};
+  }
+  var NODES = {
+    app:{x:78, y:165, w:136, label:['Your app:','startActivity(i)'], c:'#9aa4b2'},
+    it:{x:248, y:165, w:160, label:['Intent','ACTION_VIEW'], c:'#fbbf24'},
+    pm:{x:420, y:165, w:150, label:['Android checks','every intent-filter'], c:'#c084fc'},
+    zero:{x:612, y:55, w:180, label:['0 apps match:','crash'], c:'#f87171'},
+    one:{x:612, y:165, w:180, label:['1 app matches:','it opens directly'], c:'#4ade80'},
+    many:{x:612, y:275, w:180, label:['2 or more match:','a chooser'], c:'#22d3ee'}
+  };
+  var EDGES = {
+    e1:{d:'M147 165 L166 165'}, e2:{d:'M329 165 L343 165'},
+    z:{d:'M496 150 C 512 120 505 70 520 62', lab:['none'], lx:520, ly:112, anchor:'start'},
+    o:{d:'M496 165 L520 165'},
+    m:{d:'M496 180 C 512 210 505 262 520 268', lab:['many'], lx:520, ly:226, anchor:'start'}
+  };
+  var D;
+  TF2.make({
+    id:'t2i', key:'implicit', slide:'intent', model:model,
+    diagram:function(){ D = TF2.Diagram(q('svg'), NODES, EDGES); return D; },
+    runLabel:function(c){ return '▶ Tap “' + ACT[c.act].btn + '”'; },
+    runNote:function(c){ return 'Notice Board builds an implicit Intent: ' + ACT[c.act].a + '. The phone has ' + c.n + ' matching app' + (c.n === '1' ? '' : 's') + '.'; },
+    onCfg:function(c){
+      var A = ACT[c.act], J = [];
+      if(c.act === 'view') J.push('Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://tu.edu.np"));');
+      else if(c.act === 'dial') J.push('Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:9800000000"));');
+      else J.push('Intent i = new Intent(Intent.ACTION_SEND);', 'i.setType("text/plain");', 'i.putExtra(Intent.EXTRA_TEXT, "BCA exam starts on Sunday");');
+      if(c.guard) J.push({t:'try {', cls:'add'}, {t:'    startActivity(i);', cls:'hl'}, {t:'} catch (ActivityNotFoundException e) {', cls:'add'},
+        {t:'    Toast.makeText(MainActivity.this, "No app can handle this",', cls:'add'}, {t:'            Toast.LENGTH_SHORT).show();', cls:'add'}, {t:'}', cls:'add'});
+      else J.push({t:'startActivity(i);', cls:'hl'});
+      J.push('', '// Compare: the explicit intent from the notes names the class', 'Intent e = new Intent(FirstActivity.this, SecondActivity.class);');
+      TF2.code(q('[data-out="java"]'), 'MainActivity.java (inside onClick)', J);
+      q('[data-out="roAct"]').textContent = A.a; q('[data-out="roData"]').textContent = A.data;
+      var names = A.apps.slice(0, +c.n).map(function(x){ return x[0]; });
+      q('[data-out="roN"]').textContent = c.n + (names.length ? ' (' + names.join(', ') + ')' : '');
+      q('[data-out="ibtn"]').textContent = A.btn;
+      if(D){ D.label('it', ['Intent', A.a]); D.label('zero', ['0 apps match:', c.guard ? 'catch → Toast' : 'crash']); }
+    },
+    idle:function(c){
+      screen('app'); q('[data-out="ibtn"]').classList.remove('press');
+      var r = q('[data-out="roRes"]'); r.textContent = 'Not run yet'; r.style.color = '';
+      if(D) D.at('app');
+    },
+    steps:function(c, res){
+      var A = ACT[c.act];
+      var S = [
+        {fn:function(){ q('[data-out="ibtn"]').classList.add('press'); }, wait:250},
+        {edge:'e1', node:'it', log:'<span class="ev">Notice Board:</span> startActivity(i) → Intent { act=' + A.full + ' ' + A.dat + ' }'},
+        {edge:'e2', node:'pm', log:'<span class="note">Android compares the Intent with the intent-filters of installed apps. Matches: ' + (res.n ? res.apps.map(function(x){ return x[0]; }).join(', ') : 'none') + '.</span>'}
+      ];
+      if(res.out === 'crash' || res.out === 'toast'){
+        S.push({edge:'z', color:'bad', node:'zero', cls:'bad', fn:function(){ screen(res.out); if(res.out === 'crash') q('[data-out="crMsg"]').textContent = 'android.content.ActivityNotFoundException: No Activity found to handle Intent { act=' + A.full + ' ' + A.dat + ' }'; },
+          log: res.out === 'crash' ? '<span style="color:#f87171">E/AndroidRuntime: FATAL EXCEPTION: main<br>android.content.ActivityNotFoundException: No Activity found to handle Intent { act=' + A.full + ' ' + A.dat + ' }</span>'
+            : '<span style="color:#fbbf24">Caught ActivityNotFoundException → Toast “No app can handle this”. Notice Board is still running.</span>'});
+      } else if(res.out === 'direct'){
+        S.push({edge:'o', node:'one', cls:'good', fn:function(){ q('[data-out="tgBar"]').textContent = res.apps[0][0]; q('[data-out="tgBar"]').style.background = res.apps[0][1]; q('[data-out="tgBody"]').innerHTML = A.body; screen('target'); },
+          log:'<span class="ev">I/ActivityTaskManager:</span> START u0 {act=' + A.full + ' cmp=' + res.apps[0][0] + '} → only one match, so it opens directly'});
+      } else {
+        S.push({edge:'m', node:'many', cls:'good', fn:function(){
+            q('[data-out="chTitle"]').textContent = A.title;
+            q('[data-out="chApps"]').innerHTML = res.apps.map(function(x, k){ return '<span class="ic' + (k === 0 ? ' pick' : '') + '"><i style="background:' + x[1] + '">' + x[2] + '</i>' + x[0] + '</span>'; }).join('');
+            screen('chooser'); },
+          log:'<span class="ev">I/ActivityTaskManager:</span> START u0 {act=' + A.full + ' cmp=android/com.android.internal.app.ResolverActivity} → ' + res.n + ' matches, so Android asks the user', wait:1100});
+        S.push({fn:function(){ q('[data-out="tgBar"]').textContent = res.apps[0][0]; q('[data-out="tgBar"]').style.background = res.apps[0][1]; q('[data-out="tgBody"]').innerHTML = A.body; screen('target'); },
+          log:'<span class="note">The user picked ' + res.apps[0][0] + ' (“Just once”).</span>'});
+      }
+      S.push({wait:0, fn:function(){ var r = q('[data-out="roRes"]'); r.textContent = LBL[res.out]; r.style.color = res.out === 'crash' ? '#f87171' : res.out === 'toast' ? '#fbbf24' : '#4ade80'; }});
+      return S;
+    },
+    judge:function(p, res, c){
+      var ok = p.out === res.out, A = ACT[c.act], h = ok ? '<b>✅ Your prediction matched.</b> ' : '<b>❌ Your prediction did not match.</b> You predicted “' + SHORT[p.out] + '”, but the result was “' + SHORT[res.out] + '”. ';
+      if(res.out === 'chooser') h += 'An implicit intent names only an action and data, not an app. ' + res.n + ' installed apps can handle <code>' + A.a + '</code>, so Android cannot choose for you and shows a chooser.';
+      else if(res.out === 'direct') h += 'Only <b>' + res.apps[0][0] + '</b> has a matching intent-filter, so Android opens it directly. On another phone with more apps, the same code would show a chooser.';
+      else if(res.out === 'crash') h += 'No installed app has a matching intent-filter, so Android has nothing to open and <code>startActivity(i)</code> throws <b>ActivityNotFoundException</b>. Tick the try / catch box to handle it.';
+      else h += 'No app matched, so <code>startActivity(i)</code> threw ActivityNotFoundException, but your <code>catch</code> block caught it and showed a Toast. The app keeps running.';
+      return {ok:ok, html:h};
+    },
+    trial:function(c, p, res, ok){ return [ACT[c.act].a + (c.guard ? ' + try/catch' : ''), String(res.n), (ok ? '✅ ' : '❌ ') + SHORT[p.out], SHORT[res.out]]; },
+    summary:function(c, res){ return ACT[c.act].a + ' with ' + res.n + ' matching apps: ' + LBL[res.out] + '.'; },
+    explainNeedsRun:true,
+    explain:function(v, last){
+      var bad = [];
+      if(v.names !== 'action') bad.push('An implicit intent names <b>only an action and data</b>. The explicit intent is the one that names a class.');
+      if(v.how !== 'filter') bad.push('Android <b>looks for apps whose intent-filter matches</b>. Which app opens depends on what is installed.');
+      if(v.n !== String(last.res.n)) bad.push('In your last run, ' + last.res.n + ' app' + (last.res.n === 1 ? '' : 's') + ' matched.');
+      if(v.res !== last.res.out) bad.push('In your last run the result was “' + LBL[last.res.out] + '”.');
+      return bad.length ? {ok:false, html:'<b>Not quite.</b> ' + bad.join(' ')} : {ok:true, html:'<b>✅ Well explained.</b> The same implicit intent can open an app directly, show a chooser, or fail, depending on the phone.'};
+    }
+  });
+})();
+
+/* ===== TF2 figure: back stack (Back vs finish vs startActivity) ===== */
+(function(){
+  var $ = U4.$, $$ = U4.$$, root = $('#t2b'); if(!root) return;
+  var q = function(s){ return $(s, root); };
+  var ph = q('[data-out="phone"]'), svg = q('svg'), sel = TF2.sel;
+  function screen(s){ ph.setAttribute('data-screen', s); $$('.t2-l', ph).forEach(function(l){ l.classList.toggle('show', (' ' + l.getAttribute('data-l') + ' ').indexOf(' ' + s + ' ') >= 0); }); }
+  var COL = {Home:'#60a5fa', Product:'#c084fc', Cart:'#fb923c', Payment:'#4ade80'};
+  var SUB = {Home:'Flash sale · Earbuds', Product:'Earbuds · Rs 1,499', Cart:'1 item: Earbuds, Rs 1,499', Payment:'Pay Rs 1,499 with eSewa'};
+  var BTN = {Home:'Shop', Product:'Add to cart', Cart:'Checkout', Payment:'Pay now'};
+  var START = [['Home',1],['Product',1],['Cart',1]];
+  var SCN = {
+    back:{label:'Pressed Back', ops:[{op:'pop', by:'back'}], code:['// No code: the user presses the ◁ Back button on CartActivity.', '// Android finishes the activity on top of the stack.']},
+    finish:{label:'Cart called finish()', ops:[{op:'pop', by:'finish'}], code:['// CartActivity.java: “Continue shopping” button', 'btn.setOnClickListener(new View.OnClickListener() {', '    @Override', '    public void onClick(View view) {', {t:'        finish();   // closes only CartActivity', cls:'hl'}, '    }', '});']},
+    home:{label:'Cart started HomeActivity', ops:[{op:'push', name:'Home'}], code:['// CartActivity.java: “Home” button', 'btn.setOnClickListener(new View.OnClickListener() {', '    @Override', '    public void onClick(View view) {', {t:'        Intent i = new Intent(CartActivity.this, HomeActivity.class);', cls:'hl'}, {t:'        startActivity(i);', cls:'hl'}, '    }', '});']},
+    pay:{label:'Cart started Payment + finish(), then Back', ops:[{op:'push', name:'Payment', finish:true}, {op:'pop', by:'back'}], code:['// CartActivity.java: “Checkout” button', 'btn.setOnClickListener(new View.OnClickListener() {', '    @Override', '    public void onClick(View view) {', {t:'        Intent i = new Intent(CartActivity.this, PaymentActivity.class);', cls:'hl'}, {t:'        startActivity(i);', cls:'hl'}, {t:'        finish();   // remove CartActivity from the stack', cls:'hl'}, '    }', '});', '// Then the user presses ◁ Back on PaymentActivity.']},
+    back3:{label:'Pressed Back three times', ops:[{op:'pop', by:'back'}, {op:'pop', by:'back'}, {op:'pop', by:'back'}], code:['// No code: the user presses ◁ Back three times.', '// Each press finishes only the activity on top.']}
+  };
+  /* pure model: apply ops to the start stack */
+  function model(c){
+    var s = START.map(function(x){ return x.slice(); }), counts = {Home:1, Product:1, Cart:1, Payment:0}, trace = [];
+    SCN[c.scn].ops.forEach(function(op){
+      var before = s.map(function(x){ return x.slice(); });
+      if(op.op === 'push'){ counts[op.name]++; var n = [op.name, counts[op.name]], under = s[s.length - 1]; s.push(n); if(op.finish) s.splice(s.length - 2, 1); trace.push({op:op, before:before, card:n, under:under}); }
+      else { var top = s.pop(); trace.push({op:op, before:before, card:top, under:s[s.length - 1] || null}); }
+    });
+    var t = s[s.length - 1];
+    return {stack:s, top: t ? t[0] : 'phone', topObj:t, size:s.length, homes:counts.Home, trace:trace};
+  }
+  function nm(x){ return x[0] + 'Activity #' + x[1]; }
+  function key(x){ return x[0] + x[1]; }
+  /* ---------- SVG stack ---------- */
+  var SX = 70, SW = 270, CH = 46, GAP = 58, BASE = 292;
+  function slotY(i){ return BASE - i * GAP; }
+  sel('text', {x:SX + SW/2, y:24, 'class':'t2-colh', 'text-anchor':'middle'}, svg).textContent = 'Daraz back stack (top = on screen)';
+  sel('line', {x1:SX - 10, y1:BASE + CH/2 + 8, x2:SX + SW + 10, y2:BASE + CH/2 + 8, stroke:'#3d4658', 'stroke-width':3}, svg);
+  var lane = sel('g', {}, svg);
+  var pushP = sel('path', {d:'M690 60 C 560 60 520 60 ' + (SX + SW + 18) + ' 60', 'class':'tf-edge', 'marker-end':'url(#t2bA)'}, lane);
+  var popP = sel('path', {d:'M' + (SX + SW + 18) + ' 150 C 520 150 560 150 690 150', 'class':'tf-edge', 'marker-end':'url(#t2bA)'}, lane);
+  var defs = sel('defs', {}, svg), mk = sel('marker', {id:'t2bA', viewBox:'0 0 10 10', refX:'8', refY:'5', markerWidth:'7', markerHeight:'7', orient:'auto-start-reverse'}, defs);
+  sel('path', {d:'M0 0 L10 5 L0 10 z', fill:'#6b7280'}, mk);
+  var pushT = sel('text', {x:520, y:46, 'class':'tf-elab t2-elab', 'text-anchor':'middle'}, lane); pushT.textContent = 'startActivity(): push on top';
+  var popT = sel('text', {x:520, y:136, 'class':'tf-elab t2-elab', 'text-anchor':'middle'}, lane); popT.textContent = 'Back / finish(): remove';
+  var cbT = sel('text', {x:520, y:228, 'class':'t2-cbtxt', 'text-anchor':'middle'}, svg);
+  var cbT2 = sel('text', {x:520, y:256, 'class':'t2-cbsub', 'text-anchor':'middle'}, svg);
+  var gCards = sel('g', {}, svg), cards = {};
+  function mkCard(x){
+    var g = sel('g', {'class':'t2-card', style:'--c:' + COL[x[0]]}, gCards);
+    sel('rect', {x:0, y:-CH/2, width:SW, height:CH, rx:10}, g);
+    var t = sel('text', {x:16, y:6}, g); t.textContent = nm(x);
+    var s = sel('text', {x:SW - 14, y:6, 'class':'st', 'text-anchor':'end'}, g); s.textContent = '';
+    cards[key(x)] = g; return g;
+  }
+  function place(g, x, y, op){ g.style.transform = 'translate(' + x + 'px,' + y + 'px)'; if(op != null) g.style.opacity = op; }
+  function layout(stack){
+    stack.forEach(function(x, i){
+      var g = cards[key(x)] || mkCard(x); place(g, SX, slotY(i), 1);
+      g.classList.toggle('top', i === stack.length - 1);
+      g.querySelector('.st').textContent = i === stack.length - 1 ? 'Resumed' : 'Stopped';
+    });
+  }
+  function clearCards(){ gCards.innerHTML = ''; cards = {}; }
+  function lane0(){ [pushP, popP].forEach(function(p){ p.classList.remove('on','bad'); }); [pushT, popT].forEach(function(t){ t.classList.remove('on'); }); cbT.textContent = ''; cbT2.textContent = ''; }
+  /* ---------- phone & readouts ---------- */
+  var cur = START.map(function(x){ return x.slice(); });
+  function showPhone(x){
+    if(!x){ screen('phone'); return; }
+    screen('app'); q('[data-out="bBar"]').textContent = 'Daraz · ' + x[0]; q('[data-out="bBar"]').style.background = COL[x[0]] === '#fb923c' ? '#f57224' : '';
+    q('[data-out="bTv"]').textContent = nm(x); q('[data-out="bSub"]').textContent = SUB[x[0]]; q('[data-out="bBtn"]').textContent = BTN[x[0]];
+  }
+  function readouts(stack, homes, last){
+    var t = stack[stack.length - 1];
+    q('[data-out="roTop"]').textContent = t ? nm(t) : 'Phone home screen';
+    q('[data-out="roSize"]').textContent = stack.length;
+    q('[data-out="roHome"]').textContent = homes;
+    q('[data-out="roLast"]').textContent = last || 'None yet';
+  }
+  function cb(x, name, note){ return '<span class="note">' + nm(x) + ':</span> ' + U4.cbHtml(name, note); }
+  function cbShow(x, name){ cbT.textContent = name + '()'; cbT.style.fill = U4.CBCOL[name] || '#fff'; cbT2.textContent = 'on ' + nm(x); }
+  var cnt = {Home:1};
+  TF2.make({
+    id:'t2b', key:'backstack', slide:'backstack', model:model,
+    runLabel:function(c){ return '▶ Run: ' + SCN[c.scn].label; },
+    runNote:function(c){ return 'Start: HomeActivity #1 → ProductActivity #1 → CartActivity #1 (Cart on screen).'; },
+    onCfg:function(c){ TF2.code(q('[data-out="java"]'), 'Java for this action', SCN[c.scn].code); },
+    idle:function(){
+      clearCards(); lane0(); cur = START.map(function(x){ return x.slice(); }); cnt = {Home:1};
+      layout(cur); showPhone(cur[cur.length - 1]); readouts(cur, 1, null);
+    },
+    steps:function(c, res){
+      var S = [], stack = START.map(function(x){ return x.slice(); }), homes = 1;
+      res.trace.forEach(function(tr){
+        var op = tr.op, x = tr.card;
+        if(op.op === 'push'){
+          var T = tr.under;
+          S.push({fn:function(){ lane0(); pushP.classList.add('on'); pushT.classList.add('on'); cbShow(T, 'onPause'); }, log:cb(T, 'onPause'), wait:450});
+          S.push({fn:function(){ var g = mkCard(x); place(g, 690, 60, 0); g.getBoundingClientRect(); stack.push(x); if(x[0] === 'Home') homes++; layout(stack); cbShow(x, 'onCreate'); showPhone(x); readouts(stack, homes, 'Pushed ' + nm(x)); },
+            log:cb(x, 'onCreate', x[1] > 1 ? 'a NEW object, not the old #1' : ''), wait:650});
+          S.push({fn:function(){ cbShow(x, 'onStart'); }, log:cb(x, 'onStart'), wait:300});
+          S.push({fn:function(){ cbShow(x, 'onResume'); }, log:cb(x, 'onResume'), wait:300});
+          S.push({fn:function(){ cbShow(T, 'onStop'); }, log:cb(T, 'onStop'), wait:op.finish ? 350 : 200});
+          if(op.finish) S.push({fn:function(){ var g = cards[key(T)]; popP.classList.add('on'); popT.classList.add('on'); cbShow(T, 'onDestroy'); place(g, SX + 200, slotY(stack.length - 2), 0);
+              setTimeout(function(){ if(g.parentNode) g.parentNode.removeChild(g); delete cards[key(T)]; }, 520);
+              stack.splice(stack.length - 2, 1); setTimeout(function(){ layout(stack); }, 260); readouts(stack, homes, nm(T) + ' finished'); },
+            log:cb(T, 'onDestroy', 'finish() removed it from the middle of the stack'), wait:700});
+        } else {
+          var B = tr.under;
+          S.push({fn:function(){ lane0(); popP.classList.add(op.by === 'finish' ? 'on' : 'on'); popT.classList.add('on'); cbShow(x, 'onPause'); }, log:(op.by === 'back' ? '<span class="ev">User pressed ◁ Back</span><br>' : '<span class="ev">CartActivity called finish()</span><br>') + cb(x, 'onPause'), wait:400});
+          if(B){
+            S.push({fn:function(){ cbShow(B, 'onRestart'); }, log:cb(B, 'onRestart'), wait:280});
+            S.push({fn:function(){ cbShow(B, 'onStart'); }, log:cb(B, 'onStart'), wait:280});
+            S.push({fn:function(){ cbShow(B, 'onResume'); showPhone(B); }, log:cb(B, 'onResume'), wait:280});
+          }
+          S.push({fn:function(){ var g = cards[key(x)]; cbShow(x, 'onStop'); place(g, 690, 150, 0); if(!B) showPhone(null); }, log:cb(x, 'onStop'), wait:500});
+          S.push({fn:function(){ var g = cards[key(x)]; if(g && g.parentNode) g.parentNode.removeChild(g); delete cards[key(x)]; stack.pop(); layout(stack); cbShow(x, 'onDestroy'); readouts(stack, homes, (op.by === 'back' ? 'Back removed ' : 'finish() removed ') + nm(x)); },
+            log:cb(x, 'onDestroy', !B ? 'stack empty → phone home screen (Android 11 and older; see the note)' : ''), wait:420});
+        }
+      });
+      S.push({wait:0, fn:function(){ cbT.textContent = res.size ? 'On screen: ' + nm(res.topObj) : 'Stack empty'; cbT.style.fill = '#fde68a'; cbT2.textContent = res.size + ' activit' + (res.size === 1 ? 'y' : 'ies') + ' in the stack'; }});
+      return S;
+    },
+    judge:function(p, res, c){
+      var okTop = p.top === res.top, okSize = +p.size === res.size, ok = okTop && okSize;
+      var TN = function(t){ return t === 'phone' ? 'the phone’s home screen' : t + 'Activity'; };
+      var h = ok ? '<b>✅ Your prediction matched.</b> ' : '<b>❌ Your prediction did not match.</b> You predicted ' + TN(p.top) + ' with ' + p.size + ' in the stack. Android showed ' + TN(res.top) + ' with ' + res.size + '. ';
+      if(c.scn === 'home') h += 'startActivity() does not go back to the old HomeActivity #1. It creates a <b>new HomeActivity object (#2)</b> and pushes it on top, so the stack grows to 4. Pressing Back now would show Cart again.';
+      else if(c.scn === 'finish') h += '<code>finish()</code> removes only the activity that calls it, here CartActivity. It does not close the whole app, so ProductActivity comes back, exactly as with Back.';
+      else if(c.scn === 'back') h += 'Back removes only the top activity, CartActivity. ProductActivity was stopped underneath, so it gets onRestart(), onStart() and onResume().';
+      else if(c.scn === 'pay') h += 'Cart called <code>finish()</code> right after starting Payment, so CartActivity was removed from the stack. Back on Payment skips Cart and shows ProductActivity.';
+      else h += 'Each Back removes one activity: Cart, then Product, then Home. With the stack empty, you see the phone’s home screen.';
+      return {ok:ok, html:h};
+    },
+    trial:function(c, p, res, ok){ return [SCN[c.scn].label, (ok ? '✅ ' : '❌ ') + (p.top === 'phone' ? 'Phone home' : p.top) + ', ' + p.size, res.size ? nm(res.topObj) : 'Phone home screen', res.stack.map(function(x){ return x[0] + (x[1] > 1 ? ' #' + x[1] : ''); }).join(' → ') || 'empty']; },
+    summary:function(c, res){ return SCN[c.scn].label + ': ' + (res.size ? nm(res.topObj) + ' on screen' : 'phone home screen') + ', ' + res.size + ' in the stack.'; },
+    explainNeedsRun:true,
+    explain:function(v, last){
+      var bad = [];
+      if(v.push !== 'new') bad.push('startActivity() <b>puts a new activity on top</b>. It never goes back to an old copy (by default).');
+      if(v.pop !== 'top') bad.push('Back and finish() <b>remove only the activity on top</b>, not the whole app.');
+      if(v.top !== last.res.top) bad.push('After your last action the screen was ' + (last.res.top === 'phone' ? 'the phone’s home screen' : last.res.top + 'Activity') + '.');
+      if(+v.size !== last.res.size) bad.push('The stack had ' + last.res.size + ' activit' + (last.res.size === 1 ? 'y' : 'ies') + '.');
+      return bad.length ? {ok:false, html:'<b>Not quite.</b> ' + bad.join(' ')} : {ok:true, html:'<b>✅ Well explained.</b> Push on top with startActivity(), remove the top with Back or finish(): that is the whole default back stack.'};
+    }
+  });
 })();
 
 (function(){
@@ -3506,35 +5175,6 @@ var $ = U4.$, $$ = U4.$$;
     ], 750);
   });
   $('#icBack').addEventListener('click', function(){ if(!on2) return; on2 = false; $('#icB').style.opacity = '.3'; $('#icA').style.opacity = '1'; U4.walkClear('wIntent'); $('#icInfo').innerHTML = 'Back → SecondActivity destroyed, FirstActivity resumed. Tap Click Me again.'; });
-})();
-
-/* ===== Extras envelope ===== */
-(function(){
-  function pack(){
-    var h = '';
-    if(!$('#exSkipId').checked) h += '"id" → ' + ($('#exId').value || '') + '<br>';
-    h += '"name" → "' + $('#exName').value + '"<br>"address" → "' + $('#exAddr').value + '"';
-    $('#exPack').innerHTML = h;
-    return h;
-  }
-  ['exId','exName','exAddr'].forEach(function(id){ $('#' + id).addEventListener('input', pack); });
-  $('#exSkipId').addEventListener('change', pack);
-  $('#exSend').addEventListener('click', function(){
-    var h = pack(); $('#exOut').textContent = '';
-    U4.flyEnv($('#exA'), $('#exB'), '<span style="font-family:monospace;font-size:9px">' + h + '</span>', 1300, function(){
-      var raw = $('#exId').value.trim(), notes = [];
-      var id;
-      if($('#exSkipId').checked){ id = 0; notes.push('No "id" extra → <code>getIntExtra("id", 0)</code> returned the <b>default value 0</b>.'); }
-      else if(/^-?\d+$/.test(raw)){ id = parseInt(raw, 10); if(raw !== String(id)) notes.push('<code>' + raw + '</code> is the int literal <b>' + id + '</b> (leading zeros vanish).'); }
-      else { id = 0; notes.push('“' + raw + '” is not a number, so it would be a String extra → <code>getIntExtra</code> finds no int and returns <b>0</b>.'); }
-      var name = $('#exTypo').checked ? 'null' : $('#exName').value;
-      if($('#exTypo').checked) notes.push('Key <code>"Name"</code> ≠ <code>"name"</code> → <code>getStringExtra</code> returned <b>null</b>.');
-      $('#exOut').textContent = 'Id=' + id + '\nName=' + name + '\nAddress=' + $('#exAddr').value;
-      $('#exInfo').innerHTML = notes.length ? notes.join('<br>') : '✅ All three extras arrived. Keys matched exactly.';
-      if(!notes.length) U4.confettiAt($('#exB'));
-    });
-  });
-  pack();
 })();
 
 /* ===== Extras code run ===== */
@@ -3716,7 +5356,7 @@ document.addEventListener('codeline', function(e){
   var host = $('#mind'); if(!host) return;
   var NODES = [
     ['Lifecycle','@lifecycle','#4ade80',50,12],['Six callbacks','@oncreate','#60a5fa',80,18],['Fig 4-1','@fig41','#22d3ee',92,40],
-    ['Simulator','@sim','#fbbf24',88,66],['Multiple activities','@multi','#fb923c',72,88],['Manifest','@manifest','#f87171',48,90],
+    ['Simulator','@sim','#fbbf24',88,66],['Predict & try','@predict','#fde68a',74,52],['Multiple activities','@multi','#fb923c',72,88],['Manifest','@manifest','#f87171',48,90],
     ['Intent','@intent','#c084fc',25,86],['Extras','@extras','#f472b6',9,64],['Result back','@result','#a78bfa',8,38],
     ['Layout data','@layoutdata','#34d399',20,16],['Exercise','@exercise','#facc15',50,64]
   ];
