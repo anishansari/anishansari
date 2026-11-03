@@ -845,6 +845,7 @@ const FIREBASE_CONFIG = {
 /* 2) TEACHER_EMAILS — only these accounts see TEACH mode, Presenter and the teacher dashboard.
       Keep in sync with firestore.rules (isTeacher()). */
 const TEACHER_EMAILS = ['anisteacher@nationalinfotechcollege.edu.np'];
+const TEACHER_UIDS = ['bWV52DtNlnfTR85GfYpMZWjNe182']; // trusted by firestore.rules without email verification
 
 /* 3) COLLEGE — shown on the landing page and the report cover. */
 const COLLEGE = {
@@ -1075,12 +1076,22 @@ const Backend = (function () {
       writes.push(fs.setDoc(fs.doc(this.db, 'users', this.user.uid), { email: this.user.email, name: this.user.name || pend.name || '', tuReg: this.user.tuReg || pend.tuReg || '', extra: this.user.extra && Object.keys(this.user.extra).length ? this.user.extra : (pend.extra || {}), status, done, current: state.current || null, lastActive: new Date().toISOString() }, { merge: true }));
       try { await T(Promise.all(writes), 20000); } catch (x) { throw this.mapDb(x); } if (pend.uid) LS.del(PENDING); this.dbErr = null; return true;
     },
+    async teacherFresh() {
+      const { auth } = await this.load(); const cu = this.auth.currentUser; if (!cu) return; if (typeof TEACHER_UIDS !== 'undefined' && TEACHER_UIDS.includes(cu.uid)) return;
+      try { await cu.reload(); await cu.getIdToken(true); } catch (e) { }
+      if (!this.auth.currentUser.emailVerified) {
+        let sent = ''; if (!this._vSent) { try { await auth.sendEmailVerification(this.auth.currentUser); this._vSent = 1; sent = ' A new verification email was just sent.'; } catch (e) { } }
+        throw err('unverified', 'Your teacher email (' + cu.email + ') is not verified yet, so the database will not show student data.' + sent + ' Open the link in that inbox (check spam too), then reload this page.');
+      }
+    },
     async listStudents() {
+      await this.teacherFresh();
       const { fs } = await this.load(); let qs; try { qs = await T(fs.getDocs(fs.collection(this.db, 'users'))); } catch (x) { throw this.mapDb(x); } const out = [];
       qs.forEach(d => { const x = d.data(); if (isTeacher(x.email)) return; const labs = {}; for (const [id, s] of Object.entries(x.status || {})) labs[id] = { done: s === 'p', checks: 1 }; out.push(Object.assign(PUBLIC({ uid: d.id, email: x.email, name: x.name, tuReg: x.tuReg, extra: x.extra }), { state: { labs, current: x.current, lastActive: x.lastActive }, summaryOnly: true })); });
       return out;
     },
     async loadStudent(uid) {
+      await this.teacherFresh();
       const { fs } = await this.load(); let u, qs; try { u = await T(fs.getDoc(fs.doc(this.db, 'users', uid))); if (!u.exists()) return null; qs = await T(fs.getDocs(fs.collection(this.db, 'users', uid, 'labs'))); } catch (x) { throw this.mapDb(x); } const x = u.data(); const labs = {}; qs.forEach(d => { try { labs[d.id] = JSON.parse(d.data().data); } catch (e) { } });
       return Object.assign(PUBLIC({ uid, email: x.email, name: x.name, tuReg: x.tuReg, extra: x.extra }), { state: { labs, current: x.current, lastActive: x.lastActive } });
     }
